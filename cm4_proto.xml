@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- MDT XML version 20140515 -->
+<!-- MDT XML version 20140519 -->
 
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
@@ -11,6 +11,7 @@
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out codes and compile:
+# for target option "-t openmp", the default is prod-openmp
 module load fre/bronx-7
 fremake -x cm4_proto.xml -p ncrc2.intel -t openmp cm4p1
 
@@ -31,15 +32,12 @@ inputfiles -x cm4_proto.xml -p ncrc2.intel
 
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/2014.05.14"/>  <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM" value="mdt/$(RELEASE)"/>             <!-- customized as needed -->
+  <property name="FRE_STEM" value="mdt/$(RELEASE)"/>             <!-- customize as needed -->
+<!--  <property name="FRE_STEM" value="$(RELEASE)_awgUpdates_mom6_2014.05.14"/> -->
   <property name="FRE_VERSION" value="bronx-7"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
-  <property name="MOM6_SRC" value="$HOME/$(FRE_STEM)/cm4p1/src/mom6"/>  
-<!-- "cm4p1" is the compile experiment name and it's hard wired here for ocean input data.
-     Please make sure it matches your compile experiment name if you decide to change it -->
-
 <!--
 Model configurations in support of MDT Atmosphere Working Group (AWG).
 Based on v20140401 revision, but with modifications for new topo_drag
@@ -136,6 +134,17 @@ properties below.
   <property name="PP_CMIP_CHUNK" value="10yr"/>
 <!--  <property name="PP_OCEAN_CHUNK" value="10yr"/> -->
 
+
+<!--=========================================-->
+<!--= Properties needed for OM4 EXPERIMENTS =-->
+<!--=========================================-->
+   <property name="PROD_SIMTIME_OM4"   value="5"/>
+   <property name="PROD_RUNTIME_OM4"   value="16:00:00"/>
+   <property name="PROD_SEGTIME_OM4"   value="03:15:00"/>
+<!--   <property name="reference_tag"      value="tikal_201403_awgUpdates_mom6_2014.05.14"/> -->
+<!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
+
+
 <!--=================-->
 <!--= CHANGING NPES =-->
 <!--=================-->
@@ -219,6 +228,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+<!--      <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/> -->
       <csh><![CDATA[
         source $MODULESHOME/init/csh
  
@@ -257,6 +267,7 @@ configuration.
         module load fre/$(FRE_VERSION)
         module load fre-analysis
 #git MOM6 analysis scripts
+           setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
            mkdir -p $NBROOT
            cd $NBROOT
@@ -278,6 +289,10 @@ configuration.
 <!--===========-->
 <!--= COMPILE =-->
 <!--===========-->
+<!-- Property needed for ocean code -->
+   <property name="MOM6_SRC" value="$HOME/$(FRE_STEM)/cm4p1/src/mom6"/>  
+<!-- "cm4p1" is the compile experiment name and it's hard wired here for ocean input data.
+     Please make sure it matches your compile experiment name if you decide to change it -->
 
   <experiment name="cm4p1">
     <description>
@@ -516,12 +531,6 @@ $baseDate
       </dataFile>
       <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/ice.climo.1981-2000.data.nc</dataSource>
-      </dataFile>
-      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/data_table/data_table_amip_v20140324</dataSource>
-      </dataFile>
-      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/data_table/data_table_co2_v20140324</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -1571,7 +1580,7 @@ touch MOM_input
           But unfortunately frepp still tries to create a timeseries. -->
       <component type="mdbi_logger"   start="$(ANA_CMIP_START)" source="ocean_annual">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>temp</variables>
+         <variables>salt_flux</variables>
          <analysis switch="MDBIswitch" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
         </timeSeries>
       </component>
@@ -1742,10 +1751,10 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
-        <run days="8"   npes="864" runTimePerJob="01:00:00"/>
+        <run days="10"   npes="1152" runTimePerJob="01:00:00"/>
       </regression>
       <regression name="restarts">
-        <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
+        <run days="5 5" npes="1152" runTimePerJob="01:00:00"/>
       </regression>
       <regression name="timing">
         <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
@@ -1812,8 +1821,10 @@ else
   set restart_flag = 'r'
 endif
 
-cd $work/INPUT
-ln -s topog.nc ocean_topog.nc
+
+ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc
+
+touch $work/INPUT/MOM_override
 
       ]]></csh>
  
@@ -1993,4 +2004,301 @@ OVERRIDE_EOF
 
   </experiment>
 
+
+ <experiment name="OM4_SIS_baseline" inherit="cm4p1">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="OM4_SIS  $(MOM6_GIT_TAG)" 
+communityModelID="OM4_SIS"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+    </description>
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+      Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CMIP_START)"
+      endTime="$(EXP_CMIP_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1,1,1,0,0,0,
+        calendar = 'NOLEAP'
+        dt_atmos = 1200,
+        dt_cpld  = 3600,
+        use_lag_fluxes = .false.
+        concurrent = .false.
+	do_atmos = .false.
+	do_land  = .false.
+        do_ocean = .true.
+        ocean_npes = $ocean_npes
+        atmos_npes = 0
+      </namelist>
+      <namelist name="flux_exchange_nml">
+            debug_stocks = .FALSE.
+            divert_stocks_report = .TRUE.
+            do_area_weighted_flux = .FALSE.
+      </namelist>
+      <namelist name="fms_io_nml">
+            fms_netcdf_restart=.true.
+            threading_read='multi'
+            threading_write='single'
+            fileset_write='single'
+            max_files_r = 200
+            max_files_w = 200
+      </namelist>
+      <namelist name="fms_nml">
+            clock_grain='ROUTINE'
+            clock_flags='NONE'
+            domains_stack_size = 5000000
+            stack_size =0
+      </namelist>
+      <namelist name="xgrid_nml">
+        make_exchange_reproduce = .true.
+        interp_method = 'second_order'
+      </namelist>
+
+      <namelist name="static_veg_nml">
+        use_static_veg = .false.
+      </namelist>
+      <namelist name="river_nml">
+        do_rivers = .false.
+      </namelist>
+      <namelist name="topo_rough_nml">
+       use_topo_rough    = .false.
+      </namelist>
+<!--
+      <namelist name="">
+      </namelist>
+
+      <namelist name="fv_core_nml">
+        layout    = $fv_layout
+        io_layout = $fv_io_layout
+	warm_start = .false.
+        npx      = 193,
+        npy      = 193,
+        ntiles   = 6,
+        npz      = 48,
+        k_split  = 4,
+        n_split  = 5,
+        a2b_ord  = 4,
+        hord_dp = 13,
+        adjust_dry_mass = $adjust_dry_mass,
+        consv_te = 0.7,
+        fill = .true.
+        print_freq = 0,
+        grid_type = 0,
+        nord = 1,
+        dddmp = 0.0,
+        d2_bg = 0.0,
+        d4_bg = 0.16,
+        tau = 0.
+        z_tracer=.false.
+ 	
+      </namelist>
+-->
+      <!--AWG Input datasets -->
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common_v20140325.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3_v20130324.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192_v20140324.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+
+      <!--MOM6 Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
+      <!--SIS Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+
+      <!--The following two are purely needed for the initialization to work
+	  river_data.nc is needed eventhough land is off -->
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/19810101.static_veg.remapped_to_C192_GIS_025.v20140328.tar</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/c192_GIS_025_hydrography_v20140328.tar</dataSource>
+      </dataFile>
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C192L48_LM3_GIS_025_grid_19810101.remapped.v20140328.tar</dataSource>
+      </dataFile>
+      
+      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/grid/c192_GIS_025_grid_v20140327.tar</dataSource>
+      </dataFile>
+
+      <!--CORE forcing and salt restore data and data_table-->
+      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/data_table</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/ncar_precip.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/ncar_rad.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/q_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/runoff.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/salt_restore_v3.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/slp.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/t_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/u_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/v_10_mod.clim.nc</dataSource>
+      </dataFile>
+
+      <csh><![CDATA[
+# Possible domain decomposition.
+#The following layouts are for OM4 regression testing and are not suitable for CM4 runs
+#--------------------------------------------------------------------------------------
+if ( "$npes" == "288" ) then
+  set serial = "true"
+  set atmos_npes = "288"
+  set atmos_nthreads = "1"
+  set physics_window = "0,0"
+  set fv_layout    =   "2,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "2,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "24,12"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes = "288"
+else if ( "$npes" == "576" ) then
+  set serial = "true"
+  set atmos_npes = "576"
+  set atmos_nthreads = "1"
+  set physics_window = "0,0"
+  set fv_layout    =   "4,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "4,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "24,24"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "24,24"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes = "576"
+
+else if ( "$npes" == "1152" ) then
+  set serial = "true"
+  set atmos_npes = "1152"
+  set atmos_nthreads = "1"
+  set physics_window = "0,0"
+  set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "36,32"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "36,32"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes = "1152"
+
+#--------------------------------------------------------------------------------------
+
+else
+  if ( $echoOn ) unset echo
+  echo "*ERROR*: npes == '$npes' is not supported in xml."
+  if ( $echoOn ) set echo
+  exit 1
+endif
+
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
+LAYOUT = $ocn_layout
+#override IO_LAYOUT = $ocn_io_layout
+MASKTABLE = $ocn_mask_table
+LAYOUT_EOF
+
+\rm -f land.res.tile* soil.res.tile* lake.res.tile* vegn* snow.res.tile* river.res.tile* cana.res.tile* glac.res.tile*
+
+# runCommand:
+if ( $do_ocean == "true" ) then
+ if( $serial  == "true" ) then
+  alias runCommand "aprun -d 1  -n $ocean_npes ./$executable:t"
+ else
+  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
+ endif  	
+else
+  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+endif
+      ]]></csh>
+
+    </input>
+
+    <runtime>
+       <regression name="basic">
+         <run days="10"   npes="1152"  runTimePerJob="00:30:00"/>
+       </regression>
+       <regression name="rts">
+         <run days="5 5"  npes="1152"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="288"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="576"  runTimePerJob="00:30:00"/>
+       </regression>
+
+      <production simTime="$(PROD_SIMTIME_OM4)" units="years" npes="2996" runTime="$(PROD_RUNTIME_OM4)">
+           <segment simTime="12" units="months" runTime="$(PROD_SEGTIME_OM4)"/>
+       </production>
+
+<!--      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.tar"/> -->
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+
+  <!-- OCEAN  and ICE post-processing-->
+  <experiment name="OM4_postprocess">
+    <postProcess>
+        <csh><![CDATA[
+	 #Take care of iceberg restarts and trajectories
+         cd $work/RESTART
+         ncrcat icebergs.res.nc.* icebergs.res.nc
+         rm -f icebergs.res.nc.*
+         cd $work
+         ncrcat iceberg_trajectories.nc.* iceberg_trajectories.nc
+         rm -f iceberg_trajectories.nc.* 
+         #Save the last line of timestats without the first (step number) column as a signature of MOM6 answers
+         tail -1 timestats | cut -c8- > RESTART/$enddate.timestats.res
+         #Save the whole timestats under ascii/
+         mv timestats $enddate.timestats
+         mv timestats.nc $enddate.timestats.nc
+
+         #Make a directory to trick FRE to pick up and archive in ascii
+         mkdir extra.results
+
+         mv *velocity_truncations CPU_stats MOM_parameter_doc* extra.results/
+
+         ]]></csh>
+      <!--REFINE DIAG SCRIPT to untar the files under history/ -->
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
+
+      <component type="ocean_monthly"   start="$(ANA_CMIP_START)" source="ocean_month">
+        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)" source="ocean_month"/>
+      </component>
+      <component type="ocean_annual"   start="$(ANA_CMIP_START)" source="ocean_annual">
+        <timeSeries freq="annual"  chunkLength="$(PP_CMIP_CHUNK)" source="ocean_annual">
+          <!--This is an example for generating analysis figures-->
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CMIP_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
+        </timeSeries>
+        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
+      </component>
+      <component type="ice"  start="$(ANA_CMIP_START)"  source="ice_month">
+        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
+        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
+      </component>
+      <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
+          in order to update the "Monitoring" section of the DB.
+          The intention was not to do anything besides that update. We do not really want an annual timeseries.
+          But unfortunately frepp still tries to create a timeseries. -->
+      <component type="mdbi_logger"   start="$(ANA_CMIP_START)" source="ocean_annual">
+        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
+         <variables>temp</variables>
+         <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
+        </timeSeries>
+      </component>
+
+    </postProcess>
+  </experiment> 
 </experimentSuite>
