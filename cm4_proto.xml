@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- MDT XML version 20140519 -->
+<!-- MDT XML version 20140522 -->
 
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
@@ -131,8 +131,8 @@ properties below.
   <property name="ANA_CMIP_START" value="0001"/>
   <property name="ANA_CMIP_END" value="0030"/>
   <property name="ANA_CMIP_LEN" value="30yr"/>
-  <property name="PP_CMIP_CHUNK" value="10yr"/>
-<!--  <property name="PP_OCEAN_CHUNK" value="10yr"/> -->
+  <property name="PP_CMIP_CHUNK" value="5yr"/>
+  <property name="PP_OCEAN_CHUNK" value="5yr"/> 
 
 
 <!--=========================================-->
@@ -141,7 +141,7 @@ properties below.
    <property name="PROD_SIMTIME_OM4"   value="5"/>
    <property name="PROD_RUNTIME_OM4"   value="16:00:00"/>
    <property name="PROD_SEGTIME_OM4"   value="03:15:00"/>
-<!--   <property name="reference_tag"      value="tikal_201403_awgUpdates_mom6_2014.05.14"/> -->
+   <property name="reference_tag"      value="tikal_201403_awgUpdates_mom6_2014.05.14"/> 
 <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
 
 
@@ -206,7 +206,6 @@ Available options for coupled c192L48:
 Note: default settings are *highlighted*. Suggested 
 run time values may need to be adjusted for your specific
 configuration.
-
 -->
 
   <setup>
@@ -217,18 +216,24 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_f</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
-        <src>$HOME/$(stem)/$(name)/src</src>
-        <scripts>$HOME/$(stem)/scripts</scripts>
-        <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
+        <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
+	<root>$HOME/$(stem)</root>
+	<exec>$CPERM/$USER/$(stem)/$(name)/$(platform)-$(target)/exec</exec>
+	<state>$CPERM/$USER/$(stem)/$(name)/$(platform)-$(target)/state</state>
+ 	<scripts>$CPERM/$USER/$(stem)/$(name)/$(platform)-$(target)/scripts</scripts>
+        <!--swept locations (including the staged archive location)-->
+        <archive>$CTMP/$USER/$(stem)/$(name)/$(platform)-$(target)/archive</archive>
+        <stdout>$CTMP/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
+        <work>$CTMP/$USER/work/$(stem)/$FRE_JOBID</work>
       </directory>
-      <mkmfTemplate file="/ncrc/home2/Ni-Zhang.Golaz/awg/files/intel.mk"/>
-      <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
+      <!--mkmfTemplate file="/ncrc/home2/Ni-Zhang.Golaz/awg/files/intel.mk"/-->
+      <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
-<!--      <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/> -->
+      <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
  
@@ -254,12 +259,14 @@ configuration.
 <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
         <archive>$ARCHIVE/$(stem)/$(name)/$(platform)-$(target)</archive>
         <analysis>/nbhome/$USER/$(stem)/$(name)</analysis>
+	<ptmp>/ptmp/$USER</ptmp>
 <!-- /MDBI -->
       </directory>
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
         module use -a /home/fms/local/modulefiles
@@ -267,11 +274,11 @@ configuration.
         module load fre/$(FRE_VERSION)
         module load fre-analysis
 #git MOM6 analysis scripts
-           setenv FREVERSION $(FRE_VERSION)           
+           setenv FREVERSION fre/$(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
            mkdir -p $NBROOT
            cd $NBROOT
-           git clone /home/fms/git/ocean/mom6
+/home/Niki.Zadeh/bin/git_clone_mom6_fix.csh 
         ]]>
       </csh>
     </platform>
@@ -289,10 +296,8 @@ configuration.
 <!--===========-->
 <!--= COMPILE =-->
 <!--===========-->
-<!-- Property needed for ocean code -->
-   <property name="MOM6_SRC" value="$HOME/$(FRE_STEM)/cm4p1/src/mom6"/>  
-<!-- "cm4p1" is the compile experiment name and it's hard wired here for ocean input data.
-     Please make sure it matches your compile experiment name if you decide to change it -->
+  <!--The property MOM6_SRC should point to the mom6 src code that is checked out. It is needed by MOM6 to access its inpu data files-->
+  <property name="MOM6_SRC"  value="$root/cm4p1/src/mom6"/>  <!-- cm4p1 is the compile experiment name -->
 
   <experiment name="cm4p1">
     <description>
@@ -308,6 +313,8 @@ Experiment to build executable.
 * bug fix from Ming Zhao regarding entrainment rate (dpconv20140318_miz)
 * updated topo_drag from Steve Garner (tikal_topo_drag_garner_cjg)
 * bug fix from Zhi (tikal_bugfix_z1l)
+* bug fix from Huan Guo for CLUBB and MG microphysics (clubb20140516_h1g_MG1p5Interface clubb20140414_h1g_simpleInterface clubb20140516_h1g_MGbug_fix)
+ 
     </description>
 
     <component name="fms" paths="shared">
@@ -334,10 +341,13 @@ Experiment to build executable.
            cvs update -r tikal_pbl_depth_cjg atmos_param/physics_driver/physics_driver.F90 atmos_param/vert_turb_driver/vert_turb_driver.F90
            cvs update -r dpconv20140318_miz atmos_param/shallow_cu/conv_plumes_k.F90 atmos_param/shallow_cu/conv_plumes_k.F90
            cvs update -r tikal_topo_drag_garner_cjg atmos_param/damping_driver/damping_driver.F90 atmos_param/topo_drag/topo_drag.F90
-        </csh>
+           cvs update -r clubb20140516_h1g_MG1p5Interface atmos_param/clubb/MG_microp_3D.F90
+           cvs update -r clubb20140414_h1g_simpleInterface   atmos_param/physics_driver/physics_driver.F90  atmos_param/moist_processes/moist_processes.F90
+           cvs update -r clubb20140516_h1g_MGbug_fix  atmos_param/strat_cloud/cldwat2m_micro.F90  atmos_param/strat_cloud/micro_mg.F90
+         </csh>
       </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
       </compile>
     </component>
 
@@ -648,6 +658,7 @@ touch MOM_input
       <csh><![CDATA[
 # Possible domain decomposition for c192 atmosphere only experiments (numbers from Rusty Benson).
 set domains_stack_size = "3097152"
+set do_ocean = "false"
 if ( "$npes" == "864" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "1"
@@ -717,24 +728,15 @@ touch MOM_input
 #Niki: ocean_layout and ocean_io_layout could only be specified in MOM_override and setting them here does not do anything
 # Coupled configurations
 set domains_stack_size = "3097152"
-else if ( "$npes" == "3456" ) then
-  set atmos_npes = "1152"
-  set atmos_nthreads = "2"
-  set physics_window = "16,3"
-  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
-  set ocean_npes = "1152"
-else if ( "$npes" == "3210" ) then
-  set atmos_npes = "1152"
-  set atmos_nthreads = "2"
-  set physics_window = "16,3"
-  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.246.32x36"
-  set ocean_npes = "906"
+if ( "$npes" == "1152" ) then
+  set atmos_npes = "864"
+  set atmos_nthreads = "1"
+  set physics_window = "0,0"
+  set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,6"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "288"
 else if ( "$npes" == "1728" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
@@ -744,15 +746,25 @@ else if ( "$npes" == "1728" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "576"
-else if ( "$npes" == "1152" ) then
-  set atmos_npes = "864"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,6"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
-  set ocean_npes = "288"
+else if ( "$npes" == "3210" ) then
+  set atmos_npes = "1152"
+  set atmos_nthreads = "2"
+  set physics_window = "16,3"
+  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.246.32x36"
+  set ocean_npes = "906"
+else if ( "$npes" == "3456" ) then
+  set atmos_npes = "1152"
+  set atmos_nthreads = "2"
+  set physics_window = "16,3"
+  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
+#  set do_ocean = "true"
+  set ocean_npes = "1152"
 else if ( "$npes" == "6912" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
@@ -1792,7 +1804,8 @@ Experiment name = $(name)
     </dataFile>      
 
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/diag_table.MOM6</dataSource>
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/diag_table.MOM6</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/diag_table.MOM6</dataSource>
       </dataFile>
 
      <namelist name="MOM_input_nml" >
@@ -1839,7 +1852,8 @@ touch $work/INPUT/MOM_override
        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/INPUT/ice_model.res.v20140507.nc</dataSource>
      </dataFile>      
      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/diag_table.SIS</dataSource>
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/diag_table.SIS</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/diag_table.SIS</dataSource>
      </dataFile>
       
      <namelist name="ice_model_nml">
@@ -1966,7 +1980,6 @@ OVERRIDE_EOF
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192_v20140324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='cmip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_coupled_domain_decomp']/input/node())"/>
 
@@ -1981,19 +1994,19 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1152" runTimePerJob="01:20:00"/>
+        <run days="10" npes="1728" runTimePerJob="01:20:00"/>
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-            <run days="10" npes="2304" runTimePerJob="03:30:00"/><!--npes= 3456  main_loop= 967.549083  ATM= 854.505573  OCN= 936.150204  SYPD= 2.44651-->    
-            <run days="5 5 " npes="2304" runTimePerJob="03:30:00"/><!--ATM=,OCN=-->
+            <run days="10" npes="3456" runTimePerJob="01:30:00"/><!--npes= 3456  main_loop= 967.549083  ATM= 854.505573  OCN= 936.150204  SYPD= 2.44651-->    
+            <run days="5 5 " npes="1728" runTimePerJob="01:30:00"/><!--ATM=,OCN=-->
 	    
             <run days="10" npes="1728" runTimePerJob="01:00:00"/><!--npes= 1728  main_loop= 1790.576697  ATM= 1622.511115  OCN= 1708.993068  SYPD= 1.32199-->    
-            <run days="10" npes="2058" runTimePerJob="00:30:00"/><!--npes= 3210  main_loop= 967.163076  ATM= 847.618125  OCN= 939.602942  SYPD= 2.44749-->
+            <run days="10" npes="3210" runTimePerJob="00:30:00"/><!--npes= 3210  main_loop= 967.163076  ATM= 847.618125  OCN= 939.602942  SYPD= 2.44749-->
       </regression>
 
       <regression name="bigrts">
-        <run days="1" npes="7040" runTimePerJob="00:10:00"/>
+        <run days="10" npes="7040" runTimePerJob="00:10:00"/>
       </regression>
 
     </runtime>
@@ -2036,9 +2049,9 @@ communityExperimentID="$(name)" >
       <namelist name="coupler_nml">
         months = $months,
         days   = $days,
-        current_date = 1,1,1,0,0,0,
+        current_date = 1900,1,1,0,0,0,
         calendar = 'NOLEAP'
-        dt_atmos = 1200,
+        dt_atmos = 3600,
         dt_cpld  = 3600,
         use_lag_fluxes = .false.
         concurrent = .false.
@@ -2072,6 +2085,46 @@ communityExperimentID="$(name)" >
         interp_method = 'second_order'
       </namelist>
 
+     <namelist name="ice_model_nml" >
+           layout = $ice_layout
+           io_layout = $ice_io_layout
+           nsteps_dyn=144
+           nsteps_adv=2
+           num_part = 6
+           wd_turn = 0.0
+           spec_ice=.false.
+           ice_bulk_salin = 0.005
+           alb_sno = 0.85                    ! keep CM2 setting
+           alb_ice = 0.65                    ! keep CM2 setting
+           t_range_melt = 1.0                ! NOTE: CM2 uses 1.0
+           heat_rough_ice = 5.0e-4
+           cm2_bugs = .false.
+           do_icebergs = .false.
+           atmos_winds=.true.
+           add_diurnal_sw = .true.
+           do_ice_limit=.false.
+           max_ice_limit=4.0
+           channel_viscosity=5.e5
+           chan_cfl_limit=0.001
+           h_lo_lim = 1.e-10
+    </namelist>
+
+      <namelist name="monin_obukhov_nml">
+	neutral = .true.
+      </namelist>
+      <namelist name="ocean_albedo_nml">
+            ocean_albedo_option = 2
+      </namelist>
+      <namelist name="surface_flux_nml">
+            ncar_ocean_flux = .true.
+	    raoult_sat_vap = .true.
+      </namelist>
+      <namelist name="topography_nml">
+            topog_file = 'INPUT/navy_topography.data.nc'
+      </namelist>
+
+      
+<!--
       <namelist name="static_veg_nml">
         use_static_veg = .false.
       </namelist>
@@ -2081,7 +2134,6 @@ communityExperimentID="$(name)" >
       <namelist name="topo_rough_nml">
        use_topo_rough    = .false.
       </namelist>
-<!--
       <namelist name="">
       </namelist>
 
@@ -2117,15 +2169,18 @@ communityExperimentID="$(name)" >
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3_v20130324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192_v20140324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
-      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
 
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
       <!--SIS Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
 
-      <!--The following two are purely needed for the initialization to work
-	  river_data.nc is needed eventhough land is off -->
+      <diagTable>
+$name
+$baseDate
+
+      </diagTable>
+      <!--   The following block is purely needed for the initialization to work  -->
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/19810101.static_veg.remapped_to_C192_GIS_025.v20140328.tar</dataSource>
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/c192_GIS_025_hydrography_v20140328.tar</dataSource>
@@ -2133,7 +2188,32 @@ communityExperimentID="$(name)" >
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C192L48_LM3_GIS_025_grid_19810101.remapped.v20140328.tar</dataSource>
       </dataFile>
+
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/common/sea_esf_aug2013.cpio</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/lm3_data_20130815.tar</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/aerosol_inputs.dec2009.cpio</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/RCP/cmip5_rcp45.cpio</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_oct2011.cpio</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/megan2.1_input.cpio</dataSource>
+       <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/gas_conc_3D48L_am3p9.nc</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
+      </dataFile>
       
+      <dataFile label="input" target="INPUT/anthro_so2.1859_2010.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.simple.so2.1x1.1859_2020.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/emis_fuel_aircraft.1859_2010.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.aircraft.aero.1x1.1859_2020.nc</dataSource>
+      </dataFile>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p1_v20140324</dataSource>
+      </dataFile>
+      <!--  The above block is purely needed for the initialization to work    -->
+											  
+
+      <!-- Use the coupled model grid -->
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/grid/c192_GIS_025_grid_v20140327.tar</dataSource>
       </dataFile>
@@ -2238,7 +2318,7 @@ endif
            <segment simTime="12" units="months" runTime="$(PROD_SEGTIME_OM4)"/>
        </production>
 
-<!--      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.tar"/> -->
+      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.tar"/>
     </runtime>
 
     <postProcess>
@@ -2274,27 +2354,27 @@ endif
       <!--REFINE DIAG SCRIPT to untar the files under history/ -->
       <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
 
-      <component type="ocean_monthly"   start="$(ANA_CMIP_START)" source="ocean_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)" source="ocean_month"/>
+      <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month"/>
       </component>
-      <component type="ocean_annual"   start="$(ANA_CMIP_START)" source="ocean_annual">
-        <timeSeries freq="annual"  chunkLength="$(PP_CMIP_CHUNK)" source="ocean_annual">
+      <component type="ocean_annual"   start="$(ANA_CLIMO_START)" source="ocean_annual">
+        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_annual">
           <!--This is an example for generating analysis figures-->
-          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CMIP_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
         </timeSeries>
-        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
+        <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
-      <component type="ice"  start="$(ANA_CMIP_START)"  source="ice_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
+      <component type="ice"  start="$(ANA_CLIMO_START)"  source="ice_month">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
+        <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
           The intention was not to do anything besides that update. We do not really want an annual timeseries.
           But unfortunately frepp still tries to create a timeseries. -->
-      <component type="mdbi_logger"   start="$(ANA_CMIP_START)" source="ocean_annual">
+      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)" source="ocean_annual">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>temp</variables>
+         <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
         </timeSeries>
       </component>
