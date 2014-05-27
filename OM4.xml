@@ -569,7 +569,7 @@ cd $work
          ]]></csh>
 
       <!--REFINE DIAG SCRIPT to untar the files under history/ -->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh $(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
 <!--Niki: Find a way to call the database_ingestor.csh every year -->
       <!--PostProcessing component models-->
       <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month">

@@ -217,7 +217,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -740,6 +740,7 @@ if ( "$npes" == "1152" ) then
   set ice_layout   =   "144,6"; set ice_io_layout   =  "1,3"
   set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "288"
+
 else if ( "$npes" == "1728" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
@@ -749,6 +750,7 @@ else if ( "$npes" == "1728" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "576"
+
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
@@ -759,6 +761,7 @@ else if ( "$npes" == "3456" ) then
   set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
   set do_ocean = "true"
   set ocean_npes = "1152"
+
 else if ( "$npes" == "3210" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
@@ -768,6 +771,7 @@ else if ( "$npes" == "3210" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.246.32x36"
   set ocean_npes = "906"
+
 else if ( "$npes" == "6912" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
@@ -777,6 +781,7 @@ else if ( "$npes" == "6912" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "2304"
+
 else if ( "$npes" == "7040" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
@@ -785,9 +790,20 @@ else if ( "$npes" == "7040" ) then
   set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
-set domains_stack_size = "5000000"
   set do_ocean = "true"
   set ocean_npes   = "2432"
+
+else if ( "$npes" == "8576" ) then
+  set atmos_npes = "1536"
+  set atmos_nthreads = "4"
+  set physics_window = "12,3"
+  set fv_layout    =   "8,32"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,32"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "128,12"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
+  set do_ocean = "true"
+  set ocean_npes   = "2432"
+
 else
   if ( $echoOn ) unset echo
   echo "*ERROR*: npes == '$npes' is not supported in this xml."
@@ -1549,54 +1565,6 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
         </timeSeries>
       </component>
 
-<!-- OCEAN  and ICE -->
-         <csh><![CDATA[
-	 #Take care of iceberg restarts and trajectories
-         cd $work/RESTART
-         ncrcat icebergs.res.nc.* icebergs.res.nc
-         rm -f icebergs.res.nc.*
-         cd $work
-         ncrcat iceberg_trajectories.nc.* iceberg_trajectories.nc
-         rm -f iceberg_trajectories.nc.* 
-         #Save the last line of timestats without the first (step number) column as a signature of MOM6 answers
-         tail -1 timestats | cut -c8- > RESTART/$enddate.timestats.res
-         #Save the whole timestats under ascii/
-         mv timestats $enddate.timestats
-         mv timestats.nc $enddate.timestats.nc
-
-         #Make a directory to trick FRE to pick up and archive in ascii
-         mkdir extra.results
-
-         mv *velocity_truncations CPU_stats MOM_parameter_doc* extra.results/
-
-         ]]></csh>
-      <!--REFINE DIAG SCRIPT to untar the files under history/ -->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
-
-      <component type="ocean_monthly"   start="$(ANA_CMIP_START)" source="ocean_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)" source="ocean_month"/>
-      </component>
-      <component type="ocean_annual"   start="$(ANA_CMIP_START)" source="ocean_annual">
-        <timeSeries freq="annual"  chunkLength="$(PP_CMIP_CHUNK)" source="ocean_annual">
-          <!--This is an example for generating analysis figures-->
-          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CMIP_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
-        </timeSeries>
-        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
-      </component>
-      <component type="ice"  start="$(ANA_CMIP_START)"  source="ice_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="annual"  interval="$(PP_CMIP_CHUNK)"/>
-      </component>
-      <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
-          in order to update the "Monitoring" section of the DB.
-          The intention was not to do anything besides that update. We do not really want an annual timeseries.
-          But unfortunately frepp still tries to create a timeseries. -->
-      <component type="mdbi_logger"   start="$(ANA_CMIP_START)" source="ocean_annual">
-        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>salt_flux</variables>
-         <analysis switch="MDBIswitch" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-        </timeSeries>
-      </component>
 
     </postProcess>
   </experiment>
@@ -1995,25 +1963,24 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1728" runTimePerJob="01:20:00"/>
+        <run days="10" npes="1728" runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-            <run days="10" npes="3456" runTimePerJob="01:30:00"/><!--npes= 3456  main_loop= 967.549083  ATM= 854.505573  OCN= 936.150204  SYPD= 2.44651-->    
-            <run days="5 5 " npes="1728" runTimePerJob="01:30:00"/><!--ATM=,OCN=-->
-	    
-            <run days="10" npes="1728" runTimePerJob="01:00:00"/><!--npes= 1728  main_loop= 1790.576697  ATM= 1622.511115  OCN= 1708.993068  SYPD= 1.32199-->    
-            <run days="10" npes="3210" runTimePerJob="00:30:00"/><!--npes= 3210  main_loop= 967.163076  ATM= 847.618125  OCN= 939.602942  SYPD= 2.44749-->
+            <run days="10" npes="3456" runTimePerJob="00:30:00"/><!--npes= 3456  main_loop= 961.055729  ATM= 861.276609  OCN= 930.596231  SYPD= 2.46304-->        
+        <run days="10" npes="7040" runTimePerJob="00:10:00"/><!--npes= 7040  main_loop= 18846.426343  ATM= 18575.064638  OCN= 15403.657272  SYPD= 4.52162-->
+
       </regression>
 
       <regression name="bigrts">
-        <run days="10" npes="7040" runTimePerJob="00:10:00"/>
+        <run days="10" npes="8576" runTimePerJob="00:10:00"/><!---->
       </regression>
 
     </runtime>
 
     <postProcess>
       <xi:include xpointer="xpointer(//experiment[@name='c192_cmip_postprocess']/postProcess/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_postprocess']/postProcess/node())"/>
     </postProcess>
 
   </experiment>
@@ -2353,11 +2320,12 @@ endif
 
          ]]></csh>
       <!--REFINE DIAG SCRIPT to untar the files under history/ -->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh $(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month"/>
       </component>
+      
       <component type="ocean_annual"   start="$(ANA_CLIMO_START)" source="ocean_annual">
         <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_annual">
           <!--This is an example for generating analysis figures-->
@@ -2365,10 +2333,14 @@ endif
         </timeSeries>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
+      
       <component type="ice"  start="$(ANA_CLIMO_START)"  source="ice_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"  source="ice_month">
+	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
+	</timeSeries>   
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
+      
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
           The intention was not to do anything besides that update. We do not really want an annual timeseries.
