@@ -491,8 +491,8 @@ $baseDate
     <csh type="always"><![CDATA[
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-touch $work/MOM_override 
-cat > $work/MOM_layout << LAYOUT_EOF
+touch $work/INPUT/MOM_override 
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
 LAYOUT = $(OCN_PROD_LAYOUT)
 #override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT) 
 #override MASKTABLE = $(MASK_TABLE)
@@ -804,8 +804,8 @@ LAYOUT = $(ICE_PROD_LAYOUT)
 #override MASKTABLE = $(MASK_TABLE)
 OVERRIDE_EOF
 
-touch $work/MOM_override 
-cat > $work/MOM_layout << LAYOUT_EOF
+touch $work/INPUT/MOM_override 
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
 LAYOUT = $(OCN_PROD_LAYOUT)
 #override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT) 
 #override MASKTABLE = $(MASK_TABLE)
@@ -865,22 +865,18 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 
 
 
-<experiment name="OM4_SIS_Millero" inherit="OM4_SIS_baseline">
+<experiment name="OM4_SIS_gust_0p03" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
 <description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
- global 1/4 degree z  PRESSURE_DEPENDENT_FRAZIL = True
-                      DTFREEZE_DP    = -7.75e-8
-                      TFREEZE_FORM = "MILLERO_78"
+ global 1/4 degree z   GUST_CONST = 0.03
 </description>
 <!-- MDBI -->
    <input>
      <csh><![CDATA[
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-cat > MOM_override << OVERRIDE_EOF
-#override  PRESSURE_DEPENDENT_FRAZIL = True
-#override DTFREEZE_DP = -7.75e-8
-#override TFREEZE_FORM = "MILLERO_78" 
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override GUST_CONST = 0.03
 OVERRIDE_EOF
 cd $work
      ]]></csh>
