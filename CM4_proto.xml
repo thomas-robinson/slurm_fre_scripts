@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- MDT XML version 20140519 -->
+<!-- MDT XML version 20140522 -->
 
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
@@ -163,20 +163,7 @@ Choosing a particular PE number is a balancing act. The higher npes,
 the faster the model throughput, but also the lower the model efficiency
 (i.e. the overall simulation will cost more in terms of core hours).
 
-Available options for c96L48:
-
-  +========+======================+======================+
-  |npes    |  Suggested run time for 12 month segment    |
-  |        |    am4a1             |    am4b1             |
-  +========+======================+======================+
-  |   432  |    09:00:00          |    09:00:00          |
-  |   864  |    05:20:00          |    05:20:00          |
-  | *1728* |    03:00:00          |    03:00:00          |
-  |  2304  |    02:30:00          |    02:30:00          |
-  |  3456  |    02:15:00          |    02:15:00          |
-  +========+======================+======================+
-
-Available options for c192L48:
+Available options for atmos only c192L48:
 
   +========+======================+======================+
   |npes    |  Suggested run time for 12 month segment    |
@@ -206,7 +193,6 @@ Available options for coupled c192L48:
 Note: default settings are *highlighted*. Suggested 
 run time values may need to be adjusted for your specific
 configuration.
-
 -->
 
   <setup>
@@ -217,7 +203,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_f</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -229,7 +215,6 @@ configuration.
         <stdout>$CTMP/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
         <work>$CTMP/$USER/work/$(stem)/$FRE_JOBID</work>
       </directory>
-      <!--mkmfTemplate file="/ncrc/home2/Ni-Zhang.Golaz/awg/files/intel.mk"/-->
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
@@ -314,6 +299,8 @@ Experiment to build executable.
 * bug fix from Ming Zhao regarding entrainment rate (dpconv20140318_miz)
 * updated topo_drag from Steve Garner (tikal_topo_drag_garner_cjg)
 * bug fix from Zhi (tikal_bugfix_z1l)
+* bug fix from Huan Guo for CLUBB and MG microphysics (clubb20140516_h1g_MG1p5Interface clubb20140414_h1g_simpleInterface clubb20140516_h1g_MGbug_fix)
+ 
     </description>
 
     <component name="fms" paths="shared">
@@ -340,10 +327,13 @@ Experiment to build executable.
            cvs update -r tikal_pbl_depth_cjg atmos_param/physics_driver/physics_driver.F90 atmos_param/vert_turb_driver/vert_turb_driver.F90
            cvs update -r dpconv20140318_miz atmos_param/shallow_cu/conv_plumes_k.F90 atmos_param/shallow_cu/conv_plumes_k.F90
            cvs update -r tikal_topo_drag_garner_cjg atmos_param/damping_driver/damping_driver.F90 atmos_param/topo_drag/topo_drag.F90
-        </csh>
+           cvs update -r clubb20140516_h1g_MG1p5Interface atmos_param/clubb/MG_microp_3D.F90
+           cvs update -r clubb20140414_h1g_simpleInterface   atmos_param/physics_driver/physics_driver.F90  atmos_param/moist_processes/moist_processes.F90
+           cvs update -r clubb20140516_h1g_MGbug_fix  atmos_param/strat_cloud/cldwat2m_micro.F90  atmos_param/strat_cloud/micro_mg.F90
+         </csh>
       </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
       </compile>
     </component>
 
@@ -515,53 +505,13 @@ $baseDate
     </input>
   </experiment>
 
-  <!--Niki: climo_data is meant to initialize ice surf_temp, concentration and height to observations
-	    but the code does not work properly for the concentration in either SIS or SIS2. 
-	    This is intentionally removed from the last CM4-proto run. -->
- 
-  <experiment name="climo_data">
+  <experiment name="cmip_data"><!--Niki: This is not used in this xml--><!--Ni: I'd prefer to remove this if it's not needed-->
     <input>
       <dataFile label="input" target="INPUT/hadisst_sst.data.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/sst.climo.1981-2000.data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/ice.climo.1981-2000.data.nc</dataSource>
-      </dataFile>
-      <!-- Repeat data_table_amip but not data_table_co2 -->
-      
-      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/data_table/data_table_amip_v20140324</dataSource>
-      </dataFile>
-     
-    
-    </input>
-  </experiment>
-
-  <experiment name="cmip_data"><!--Niki: This is not used in this xml-->
-    <input>
-      <dataFile label="input" target="INPUT/hadisst_sst.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/sst.climo.1981-2000.data.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/ice.climo.1981-2000.data.nc</dataSource>
-      </dataFile>
-    </input>
-  </experiment>
-
-
-  <experiment name="c96_data"><!--Niki: This is not used in this xml-->
-    <input>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/19810101.static_veg.remapped_to_C96_GIS_025.v20140328.tar</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/c96_GIS_025_hydrography_v20140328.tar</dataSource>
-      </dataFile>
-      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C96L48_LM3_GIS_025_grid_19810101.remapped.v20140328.tar</dataSource>
-      </dataFile>
-      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/grid/c96_GIS_025_grid_v20140327.tar</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -583,78 +533,6 @@ $baseDate
     </input>
   </experiment>
 
-
-  <experiment name="c96_atmos_domain_decomp"><!--Niki: This is not used in this xml-->
-    <input>
-      <csh><![CDATA[
-# Possible domain decompositions for c96 atmosphere only experiments (numbers from Rusty Benson).
-if ( "$npes" == "432" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "3,24";   set fv_io_layout    =  "1,4"
-  set land_layout  =   "3,24";   set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,3";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,3";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-else if ( "$npes" == "864" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "2"
-  set physics_window = "32,2"
-  set fv_layout    =   "3,24";   set fv_io_layout    =  "1,4"
-  set land_layout  =   "3,24";   set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,3";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,3";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-else if ( "$npes" == "1728" ) then
-  set atmos_npes = "864"
-  set atmos_nthreads = "2"
-  set physics_window = "16,2"
-  set fv_layout    =   "6,24";   set fv_io_layout    =  "1,4"
-  set land_layout  =   "6,24";   set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,6";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,6";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-else if ( "$npes" == "2304" ) then
-  set atmos_npes = "1152"
-  set atmos_nthreads = "2"
-  set physics_window = "8,3"
-  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,8";  set ocean_io_layout =  "1,4"
-  set ice_layout   =   "144,8";  set ice_io_layout   =  "1,4"
-  set domains_stack_size = "2097152"
-else if ( "$npes" == "3456" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "8"
-  set physics_window = "8,2"
-  set fv_layout    =   "12,6";   set fv_io_layout    =  "1,3"
-  set land_layout  =   "12,6";   set land_io_layout  =  "1,3"
-  set ocean_layout =   "144,3";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,3";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-else
-  if ( $echoOn ) unset echo
-  echo "*ERROR*: npes == '$npes' is not supported in this xml."
-  if ( $echoOn ) set echo
-  exit 1
-endif
-
-# runCommand:
-alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
-      ]]></csh>
-
-      <csh type="always"><![CDATA[
-cd INPUT
-
-# adjustment of dry mass first time only
-set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
-
-# create dummy MOM6 parameter file
-touch MOM_input
-      ]]></csh>
-    </input>
-  </experiment>
 
   <experiment name="c192_atmos_domain_decomp">
     <input>
@@ -836,372 +714,6 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
 <!--= TEMPLATES FOR POSTPROCESSING =-->
 <!--================================-->
 
-  <experiment name="c96_amip_postprocess"><!--Niki: This is not used in this xml-->
-    <postProcess>
-
-      <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-<!-- MDBI, this switch must be on to trigger "fredb" automatically -->
-          <analysis switch="$(MDBIswitch)" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-<!-- /MDBI -->
-        </timeSeries>
-        <timeSeries freq="6hr" source="atmos_4xdaily" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmos4xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="atmos_daily" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-        <timeAverage source="annual" interval="$(PP_AMIP_CHUNK)" calcInterval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="annual" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_month_aer" start="$(ANA_AMIP_START)" source="atmos_month_aer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAerAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-      </component>
-
-      <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar">
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
-      </component>
-
-<!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_AMIP_START)" source="atmos_tracer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/tracerAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/tracerMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-<!-- LAND -->
-      <component type="land" start="$(ANA_AMIP_START)" source="land_month" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)"/>
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/landMonthTS/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/landMonthAve/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" cubicToLatLon="none">
-        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" >
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/landMonthTSNative/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/landDailyTSNative/*)">
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-      </component>
-
-    </postProcess>
-  </experiment>
-
-  <experiment name="c96_climo_postprocess"><!--Niki: This is not used in this xml-->
-    <postProcess>
-
-      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-<!-- MDBI, this switch must be on to trigger "fredb" automatically -->
-          <analysis switch="$(MDBIswitch)" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-<!-- /MDBI -->
-        </timeSeries>
-        <timeSeries freq="6hr" source="atmos_4xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmos4xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="atmos_daily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK)" calcInterval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="annual" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAerAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-      </component>
-
-      <component type="atmos_scalar" start="$(ANA_CLIMO_START)" source="atmos_scalar">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-      </component>
-
-<!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/tracerAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/tracerMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-<!-- LAND -->
-      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthTS/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthAve/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="land_cubic" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="none">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)" >
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthTSNative/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landDailyTSNative/*)">
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-      </component>
-
-    </postProcess>
-  </experiment>
-
-  <experiment name="c96_cmip_postprocess"><!--Niki: This is not used in this xml-->
-    <postProcess>
-
-      <component type="atmos" zInterp="era40" start="$(ANA_CMIP_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-<!-- MDBI, this switch must be on to trigger "fredb" automatically -->
-          <analysis switch="$(MDBIswitch)" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-<!-- /MDBI -->
-        </timeSeries>
-        <timeSeries freq="6hr" source="atmos_4xdaily" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmos4xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="atmos_daily" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosMonthTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-        <timeAverage source="annual" interval="$(PP_CMIP_CHUNK)" calcInterval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="annual" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_level" start="$(ANA_CMIP_START)" source="atmos_month" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_month_aer" start="$(ANA_CMIP_START)" source="atmos_month_aer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/atmosMonthAerAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_diurnal" start="$(ANA_CMIP_START)" source="atmos_diurnal" cubicToLatLon="180,288">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-      </component>
-
-      <component type="atmos_scalar" start="$(ANA_CMIP_START)" source="atmos_scalar">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-      </component>
-
-<!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_CMIP_START)" source="atmos_tracer" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/tracerAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/tracerMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-<!-- LAND -->
-      <component type="land" start="$(ANA_CMIP_START)" source="land_month" cubicToLatLon="180,288" interpMethod="conserve_order1">
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CMIP_CHUNK)"/>
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/landMonthTS/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CMIP_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CMIP_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/landMonthAve/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="land_cubic" start="$(ANA_CMIP_START)" source="land_month" cubicToLatLon="none">
-        <timeSeries freq="monthly" chunkLength="$(PP_CMIP_CHUNK)" >
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/landMonthTSNative/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CMIP_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_cmip.xml" xpointer="xpointer(*/landDailyTSNative/*)">
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-      </component>
-
-    </postProcess>
-  </experiment>
-
   <experiment name="c192_amip_postprocess">
     <postProcess>
 
@@ -1324,127 +836,6 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
     </postProcess>
   </experiment>
 
-  <experiment name="c192_climo_postprocess">
-    <postProcess>
-
-      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="360,576">
-        <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-<!-- MDBI, this switch must be on to trigger "fredb" automatically -->
-          <analysis switch="$(MDBIswitch)" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-<!-- /MDBI -->
-        </timeSeries>
-        <timeSeries freq="6hr" source="atmos_4xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmos4xDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="atmos_daily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosDailyTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK)" calcInterval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="annual" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="360,576">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer" cubicToLatLon="360,576" interpMethod="conserve_order1">
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAerAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" cubicToLatLon="360,576">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-      </component>
-
-      <component type="atmos_scalar" start="$(ANA_CLIMO_START)" source="atmos_scalar">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-      </component>
-
-<!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" cubicToLatLon="360,576" interpMethod="conserve_order1">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/tracerAnnualTS/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/tracerMonthAve/*)">
-            <xi:fallback/>
-          </xi:include>
-        </timeAverage>
-      </component>
-
-<!-- LAND -->
-      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="360,576" interpMethod="conserve_order1">
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)"/>
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthTS/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
-        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthAve/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeAverage>
-      </component>
-
-      <component type="land_cubic" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="none">
-        <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)" >
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthTSNative/*)" >
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-        <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)">
-          <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landDailyTSNative/*)">
-            <xi:fallback/>
-	  </xi:include>
-        </timeSeries>
-      </component>
-
-    </postProcess>
-  </experiment>
 
   <experiment name="c192_cmip_postprocess">
     <postProcess>
@@ -1565,10 +956,10 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
         </timeSeries>
       </component>
 
-
     </postProcess>
   </experiment>
 
+ 
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
@@ -1664,94 +1055,6 @@ Experiment name = $(name)
 
   </experiment>
 
-<!--=====================-->
-<!--= CLIMO EXPERIMENTS =-->
-<!--=====================-->
-
-  <experiment name="c192L48_am4a1_2000climo" inherit="cm4p1_compile">
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="am4a1" 
-communityModelID="am4a1"
-communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Same model as c192L48_am4a1, but
-configuration with present-day climatological SSTs, present-day GHGs and aerosols.
-
-    </description>
-
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_v20140325.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common_v20140325.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3_v20130324.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192_v20140324.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1,1,1,0,0,0,
-        calendar = 'noleap'
-        dt_atmos = 1200,
-        dt_cpld  = 7200,
-        use_lag_fluxes = .true.
-        concurrent = .false.
-        do_ocean = .false.
-        ocean_npes = 0
-        atmos_npes = $atmos_npes
-        atmos_nthreads = $atmos_nthreads
-      </namelist>
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c192_atmos_domain_decomp']/input/node())"/>
-    </input>
-
-    <runtime>
-      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="5:20:00"/>
-      </production>
-      <regression name="basic">
-        <run days="10"   npes="1152" runTimePerJob="01:00:00"/>
-      </regression>
-      <regression name="restarts">
-        <run days="5 5" npes="1152" runTimePerJob="01:00:00"/>
-      </regression>
-      <regression name="timing">
-        <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
-        <run months="1"   npes="1152" runTimePerJob="02:00:00"/> 
-        <run months="1"   npes="2304" runTimePerJob="01:30:00"/>
-        <run months="1"   npes="3456" runTimePerJob="01:00:00"/>
-        <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
-        <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
-      </regression>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//experiment[@name='c192_climo_postprocess']/postProcess/node())"/>
-    </postProcess>
-
-  </experiment>
 
 <!--=======================-->
 <!--= COUPLED EXPERIMENTS =-->
@@ -1973,7 +1276,7 @@ OVERRIDE_EOF
       </regression>
 
       <regression name="bigrts">
-        <run days="10" npes="8576" runTimePerJob="00:10:00"/><!---->
+        <run days="10" npes="8576" runTimePerJob="00:30:00"/><!---->
       </regression>
 
     </runtime>
