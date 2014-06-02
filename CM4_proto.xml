@@ -1626,20 +1626,21 @@ endif
       <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh $(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month"/>
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_monthly.frepp"/>
+        </timeSeries>        
       </component>
       
       <component type="ocean_annual"   start="$(ANA_CLIMO_START)" source="ocean_annual">
         <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_annual">
-          <!--This is an example for generating analysis figures-->
-          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_annual.frepp"/>
         </timeSeries>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
       
       <component type="ice"  start="$(ANA_CLIMO_START)"  source="ice_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"  source="ice_month">
-	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
+	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
 	</timeSeries>   
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
       </component>
