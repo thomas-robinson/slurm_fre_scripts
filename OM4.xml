@@ -146,6 +146,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
      <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
         <archive>$ARCHIVE/$(FRE_STEM)$(DEBUGLEVEL)/$(name)/$(platform)-$(target)</archive>
         <analysis>$(NB_ROOT)</analysis>
+        <ptmp>/ptmp/$USER</ptmp>
      <!-- /MDBI -->
      </directory>
      <property name="F2003_FLAGS"   value=""/>
@@ -571,16 +572,16 @@ cd $work
       <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
       <!--PostProcessing component models-->
       <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month">
-        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month"/>
-      </component>
-      <component type="ocean_annual"   start="$(PP_START_YEAR)" source="ocean_annual"> 
-        <timeSeries freq="annual"  chunkLength="$(CHUNK_LENGTH_A)" source="ocean_annual">
-          <!--This is an example for generating analysis figures-->
-          <!--<variables>temp salt</variables>--> <!--This causes temp and salt time series only-->
-          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
+        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month">
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_monthly.frepp"/>
         </timeSeries>
       </component>
-      
+      <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"> 
+        <timeSeries freq="annual"  chunkLength="$(CHUNK_LENGTH_A)" source="ocean_annual">
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_annual.frepp"/>
+        </timeSeries>
+      </component>
+
       <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)"  source="ice_month">
 	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" cumulative="yes" script="/home/fms/local/opt/fre-analysis/test/jpk/SeaIce/Krasting-SeaIce.csh"/>
