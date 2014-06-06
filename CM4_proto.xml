@@ -203,7 +203,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -657,8 +657,18 @@ else if ( "$npes" == "6912" ) then
   set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set ocn_layout   =   "32,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "2304"
+
+else if ( "$npes" == "13824" ) then
+  set atmos_npes = "2304"
+  set atmos_nthreads = "4"
+  set physics_window = "8,3"
+  set fv_layout    =   "24,16"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "24,16"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "64,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "4608"
 
 else if ( "$npes" == "7040" ) then
   set atmos_npes = "1152"
@@ -670,6 +680,50 @@ else if ( "$npes" == "7040" ) then
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
   set do_ocean = "true"
   set ocean_npes   = "2432"
+
+else if ( "$npes" == "7848" ) then
+  set atmos_npes = "1152"
+  set atmos_nthreads = "4"
+  set physics_window = "16,3"
+  set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "3240"
+
+else if ( "$npes" == "15696" ) then
+  set atmos_npes = "2304"
+  set atmos_nthreads = "4"
+  set physics_window = "8,3"
+  set fv_layout    =   "24,16"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "24,16"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "90,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "6480"
+
+else if ( "$npes" == "8169" ) then
+  set atmos_npes = "1536"
+  set atmos_nthreads = "4"
+  set physics_window = "12,3"
+  set fv_layout    =   "8,32"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,32"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "128,12"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "45,45"; set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "2025"
+
+else if ( "$npes" == "8448" ) then
+  set atmos_npes = "1536"
+  set atmos_nthreads = "4"
+  set physics_window = "12,3"
+  set fv_layout    =   "8,32"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,32"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "128,12"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "32,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "2304"
 
 else if ( "$npes" == "8576" ) then
   set atmos_npes = "1536"
@@ -1271,12 +1325,14 @@ OVERRIDE_EOF
 
       <regression name="rts"> <!--fits on t1-->
             <run days="10" npes="3456" runTimePerJob="00:30:00"/><!--npes= 3456  main_loop= 961.055729  ATM= 861.276609  OCN= 930.596231  SYPD= 2.46304-->        
-        <run days="10" npes="7040" runTimePerJob="00:10:00"/><!--npes= 7040  main_loop= 18846.426343  ATM= 18575.064638  OCN= 15403.657272  SYPD= 4.52162-->
+            <run days="10" npes="7040" runTimePerJob="00:30:00"/><!--npes= 7040  main_loop= 18846.426343  ATM= 18575.064638  OCN= 15403.657272  SYPD= 4.52162-->
 
+        <run days="10" npes="8576" runTimePerJob="00:30:00"/><!--npes= 8576  main_loop= 479.941982  ATM= 465.252784  OCN= 398.818169  SYPD= 4.9321-->
+        <run days="10" npes="8169" runTimePerJob="00:30:00"/><!--npes= 8169  main_loop= 624.676531  ATM= 459.766339  OCN= 592.720540  SYPD= 3.78936-->
       </regression>
 
       <regression name="bigrts">
-        <run days="10" npes="8576" runTimePerJob="00:30:00"/><!---->
+        <run days="10" npes="7848" runTimePerJob="00:30:00"/><!---->
       </regression>
 
     </runtime>
