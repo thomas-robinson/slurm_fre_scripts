@@ -13,18 +13,18 @@ module load fre/bronx-7
 fremake -x OM4.xml -p ncrc2.intel -t prod MOM6_SIS_libs_compile -no-link
    To run with SIS
 fremake -x OM4.xml -p ncrc2.intel -t prod MOM6_SIS_compile
-frerun  -x OM4.xml -p ncrc2.intel -t prod  MOM6z_SIS_025_base_line -r basic 
+frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS_baseline -r basic 
    To run with SIS2
 fremake -x OM4.xml -p ncrc2.intel -t prod MOM6_SIS2_compile
-frerun  -x OM4.xml -p ncrc2.intel -t prod MOM6z_SIS2_025_base_line -r basic 
+frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic 
 
 
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
    <property name="RELEASE"      value="tikal_201403"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_GIT_TAG" value="dev/master"/>  <!-- git tag for MOM6 source code -->
-   <property name="SIS2_GIT_TAG" value="dev/master"/>
+   <property name="MOM6_GIT_TAG" value="dev/master/2014.05.23"/> <!-- git tag for MOM6 source code -->
+   <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
    <property name="FRE_STEM"     value="$(RELEASE)_mom6_20140523"/>
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
 
@@ -37,9 +37,10 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod MOM6z_SIS2_025_base_line -r basic
    <property name="ANALYSIS_SWITCH" value="on"/>
 
    <property name="PROD_RUNTIME"         value="16:00:00"/>
-   <property name="PROD_SEGTIME"         value="03:15:00"/>
+   <property name="PROD_SEGTIME"         value="03:45:00"/>
    <property name="MASK_TABLE"           value="mask_table.1054.90x45"/> <!--layouts must be 90,45-->
    <property name="PROD_NPES"            value="2996"/> <!-- 90*45 - 1054 -->
+   <property name="OCN_PROD_LAYOUT"      value="90,45"/>
    <property name="OCN_PROD_IO_LAYOUT"   value="9,5"/>
    <property name="ICE_PROD_LAYOUT"      value="90,45"/>
    <property name="ICE_PROD_IO_LAYOUT"   value="9,5"/>
@@ -145,6 +146,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod MOM6z_SIS2_025_base_line -r basic
      <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
         <archive>$ARCHIVE/$(FRE_STEM)$(DEBUGLEVEL)/$(name)/$(platform)-$(target)</archive>
         <analysis>$(NB_ROOT)</analysis>
+        <ptmp>/ptmp/$USER</ptmp>
      <!-- /MDBI -->
      </directory>
      <property name="F2003_FLAGS"   value=""/>
@@ -165,7 +167,6 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod MOM6z_SIS2_025_base_line -r basic
            mkdir -p $NBROOT
            cd $NBROOT
 /home/Niki.Zadeh/bin/git_clone_mom6_fix.csh 
-
          ]]></csh>
 <!--The following are not used, but needed by fre -->
      <property name="SGI_FLAGS" value=""/>
@@ -430,7 +431,7 @@ $baseDate
          input_filename = '$restart_flag'
          restart_input_dir = 'INPUT/',
          restart_output_dir = 'RESTART/',
-         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_override'  
+         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_override'  
      </namelist>
 
      <namelist name="fms_nml">
@@ -488,21 +489,20 @@ $baseDate
            h_lo_lim = 1.e-10
     </namelist>
 
-<!--Niki: find a way to specify the NIPROC,NJPROC below by $(NIPROC),... -->  
-        <csh><![CDATA[
+    <csh type="always"><![CDATA[
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-touch MOM_override 
-cat > MOM_override << OVERRIDE_EOF
-LAYOUT = 90,45
+touch $work/INPUT/MOM_override 
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
+LAYOUT = $(OCN_PROD_LAYOUT)
 #override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT) 
 #override MASKTABLE = $(MASK_TABLE)
-OVERRIDE_EOF
+LAYOUT_EOF
 cd $work
-     ]]></csh>
+    ]]></csh>
   
-     <csh type="always">
-        <![CDATA[
+    <csh type="always">
+      <![CDATA[
 #------------------------------------------
 ## Find out whether to restart.
 
@@ -518,10 +518,10 @@ endif
 cd $work
 ## Run the model
 #------------------------------------------
-       ]]>
-      </csh>    
-
+      ]]>
+    </csh>    
    </input>
+
    <runtime>   
        <regression name="basic">
          <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
@@ -570,19 +570,18 @@ cd $work
 
       <!--REFINE DIAG SCRIPT to untar the files under history/ -->
       <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
-<!--Niki: Find a way to call the database_ingestor.csh every year -->
       <!--PostProcessing component models-->
       <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month">
-        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month"/>
-      </component>
-      <component type="ocean_annual"   start="$(PP_START_YEAR)" source="ocean_annual"> 
-        <timeSeries freq="annual"  chunkLength="$(CHUNK_LENGTH_A)" source="ocean_annual">
-          <!--This is an example for generating analysis figures-->
-          <!--<variables>temp salt</variables>--> <!--This causes temp and salt time series only-->
-          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/MOM6_ts_annual.csh"/>
+        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month">
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_monthly.frepp"/>
         </timeSeries>
       </component>
-      
+      <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"> 
+        <timeSeries freq="annual"  chunkLength="$(CHUNK_LENGTH_A)" source="ocean_annual">
+          <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" endYear="$(PP_END_YEAR)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_annual.frepp"/>
+        </timeSeries>
+      </component>
+
       <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)"  source="ice_month">
 	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" cumulative="yes" script="/home/fms/local/opt/fre-analysis/test/jpk/SeaIce/Krasting-SeaIce.csh"/>
@@ -613,9 +612,9 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
-<experiment name="MOM6z_SIS2_025_base_line" inherit="MOM6_SIS2_compile">
+<experiment name="OM4_SIS2_baseline" inherit="MOM6_SIS2_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="MOM6z_SIS2_025 $(MOM6_GIT_TAG)" communityModelID="OWG_MOM6z_SIS2_025" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS2 $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" communityExperimentID="$(name)" >
  global 1/4 degree z test case
 </description>  
 <!-- MDBI --> 
@@ -703,7 +702,7 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 
 <!--With the followin initCond crashed in 1 day
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">/lustre/f1/Niki.Zadeh/tikal_201403_mom6_20140506/MOM6z_SIS2_025_base_line_493days/ncrc2.intel-prod/1x0m128d_2996pe/restart/19010509.tar</dataSource>
+         <dataSource platform="$(platform)">/lustre/f1/Niki.Zadeh/tikal_201403_mom6_20140506/MOM6z_SIS2_025_baseline_493days/ncrc2.intel-prod/1x0m128d_2996pe/restart/19010509.tar</dataSource>
       </dataFile>
 -->
       
@@ -746,7 +745,7 @@ $baseDate
          input_filename = '$restart_flag'
          restart_input_dir = 'INPUT/',
          restart_output_dir = 'RESTART/',
-         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_override'  
+         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_override'  
      </namelist>
 
       <namelist name="SIS_input_nml" >
@@ -793,35 +792,29 @@ $baseDate
        mask_table='INPUT/$(MASK_TABLE)'
     </namelist>
 
-<!--Niki: find a way to specify the NIPROC,NJPROC below by $(NIPROC),... -->  
-        <csh><![CDATA[
+    <csh><![CDATA[
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-touch SIS_override
-cat > SIS_override << OVERRIDE_EOF
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-#override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT)
-#override NIPROC = 90
-#override NJPROC = 45
-#override MASKTABLE = $(MASK_TABLE)
-OVERRIDE_EOF
-
-touch MOM_override 
-cat > MOM_override << OVERRIDE_EOF
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-#override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT)
-#override NIPROC = 90
-#override NJPROC = 45
-#override MASKTABLE = $(MASK_TABLE)
-OVERRIDE_EOF
-
 cd $work
-     ]]></csh>
+touch $work/SIS_override
+cat > $work/SIS_override << OVERRIDE_EOF
+#override undef NIPROC_IO
+#override undef NJPROC_IO
+#override IO_LAYOUT = $(ICE_PROD_IO_LAYOUT)
+LAYOUT = $(ICE_PROD_LAYOUT)
+#override MASKTABLE = $(MASK_TABLE)
+OVERRIDE_EOF
+
+touch $work/INPUT/MOM_override 
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
+LAYOUT = $(OCN_PROD_LAYOUT)
+#override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT) 
+#override MASKTABLE = $(MASK_TABLE)
+LAYOUT_EOF
+    ]]></csh>
   
-     <csh type="always">
-        <![CDATA[
+    <csh type="always">
+      <![CDATA[
 #------------------------------------------
 ## Find out whether to restart.
 
@@ -837,10 +830,10 @@ endif
 cd $work
 ## Run the model
 #------------------------------------------
-       ]]>
-      </csh>    
-
+      ]]>
+    </csh>    
    </input>
+
    <runtime>   
        <regression name="basic">
          <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
@@ -864,97 +857,31 @@ cd $work
 
 </experiment>
 
-<experiment name="MOM6z_SIS2_025_base_line_TEST" inherit="MOM6z_SIS2_025_base_line">
+<experiment name="OM4_SIS2_baseline_TEST" inherit="OM4_SIS2_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="TEST" communityModel="MOM6z_SIS_025 $(MOM6_GIT_TAG)" communityModelID="OWG_MOM6z_SIS_025" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="TEST" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
 MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
 
 
-<experiment name="OM4_SIS_Millero" inherit="OM4_SIS_baseline">
+<experiment name="OM4_SIS_gust_0p03" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="MOM6z_SIS_025 $(MOM6_GIT_TAG)" communityModelID="OWG_MOM6z_SIS_025" communityExperimentName="$(name)" communityExperimentID="$(name)" >
- global 1/4 degree z  PRESSURE_DEPENDENT_FRAZIL = True
-                      DTFREEZE_DP    = -7.75e-8
-                      TFREEZE_FORM = "MILLERO_78"
+<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+ global 1/4 degree z   GUST_CONST = 0.03
 </description>
 <!-- MDBI -->
    <input>
-        <csh><![CDATA[
+     <csh><![CDATA[
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-touch MOM_override
-cat > MOM_override << OVERRIDE_EOF
-#override  PRESSURE_DEPENDENT_FRAZIL = True
-#override DTFREEZE_DP = -7.75e-8
-#override TFREEZE_FORM = "MILLERO_78" 
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-#override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT)
-#override NIPROC = 90
-#override NJPROC = 45
-#override MASKTABLE = $(MASK_TABLE)
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override GUST_CONST = 0.03
 OVERRIDE_EOF
 cd $work
      ]]></csh>
-
-     <csh type="always">
-        <![CDATA[
-#------------------------------------------
-## Find out whether to restart.
-
-if ( $ireload == 1 ) then
- if ( $irun == 1 ) then
-  set restart_flag = 'n'
- else
-  set restart_flag = 'r'
- endif
-else
-  set restart_flag = 'r'
-endif
-cd $work
-## Run the model
-#------------------------------------------
-       ]]>
-      </csh>
-   </input>
-</experiment>
-<experiment name="MOM6z_SIS_025_cdwlow" inherit="OM4_SIS_baseline">
-<!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="MOM6z_SIS_025 $(MOM6_GIT_TAG)" communityModelID="OWG_MOM6z_SIS_025" communityExperimentName="$(name)" communityExperimentID="$(name)" >
- global 1/4 degree z     ice_model_nml namelist modification, cdw = 1.E-003
-</description>
-<!-- MDBI -->
-   <input>
-     <namelist name="ice_model_nml" >
-       layout=$(ICE_PROD_LAYOUT)
-       io_layout=$(ICE_PROD_IO_LAYOUT)
-       mask_table='INPUT/$(MASK_TABLE)'
-           nsteps_dyn=144
-           nsteps_adv=2
-           num_part = 6
-           wd_turn = 0.0
-           spec_ice=.false.
-           ice_bulk_salin = 0.005
-           alb_sno = 0.85                    ! keep CM2 setting
-           alb_ice = 0.65                    ! keep CM2 setting
-           t_range_melt = 1.0                ! NOTE: CM2 uses 1.0
-           heat_rough_ice = 5.0e-4
-           cm2_bugs = .false.
-           do_icebergs = .false.
-           atmos_winds=.true.
-           add_diurnal_sw = .true.
-           do_ice_limit=.false.
-           max_ice_limit=4.0
-           channel_viscosity=5.e5
-           chan_cfl_limit=0.001
-           h_lo_lim = 1.e-10
-           cdw = 1.0e-3                     ! default ice/water drag coef 3.24e-3
-    </namelist>
    </input>
 </experiment>
 
 </experimentSuite>
-
