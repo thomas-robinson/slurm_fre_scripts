@@ -716,8 +716,8 @@ $baseDate
       </dataFile>
 
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS</dataSource>
-        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS</dataSource>
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS2</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS2</dataSource>
       </dataFile>
 
       <namelist name="coupler_nml">
@@ -753,7 +753,7 @@ $baseDate
         input_filename = 'n'
         restart_input_dir = 'INPUT/',
         restart_output_dir = 'RESTART/',
-        parameter_filename = 'INPUT/SIS_input','INPUT/SIS_override' 
+        parameter_filename = 'INPUT/SIS_input','INPUT/SIS_layout','INPUT/SIS_override' 
      </namelist>
 
     <namelist name="fms_nml">
@@ -796,12 +796,10 @@ $baseDate
 cd $work/INPUT
 ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
 cd $work
-touch $work/SIS_override
-cat > $work/SIS_override << OVERRIDE_EOF
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-#override IO_LAYOUT = $(ICE_PROD_IO_LAYOUT)
+touch $work/INPUT/SIS_override
+cat > $work/INPUT/SIS_layout << OVERRIDE_EOF
 LAYOUT = $(ICE_PROD_LAYOUT)
+#override IO_LAYOUT = $(ICE_PROD_IO_LAYOUT)
 #override MASKTABLE = $(MASK_TABLE)
 OVERRIDE_EOF
 
