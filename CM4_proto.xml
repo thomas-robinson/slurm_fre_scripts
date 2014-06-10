@@ -31,8 +31,8 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
-  <property name="MOM6_GIT_TAG" value="dev/master/2014.05.14"/>  <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM" value="mdt/$(RELEASE)"/>             <!-- customize as needed -->
+  <property name="MOM6_GIT_TAG" value="dev/master/2014.06.09"/>  <!-- git tag for MOM6 source code -->
+  <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates_mom6_2014.06.09"/>             <!-- customize as needed -->
 <!--  <property name="FRE_STEM" value="$(RELEASE)_awgUpdates_mom6_2014.05.14"/> -->
   <property name="FRE_VERSION" value="bronx-7"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -680,6 +680,17 @@ else if ( "$npes" == "7040" ) then
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
   set do_ocean = "true"
   set ocean_npes   = "2432"
+
+else if ( "$npes" == "7008" ) then
+  set atmos_npes = "1152"
+  set atmos_nthreads = "4"
+  set physics_window = "16,3"
+  set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "75,32"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "2400"
 
 else if ( "$npes" == "7848" ) then
   set atmos_npes = "1152"
@@ -1329,10 +1340,12 @@ OVERRIDE_EOF
 
         <run days="10" npes="8576" runTimePerJob="00:30:00"/><!--npes= 8576  main_loop= 479.941982  ATM= 465.252784  OCN= 398.818169  SYPD= 4.9321-->
         <run days="10" npes="8169" runTimePerJob="00:30:00"/><!--npes= 8169  main_loop= 624.676531  ATM= 459.766339  OCN= 592.720540  SYPD= 3.78936-->
+        <run days="10" npes="7848" runTimePerJob="00:30:00"/><!--npes= 7848  main_loop= 532.500004  ATM= 529.401630  OCN= 397.083122  SYPD= 4.4453-->
+        <run days="10" npes="7008" runTimePerJob="00:30:00"/><!--npes= 7008  main_loop= 555.280044  ATM= 524.772877  OCN= 521.962257  SYPD= 4.26294-->
       </regression>
 
       <regression name="bigrts">
-        <run days="10" npes="7848" runTimePerJob="00:30:00"/><!---->
+        <run days="10" npes="7008" runTimePerJob="00:30:00"/><!---->
       </regression>
 
     </runtime>
