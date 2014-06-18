@@ -34,7 +34,7 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
   <property name="MOM6_DATE" value="2014.06.09"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>                  <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
-  <property name="FRE_VERSION" value="bronx-7"/>
+  <property name="FRE_VERSION" value="fre/bronx-7"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
@@ -228,7 +228,7 @@ configuration.
         module unload netcdf fre
         module load PrgEnv-intel/4.0.46
         module swap intel intel/12.0.5.220
-        module load fre/$(FRE_VERSION)
+        module load $(FRE_VERSION)
  
         setenv KMP_STACKSIZE 512m
         setenv NC_BLKSZ 1M
@@ -257,10 +257,10 @@ configuration.
         source $MODULESHOME/init/csh
         module use -a /home/fms/local/modulefiles
         module purge
-        module load fre/$(FRE_VERSION)
+        module load $(FRE_VERSION)
         module load fre-analysis
 #git MOM6 analysis scripts
-           setenv FREVERSION fre/$(FRE_VERSION)           
+           setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
            mkdir -p $NBROOT
            cd $NBROOT
@@ -606,7 +606,6 @@ touch MOM_input
   <experiment name="c192_coupled_domain_decomp">
     <input>
       <csh><![CDATA[
-#Niki: ocean_layout and ocean_io_layout could only be specified in MOM_override and setting them here does not do anything
 # Coupled configurations
 set domains_stack_size = "3097152"
 if ( "$npes" == "1152" ) then
@@ -1171,8 +1170,7 @@ else
   set restart_flag = 'r'
 endif
 
-
-ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc
+ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc 
 
 touch $work/INPUT/MOM_override
 

@@ -23,9 +23,10 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
    <property name="RELEASE"      value="tikal_201403"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_GIT_TAG" value="dev/master/2014.05.23"/> <!-- git tag for MOM6 source code -->
+   <property name="MOM6_DATE"    value="20140618"/>     <!-- git tag date for MOM6 source code -->
+   <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
+   <property name="MOM6_GIT_TAG" value="dev/master"/> <!-- git tag for MOM6 source code -->
    <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
-   <property name="FRE_STEM"     value="$(RELEASE)_mom6_20140523"/>
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
 
    <!--Production run properties. Users can modify these according to their need and/or performance analysis-->
@@ -38,8 +39,8 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
    <property name="PROD_RUNTIME"         value="16:00:00"/>
    <property name="PROD_SEGTIME"         value="03:45:00"/>
-   <property name="MASK_TABLE"           value="mask_table.1054.90x45"/> <!--layouts must be 90,45-->
-   <property name="PROD_NPES"            value="2996"/> <!-- 90*45 - 1054 -->
+   <property name="MASK_TABLE"           value="mask_table.1053.90x45"/> <!--layouts must be 90,45-->
+   <property name="PROD_NPES"            value="2997"/> <!-- 90*45 - 1053 -->
    <property name="OCN_PROD_LAYOUT"      value="90,45"/>
    <property name="OCN_PROD_IO_LAYOUT"   value="9,5"/>
    <property name="ICE_PROD_LAYOUT"      value="90,45"/>
@@ -326,6 +327,344 @@ Make the executable for ocean-ice experiments.
 <!-- /MDBI -->
 
      <input>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+      <!--MOM6 Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
+      <!--SIS Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+
+      <dataFile label="namelist" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/input.nml</dataSource>
+     </dataFile>
+     <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/field_table</dataSource>
+     </dataFile>
+
+      <!--OM4 gridSpec mosaic datasets-->
+      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/grid_spec.nc</dataSource>
+        <dataSource site="gfdl">/archive/gold/datasets/OM4_025/siena/mosaic.unpacked/grid_spec.nc</dataSource> 
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xland_mosaic_tile1.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mask.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_hgrid.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mask.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mosaic.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_topog.nc</dataSource>
+       <!--hsmget cannot get this  <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/topog.nc</dataSource> -->
+      </dataFile>
+
+      <!--OM4 CORE forcing datasets-->
+      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/data_table</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_precip.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_rad.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/q_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/runoff.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/salt_restore.v20140616.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/slp.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/t_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/u_10_mod.clim.nc</dataSource>
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/v_10_mod.clim.nc</dataSource>
+      </dataFile>
+
+      <diagTable>
+$name
+$baseDate
+      </diagTable>
+
+
+      <namelist name="coupler_nml">
+       months = $months,
+       days   = $days,
+       current_date = 1900,1,1,0,0,0,
+       hours = 0
+       minutes = 0
+       seconds = 0
+       calendar = 'NOLEAP',
+       dt_cpld  = 3600,
+       dt_atmos = 3600,
+       do_atmos = .false.,
+       do_land = .false.,
+       do_ice = .true.,
+       do_ocean = .true.,
+       atmos_npes = 0,
+       ocean_npes = 0,
+       concurrent = .false.
+       use_lag_fluxes=.false. 
+     </namelist>
+
+     <namelist name="fms_nml">
+            clock_grain='ROUTINE'
+            clock_flags='NONE'
+            domains_stack_size = $domains_stack_size
+            stack_size =0
+      </namelist>
+     <namelist name="fms_io_nml" >
+         fms_netcdf_restart=.true.
+         threading_read='multi'
+         threading_write='single'
+         fileset_write='single'
+         max_files_r = 200
+         max_files_w = 200
+         checksum_required = .false. ! This is needed to be able to restart the Ice under GNU. ref. Redmine issue 2000
+     </namelist>
+
+     <namelist name="atmos_model_nml" >
+       layout=$fv_layout
+       mask_table='INPUT/$ocn_mask_table'
+     </namelist>
+     <namelist name="land_model_nml" >
+       layout=$land_layout
+       mask_table='INPUT/$ocn_mask_table'
+     </namelist>
+
+   
+   </input>
+
+   <runtime>   
+       <regression name="basic">
+         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       </regression>
+       <regression name="rts">
+         <run days="5 5"  npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       </regression>
+       <regression name="timing">
+         <run days="10"   npes="576"   runTimePerJob="00:30:00"/>
+         <run days="10"   npes="1152"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="2304"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="3240"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="2432"  runTimePerJob="00:30:00"/>
+       </regression>
+
+      <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
+           <segment simTime="12" units="months" runTime="$(PROD_SEGTIME)"/>
+       </production>
+
+      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.$(TAREXT)"/>
+
+   </runtime>
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+  <experiment name="OM4_domain_decomp">
+    <input>
+      <csh><![CDATA[
+set domains_stack_size = "3097152"
+
+if ( "$npes" == "288" ) then
+  set fv_layout    =   "24,12"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "24,12"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "24,12"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "288"
+
+else if ( "$npes" == "576" ) then
+  set fv_layout    =   "24,24"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "24,24"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "24,24"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "0,0"  ; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "576"
+
+else if ( "$npes" == "1152" ) then
+  set fv_layout    =   "32,36"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "32,36"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "32,36"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes = "1152"
+#npes= 1152  main_loop= 1085.141626  ATM= 47.583859  OCN= 1036.583676  SYPD= 2.1814
+
+else if ( "$npes" == "2304" ) then
+  set fv_layout    =   "32,72"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "32,72"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "32,72"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "32,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes = "2304"
+#npes= 2304  main_loop= 603.878142  ATM= 37.217106  OCN= 565.590432  SYPD= 3.91987
+
+
+else if ( "$npes" == "3240" ) then
+  set fv_layout    =   "45,72"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "45,72"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "45,72"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "3240"
+#npes= 3240  main_loop= 464.708698  ATM= 39.759137  OCN= 423.801078  SYPD= 5.09378
+
+else if ( "$npes" == "2432" ) then
+  set fv_layout    =   "45,72"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "45,72"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "45,72"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
+  set do_ocean = "true"
+  set ocean_npes   = "2432"
+#npes= 2432  main_loop= 458.382556  ATM= 33.484085  OCN= 423.827549  SYPD= 5.16408
+
+else if ( "$npes" == "4050" ) then
+  set fv_layout    =   "90,45"; set fv_io_layout    =  "9,5"
+  set land_layout  =   "90,45"; set land_io_layout  =  "9,5"
+  set ice_layout   =   "90,45"; set ice_io_layout   =  "9,5"
+  set ocn_layout   =   "90,45"; set ocn_io_layout   =  "9,5"; set ocn_mask_table = "MOM_mask_table"
+  set do_ocean = "true"
+  set ocean_npes   = "4050"
+
+else if ( "$npes" == "2997" ) then
+  set fv_layout    =   "90,45"; set fv_io_layout    =  "9,5"
+  set land_layout  =   "90,45"; set land_io_layout  =  "9,5"
+  set ice_layout   =   "90,45"; set ice_io_layout   =  "9,5"
+  set ocn_layout   =   "90,45"; set ocn_io_layout   =  "9,5"; set ocn_mask_table = "mask_table.1053.90x45"
+  set do_ocean = "true"
+  set ocean_npes   = "2997"
+#npes= 2997  main_loop= 395.756260  ATM= 33.947977  OCN= 361.032958  SYPD= 5.98127
+
+else
+  if ( $echoOn ) unset echo
+  echo "*ERROR*: npes == '$npes' is not supported in this xml."
+  if ( $echoOn ) set echo
+  exit 1
+endif
+
+cat > $work/INPUT/MOM_layout << LAYOUT_EOF
+LAYOUT = $ocn_layout
+#override IO_LAYOUT = $ocn_io_layout
+MASKTABLE = $ocn_mask_table
+LAYOUT_EOF
+
+# runCommand:
+  alias runCommand "aprun -n $ocean_npes -d 1 ./$executable:t"
+      ]]></csh>
+
+    </input>
+  </experiment>
+
+  <experiment name="OM4_data">
+    <input>
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/MOM_input</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/layer_coord.nc</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/seawifs_1998-2006_smoothed_2X.v20140616.nc</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/tidal_amplitude.v20140616.nc</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/MOM_channels_global_025</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/vgrid_75_2m.nc</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/WOA05_pottemp_salt.nc </dataSource>
+
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.808.45x72</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1053.90x45</dataSource>
+     </dataFile>      
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
+      </dataFile>
+
+     <namelist name="MOM_input_nml" >
+         output_directory = './',
+         input_filename = '$restart_flag'
+         restart_input_dir = 'INPUT/',
+         restart_output_dir = 'RESTART/',
+         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_override'
+     </namelist>
+
+     <csh type="always"><![CDATA[
+if ( $ireload == 1 ) then
+ if ( $irun == 1 ) then
+  set restart_flag = 'n'
+ else
+  set restart_flag = 'r'
+ endif
+else
+  set restart_flag = 'r'
+endif
+
+
+ln -s $work/INPUT/ocean_topog.nc $work/INPUT/topog.nc 
+
+touch $work/INPUT/MOM_override
+
+      ]]></csh>
+ 
+     </input>
+
+  </experiment>
+
+  <experiment name="SIS_data">
+    <input>
+
+     <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+     </dataFile>
+      
+     <namelist name="ice_model_nml">
+           layout = $ice_layout
+           io_layout = $ice_io_layout
+           mask_table='INPUT/$ocn_mask_table'
+           nsteps_dyn=144
+           nsteps_adv=2
+           num_part = 6
+           wd_turn = 0.0
+           spec_ice=.false.
+           ice_bulk_salin = 0.05
+           alb_sno = 0.85                    ! keep CM2 setting
+           alb_ice = 0.65                    ! keep CM2 setting
+           t_range_melt = 1.0                ! NOTE: CM2 uses 1.0
+           heat_rough_ice = 5.0e-4
+           cm2_bugs = .false.
+           do_icebergs = .false.
+           add_diurnal_sw = .true.
+           do_ice_limit=.false.
+           max_ice_limit=4.0
+           channel_viscosity=5.e5
+           h_lo_lim = 1.e-10
+      </namelist>
+      <namelist name="icebergs_nml">
+        really_debug=.FALSE.
+        debug=.FALSE.
+        verbose=.FALSE.
+        verbose_hrs=2400
+      </namelist>
+
+      <namelist name="ocean_albedo_nml">
+            ocean_albedo_option = 2
+      </namelist>
+      <namelist name="ocean_rough_nml">
+            rough_scheme = 'beljaars'
+      </namelist>
+     </input>
+  </experiment>
+
+
+
+  
+<experiment name="OM4_SIS_baseline_old" inherit="MOM6_SIS_compile">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+ global 1/4 degree z test case
+</description>  
+<!-- MDBI --> 
+    <realization r="1" i="1" p="1"/>
+    <scenario 
+      communityForcing="CORE"
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      startTime="$(PP_START_YEAR)"
+      endTime="$(PP_END_YEAR)" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+     <input>
      <dataFile label="namelist" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/input.nml</dataSource>
      </dataFile>
@@ -542,7 +881,6 @@ cd $work
     </postProcess>
 
   </experiment>
-
 
   <!-- OCEAN  and ICE post-processing-->
   <experiment name="OM4_postprocess">
