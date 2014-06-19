@@ -344,7 +344,7 @@ Make the executable for ocean-ice experiments.
       <!--OM4 gridSpec mosaic datasets-->
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/grid_spec.nc</dataSource>
-        <dataSource site="gfdl">/archive/gold/datasets/OM4_025/siena/mosaic.unpacked/grid_spec.nc</dataSource> 
+        <dataSource site="gfdl">/archive/gold/datasets/OM4_025/mosaic.v20140610.unpacked/grid_spec.nc</dataSource> 
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xland_mosaic_tile1.nc</dataSource>
@@ -922,7 +922,7 @@ cd $work
 
       <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)"  source="ice_month">
-	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" cumulative="yes" script="/home/fms/local/opt/fre-analysis/test/jpk/SeaIce/Krasting-SeaIce.csh"/>
+	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(PP_START_YEAR)" cumulative="yes" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
 	</timeSeries>   
         
         <timeAverage source="annual"  interval="$(CHUNK_LENGTH_A)"/>
