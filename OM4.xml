@@ -606,8 +606,8 @@ touch $work/INPUT/MOM_override
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
      </dataFile>
 
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ice_model.res.nc</dataSource>
+     <dataFile label="input" target="INPUT/ice_model.res.nc" chksum="" size="" timestamp="">
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc</dataSource>
      </dataFile>
       
      <namelist name="ice_model_nml">
