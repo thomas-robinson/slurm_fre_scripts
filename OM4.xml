@@ -22,10 +22,10 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
-   <property name="RELEASE"      value="tikal_201403"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_DATE"    value="20140623"/>     <!-- git tag date for MOM6 source code -->
+   <property name="RELEASE"      value="tikal_201406"/> <!-- CVS tag for shared source code -->
+   <property name="MOM6_DATE"    value="2014.07.01"/>     <!-- git tag date for MOM6 source code -->
    <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
-   <property name="MOM6_GIT_TAG" value="dev/master/2014.06.23"/> <!-- git tag for MOM6 source code -->
+   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
    <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
 
@@ -35,6 +35,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
    <property name="PP_START_YEAR"  value="1900"/>
    <property name="PP_END_YEAR"    value="1909"/>
    <property name="CHUNK_LENGTH_A" value="5yr"/>
+   <property name="CHUNK_LENGTH_B" value="10yr"/>
    <property name="ANALYSIS_SWITCH" value="on"/>
 
    <property name="PROD_RUNTIME"         value="16:00:00"/>
@@ -89,7 +90,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
           module unload netcdf fre fre-commands
           module load PrgEnv-intel
           module swap intel intel/12.0.5.220
-
+          module load git
           module load $(FRE_VERSION)
           setenv KMP_STACKSIZE 512m
           setenv NC_BLKSZ 1M
@@ -121,7 +122,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
           module use -a /ncrc/home2/fms/local/modulefiles
           module unload PrgEnv-pgi PrgEnv-pathscale PrgEnv-intel PrgEnv-gnu PrgEnv-cray
           module unload netcdf fre fre-commands
-
+          module load git
           module load $(FRE_VERSION)
           setenv KMP_STACKSIZE 512m
           setenv NC_BLKSZ 1M
@@ -161,7 +162,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
            module purge
            module load jpk-analysis/0.0.4
            module load $(FRE_VERSION)
-
+           module load git
            #Some tricks to use the refineDiag and analysis scripts from a checkout of MOM6 at gfdl 
            setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
@@ -192,10 +193,6 @@ Make the executable for ocean-ice experiments.
       <component name="fms" paths="shared" includeDir="$root/$(LIBS_ROOT)/src/shared/include">
          <source>
             <codeBase version="$(RELEASE)"> shared </codeBase>
-	    <!--The following update is needed to run in debug mode with Intel-->
-	    <csh>
-	      cvs up -r tikal_bugfix_z1l shared/mpp/include/mpp_update_domains2D.h
-	    </csh>
          </source>
          <compile>
             <cppDefs>-Duse_libMPI -Duse_netCDF $(F2003_FLAGS)</cppDefs>
@@ -311,11 +308,10 @@ Make the executable for ocean-ice experiments.
 
 <experiment name="OM4_SIS_baseline" inherit="MOM6_SIS_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
  global 1/4 degree z test case
 </description>  
 <!-- MDBI --> 
-    <realization r="1" i="1" p="1"/>
     <scenario 
       communityForcing="CORE"
       parentExperimentID="N/A" 
@@ -653,11 +649,10 @@ touch $work/INPUT/MOM_override
   
 <experiment name="OM4_SIS_baseline_old" inherit="MOM6_SIS_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
  global 1/4 degree z test case
 </description>  
 <!-- MDBI --> 
-    <realization r="1" i="1" p="1"/>
     <scenario 
       communityForcing="CORE"
       parentExperimentID="N/A" 
@@ -915,21 +910,31 @@ cd $work
       <!--PostProcessing component models-->
       <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month">
-          <analysis switch="$(ANALYSIS_SWITCH)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_monthly.frepp"/>
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_monthly.frepp"/>
+        </timeSeries>
+        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_B)" source="ocean_month">
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_monthly.frepp"/>
         </timeSeries>
       </component>
+
       <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"> 
-        <timeSeries freq="annual"  chunkLength="$(CHUNK_LENGTH_A)" source="ocean_annual">
-          <analysis switch="$(ANALYSIS_SWITCH)" script="$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/ocn_annual.frepp"/>
-        </timeSeries>
+        <timeAverage source="annual"  interval="$(CHUNK_LENGTH_A)">
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
+        </timeAverage>
+        <timeAverage source="annual"  interval="$(CHUNK_LENGTH_B)">
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
+        </timeAverage>
       </component>
 
       <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)"  source="ice_month">
 	   <analysis switch="$(ANALYSIS_SWITCH)" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
 	</timeSeries>   
-        
+        <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_B)"  source="ice_month">
+           <analysis switch="$(ANALYSIS_SWITCH)" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
+        </timeSeries>
         <timeAverage source="annual"  interval="$(CHUNK_LENGTH_A)"/>
+        <timeAverage source="annual"  interval="$(CHUNK_LENGTH_B)"/>
       </component>
 
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
@@ -949,18 +954,17 @@ cd $work
 
 <experiment name="OM4_SIS_baseline_TEST" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="TEST" communityModel="OM4_SIS_baseline_TEST $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="TEST" communityModel="OM4_SIS_baseline_TEST $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
 MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
 <experiment name="OM4_SIS2_baseline" inherit="MOM6_SIS2_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS2 $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS2 $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" >
  global 1/4 degree z test case
 </description>  
 <!-- MDBI --> 
-    <realization r="1" i="1" p="1"/>
     <scenario 
       communityForcing="CORE"
       parentExperimentID="N/A" 
@@ -1199,27 +1203,42 @@ cd $work
 
 <experiment name="OM4_SIS2_baseline_TEST" inherit="OM4_SIS2_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="TEST" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="TEST" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
 MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
+<experiment name="OM4_SIS_noBG" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)">
+ global 1/4 degree z  no background mixing , as in the CM2.5 
+</description>
+<!-- MDBI -->
+   <input>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
 
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override HENYEY_IGW_BACKGROUND = False
+#override KD = 1.0E-07
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
 
 <experiment name="OM4_SIS_gust_0p03" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" communityExperimentID="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
  global 1/4 degree z   GUST_CONST = 0.03
 </description>
 <!-- MDBI -->
    <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
      <csh><![CDATA[
-cd $work/INPUT
-ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
 cat > $work/INPUT/MOM_override << OVERRIDE_EOF
 #override GUST_CONST = 0.03
 OVERRIDE_EOF
-cd $work
      ]]></csh>
    </input>
 </experiment>
