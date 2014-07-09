@@ -626,6 +626,23 @@ touch MOM_input
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/c192_GIS_025_hydrography_v20140328.tar</dataSource>
       </dataFile>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C192L48_LM3_GIS_025_grid_19810101.remapped.v20140505.tar</dataSource>
+      </dataFile>
+      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/grid/c192_GIS_025_grid_v20140508.tar</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
+  <experiment name="c192_data_oldGrid">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/19810101.static_veg.remapped_to_C192_GIS_025.v20140328.tar</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/c192_GIS_025_hydrography_v20140328.tar</dataSource>
+      </dataFile>
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C192L48_LM3_GIS_025_grid_19810101.remapped.v20140328.tar</dataSource>
       </dataFile>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
@@ -746,6 +763,7 @@ else if ( "$npes" == "3168" ) then
   set ocean_npes = "2304"
 
 #npes= 3168  main_loop= 556.145360  ATM= 504.227122  OCN= 528.297102  SYPD= 4.2563
+#npes= 3168  main_loop= 556.754100  ATM= 503.647652  OCN= 528.220859  SYPD= 4.25165
 
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "576"
@@ -758,6 +776,7 @@ else if ( "$npes" == "3456" ) then
   set ocean_npes = "2304"
 
 #npes= 3456  main_loop= 576.297966  ATM= 411.944604  OCN= 547.548220  SYPD= 4.10746
+#npes= 3456  main_loop= 539.972313  ATM= 394.137114  OCN= 526.619508  SYPD= 4.38379
 
 else if ( "$npes" == "3456_2" ) then
   set atmos_npes = "432"
@@ -782,6 +801,8 @@ else if ( "$npes" == "3296" ) then
   set ocean_npes   = "2432"
 
 #npes= 3296  main_loop= 511.343895  ATM= 507.349218  OCN= 391.545661  SYPD= 4.62922
+#npes= 3296  main_loop= 593.167007  ATM= 532.334115  OCN= 451.776504  SYPD= 3.99065 ?
+#npes= 3296  main_loop= 506.862653  ATM= 503.128218  OCN= 391.497827  SYPD= 4.67015
 
 else if ( "$npes" == "3584" ) then
   set atmos_npes = "576"
@@ -794,6 +815,19 @@ else if ( "$npes" == "3584" ) then
   set ocean_npes   = "2432"
 
 #npes= 3584  main_loop= 423.286286  ATM= 399.471799  OCN= 391.183390  SYPD= 5.59225
+#npes= 3584  main_loop= 419.922637  ATM= 395.322781  OCN= 391.138917  SYPD= 5.63705
+
+else if ( "$npes" == "6975" ) then
+  set atmos_npes = "1152"
+  set atmos_nthreads = "2"
+  set physics_window = "8,3"
+  set fv_layout    =   "12,16"; set fv_io_layout    =  "2,4"
+  set land_layout  =   "12,16"; set land_io_layout  =  "2,4"
+  set ice_layout   =   "144,8"; set ice_io_layout   =  "2,4"
+  set ocn_layout   =   "90,72"; set ocn_io_layout   =  "2,4"; set ocn_mask_table = "mask_table.1809.90x72"
+  set ocean_npes   = "4671"
+
+#npes= 6975  main_loop= 252.023227  ATM= 238.648825  OCN= 231.217848  SYPD= 9.39248
 
 else
   if ( $echoOn ) unset echo
@@ -1567,6 +1601,7 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_atmos_domain_decomp']/input/node())"/>
     </input>
 
     <runtime>
@@ -1576,6 +1611,11 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
+      <regression name="rts">
+        <run days="4 4"   npes="432"  runTimePerJob="00:30:00"/>
+        <run days="8"   npes="864"  runTimePerJob="00:30:00"/>
+      </regression>
+
       <regression name="restarts">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
@@ -1586,6 +1626,9 @@ Experiment name = $(name)
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
       </regression>
+
+      <reference restart="$(REFERENCE)/archive/1x0m8d_432pe/restart/19800109.tar"/>
+
     </runtime>
 
     <postProcess>
@@ -1652,7 +1695,7 @@ Experiment name = $(name)
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
       </namelist>
-      <!-- Input datasets -->
+      <!--AMIP Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
@@ -1666,6 +1709,11 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
       </regression>
+      <regression name="rts">
+        <run days="4 4" npes="864" runTimePerJob="01:00:00"/>
+        <run days="8" npes="1152" runTimePerJob="01:00:00"/>
+      </regression>
+
       <regression name="restarts">
         <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
       </regression>
@@ -1677,6 +1725,9 @@ Experiment name = $(name)
         <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
         <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
       </regression>
+
+      <reference restart="$(REFERENCE)/archive/1x0m8d_864pe/restart/19800109.tar"/>
+
     </runtime>
 
     <postProcess>
@@ -1703,6 +1754,8 @@ Experiment name = $(name)
 
        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.808.45x72</dataSource>
        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1053.90x45</dataSource>
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1809.90x72</dataSource>
+
      </dataFile>      
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
@@ -1995,24 +2048,32 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="720" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="720" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="1440" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="720" runTimePerJob="01:20:00"/><!---->
         <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
      </regression>
 
       <regression name="timing">
+        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
         <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
       </regression>
 
       <regression name="bigrts">
-        <run days="10" npes="7008" runTimePerJob="00:30:00"/><!---->
+        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="6975" runTimePerJob="00:20:00"/><!---->
+
       </regression>
+
+      <reference restart="$(REFERENCE)/archive/1x0m10d_1440pe/restart/00010111.tar"/>
 
     </runtime>
 
@@ -2023,7 +2084,7 @@ OVERRIDE_EOF
 
   </experiment>
 
- <experiment name="CM4_c192L48_am4a1_2000" inherit="cm4p1_compile">
+ <experiment name="CM4_c192L48_am4a1_2000" inherit="cm4p1_compile"> <!--This test case crashes with sat.vap.pres.tbl.overflow since the new grid-->
 
 <!-- MDBI -->
     <description
@@ -2102,8 +2163,10 @@ OVERRIDE_EOF
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3_v20130324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192_v20140324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
+
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
+      
       <xi:include xpointer="xpointer(//experiment[@name='c192_coupled_domain_decomp']/input/node())"/>
 
       <!--MOM6 Input datasets-->
@@ -2121,18 +2184,20 @@ OVERRIDE_EOF
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-            <run days="10" npes="3456" runTimePerJob="00:30:00"/><!--npes= 3456  main_loop= 961.055729  ATM= 861.276609  OCN= 930.596231  SYPD= 2.46304-->        
-            <run days="10" npes="7040" runTimePerJob="00:30:00"/><!--npes= 7040  main_loop= 18846.426343  ATM= 18575.064638  OCN= 15403.657272  SYPD= 4.52162-->
+        <run days="5 5" npes="1728" runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
+      </regression>
 
+      <regression name="bigrts">
+        <run days="10" npes="3456" runTimePerJob="00:30:00"/><!--npes= 3456  main_loop= 961.055729  ATM= 861.276609  OCN= 930.596231  SYPD= 2.46304-->
+        <run days="10" npes="7040" runTimePerJob="00:30:00"/><!--npes= 7040  main_loop= 18846.426343  ATM= 18575.064638  OCN= 15403.657272  SYPD= 4.52162-->
         <run days="10" npes="8576" runTimePerJob="00:30:00"/><!--npes= 8576  main_loop= 479.941982  ATM= 465.252784  OCN= 398.818169  SYPD= 4.9321-->
         <run days="10" npes="8169" runTimePerJob="00:30:00"/><!--npes= 8169  main_loop= 624.676531  ATM= 459.766339  OCN= 592.720540  SYPD= 3.78936-->
         <run days="10" npes="7848" runTimePerJob="00:30:00"/><!--npes= 7848  main_loop= 532.500004  ATM= 529.401630  OCN= 397.083122  SYPD= 4.4453-->
         <run days="10" npes="7008" runTimePerJob="00:30:00"/><!--npes= 7008  main_loop= 555.280044  ATM= 524.772877  OCN= 521.962257  SYPD= 4.26294-->
-      </regression>
-
-      <regression name="bigrts">
         <run days="10" npes="7008" runTimePerJob="00:30:00"/><!---->
       </regression>
+
+      <reference restart="$(REFERENCE)/archive/1x0m10d_1728pe_crash/restart/00010111.tar"/>
 
     </runtime>
 

@@ -961,7 +961,7 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 
 <experiment name="OM4_SIS2_baseline" inherit="MOM6_SIS2_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS2 $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS2 $(FRE_STEM)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" >
  global 1/4 degree z test case
 </description>  
 <!-- MDBI --> 
@@ -1203,14 +1203,14 @@ cd $work
 
 <experiment name="OM4_SIS2_baseline_TEST" inherit="OM4_SIS2_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="TEST" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+<description communityProject="TEST" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
 MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
 <experiment name="OM4_SIS_noBG" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)">
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)">
  global 1/4 degree z  no background mixing , as in the CM2.5 
 </description>
 <!-- MDBI -->
@@ -1226,9 +1226,26 @@ OVERRIDE_EOF
    </input>
 </experiment>
 
+<experiment name="OM4_SIS_gust_0p01" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z   GUST_CONST = 0.01
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override GUST_CONST = 0.01
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
 <experiment name="OM4_SIS_gust_0p03" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="OWG" communityModel="OM4_SIS $(MOM6_GIT_TAG)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
  global 1/4 degree z   GUST_CONST = 0.03
 </description>
 <!-- MDBI -->
@@ -1242,5 +1259,242 @@ OVERRIDE_EOF
      ]]></csh>
    </input>
 </experiment>
+
+<experiment name="OM4_SIS_gust_0p1" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z   GUST_CONST = 0.1  - really push the gustiness, 10x
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override GUST_CONST = 0.1
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_KPP_linear" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z  KPP shape linear
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override KPP%NLT_SHAPE = "LINEAR"
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_KHTH_200" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z   KHTH_200, RES SCALED KHTH=F, res coef = default
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override USE_VARIABLE_MIXING = False
+#override RESOLN_SCALED_KHTH = False
+THICKNESSDIFFUSE = True
+THICKNESSDIFFUSE_FIRST = True
+KHTH = 200.
+#override KHTH_SLOPE_CFF = 0.
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_KHTH_res7_200" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z   KHTH_200, RES SCALED KHTH=F, res coef = 0.7101
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override USE_VARIABLE_MIXING = False
+THICKNESSDIFFUSE = True
+THICKNESSDIFFUSE_FIRST = True
+KHTH = 200.
+#override KHTH_SLOPE_CFF = 0.
+KH_RES_FN_POWER = 100
+KH_RES_SCALE_COEF = 0.7101
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_KHTH_res1_200" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+ global 1/4 degree z   KHTH_200, RES SCALED KHTH=F, res coef = 1.0
+</description>
+<!-- MDBI -->
+   <input>
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh><![CDATA[
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override USE_VARIABLE_MIXING = False
+THICKNESSDIFFUSE = True
+THICKNESSDIFFUSE_FIRST = True
+KHTH = 200.
+#override KHTH_SLOPE_CFF = 0.
+KH_RES_FN_POWER = 100
+KH_RES_SCALE_COEF = 1.0
+OVERRIDE_EOF
+     ]]></csh>
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_baseline_appendDiagTable_crashes" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="TEST" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
+</description>
+
+   <input>
+<!--
+    The problem with this approach is that the "Aditional ICE DIAGNOSTICS" section appears right after the first two lines and before
+    the file section. This cause the model to crash like:
+    FATAL from PE     3: diag_util_mod::init_output_field: file ice_month is NOT found in the diag_table
+-->    
+      <diagTable>
+$name
+$baseDate
+      </diagTable>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
+      </dataFile>
+     <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+     </dataFile>
+     
+      <diagTable>
+#================
+# Aditional ICE DIAGNOSTICS
+#================
+"ice_model", "T1",         "T1",         "ice_month", "all", .true., "none", 2
+"ice_model", "T2",         "T2",         "ice_month", "all", .true., "none", 2
+"ice_model", "T3",         "T3",         "ice_month", "all", .true., "none", 2
+"ice_model", "T4",         "T4",         "ice_month", "all", .true., "none", 2
+"ice_model", "TSN",        "TSN",        "ice_month", "all", .true., "none", 2
+"ice_model", "TS",         "TS",         "ice_month", "all", .true., "none", 2
+
+      </diagTable>
+	
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_baseline_appendDiagTable_csh" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="TEST" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
+</description>
+
+   <input>
+<!--
+   This works. But it's a kludge. 
+-->    
+     
+     <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+     <csh type="always">
+        <![CDATA[
+#===Have to repeat whatever is in the parent experiment===
+if ( $ireload == 1 ) then
+ if ( $irun == 1 ) then
+  set restart_flag = 'n'
+ else
+  set restart_flag = 'r'
+ endif
+else
+  set restart_flag = 'r'
+endif
+
+ln -s $work/INPUT/ocean_topog.nc $work/INPUT/topog.nc
+
+touch $work/INPUT/MOM_override
+#=========================================================
+#Append to diag_table
+#=======================
+cat >> $work/diag_table.append << DIAG_EOF
+#================
+# Additional ICE DIAGNOSTICS
+#================
+"ice_model", "T3",         "T3",         "ice_month", "all", .true., "none", 2
+"ice_model", "T4",         "T4",         "ice_month", "all", .true., "none", 2
+"ice_model", "TSN",        "TSN",        "ice_month", "all", .true., "none", 2
+DIAG_EOF
+
+#Override the runCommand to do something in the workDir right before run command
+unalias runCommand
+alias runCommand 'cat $work/diag_table.append>>$work/diag_table; /usr/bin/time -p `which aprun` -n $npes -d 1 $executable'
+       ]]>
+      </csh>
+
+
+   </input>
+</experiment>
+
+<experiment name="OM4_SIS_baseline_appendDiagTable_runtimecsh_doesnotwork" inherit="OM4_SIS_baseline">
+<!--The following description tags are needed to put the experiment in the MDBI-->
+<description communityProject="TEST" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
+</description>
+
+   <runtime>   
+       <regression name="basic">
+         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       </regression>
+       <regression name="rts">
+         <run days="5 5"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       </regression>
+
+      <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
+           <segment simTime="12" units="months" runTime="$(PROD_SEGTIME)"/>
+       </production>
+
+      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.$(TAREXT)"/>
+
+     <csh type="always">
+        <![CDATA[
+#Append to diag_table
+#=======================
+echo We are here
+cat >> $work/diag_table << DIAG_EOF
+#================
+# Additional ICE DIAGNOSTICS
+#================
+"ice_model", "T3",         "T3",         "ice_month", "all", .true., "none", 2
+"ice_model", "T4",         "T4",         "ice_month", "all", .true., "none", 2
+"ice_model", "TSN",        "TSN",        "ice_month", "all", .true., "none", 2
+DIAG_EOF
+
+       ]]>
+      </csh>
+   </runtime>
+
+
+</experiment>
+
+
 
 </experimentSuite>
