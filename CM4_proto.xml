@@ -817,6 +817,18 @@ else if ( "$npes" == "3584" ) then
 #npes= 3584  main_loop= 423.286286  ATM= 399.471799  OCN= 391.183390  SYPD= 5.59225
 #npes= 3584  main_loop= 419.922637  ATM= 395.322781  OCN= 391.138917  SYPD= 5.63705
 
+else if ( "$npes" == "5279" ) then
+  set atmos_npes = "864"
+  set atmos_nthreads = "2"
+  set physics_window = "8,4"
+  set fv_layout    =   "12,12"; set fv_io_layout    =  "2,4"
+  set land_layout  =   "12,12"; set land_io_layout  =  "2,4"
+  set ice_layout   =   "72,12"; set ice_io_layout   =  "2,4"
+  set ocn_layout   =   "90,54"; set ocn_io_layout   =  "2,6"; set ocn_mask_table = "mask_table.1309.90x54"
+  set ocean_npes   = "3551"
+
+#npes= 5279  main_loop= 313.143484  ATM= 295.694495  OCN= 290.264955  SYPD= 7.55923
+
 else if ( "$npes" == "6975" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
@@ -1738,29 +1750,47 @@ Experiment name = $(name)
 
 
 <!--=======================-->
-<!--= COUPLED EXPERIMENTS =-->
+<!--= OCEAN-ICE DATA      =-->
 <!--=======================-->
-<!-- Implemented by Niki -->
   <experiment name="OM4_data">
     <input>
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/MOM_input</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/layer_coord.nc</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/seawifs_1998-2006_smoothed_2X.v20140616.nc</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/tidal_amplitude.v20140616.nc</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/MOM_channels_global_025</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/vgrid_75_2m.nc</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/WOA05_pottemp_salt.nc </dataSource>
-
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.808.45x72</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1053.90x45</dataSource>
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1809.90x72</dataSource>
-
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/MOM_input
      </dataFile>      
-      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/layer_coord.nc
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/seawifs_1998-2006_smoothed_2X.v20140616.nc
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/tidal_amplitude.v20140616.nc
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/MOM_channels_global_025
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/vgrid_75_2m.nc
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/WOA05_pottemp_salt.nc 
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.808.45x72
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1053.90x45
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1809.90x72
+     </dataFile>
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1309.90x54     
+     </dataFile>
+     <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
-      </dataFile>
+     </dataFile>
 
      <namelist name="MOM_input_nml" >
          output_directory = './',
@@ -1806,7 +1836,7 @@ touch $work/INPUT/MOM_override
      </dataFile>
 
      <dataFile label="input" target="INPUT/ice_model.res.nc" chksum="" size="" timestamp="">
-       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc</dataSource>
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc
      </dataFile>
       
      <namelist name="ice_model_nml">
@@ -1852,6 +1882,9 @@ touch $work/INPUT/MOM_override
      </input>
   </experiment>
 
+<!--=======================-->
+<!--= COUPLED EXPERIMENTS =-->
+<!--=======================-->
   <experiment name="c96L48_am4a1r1_2000climo" inherit="cm4p1_compile">
 
 <!-- MDBI -->
@@ -2058,10 +2091,7 @@ OVERRIDE_EOF
      </regression>
 
       <regression name="timing">
-        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="5279" runTimePerJob="00:20:00"/><!---->
       </regression>
 
       <regression name="bigrts">
@@ -2231,8 +2261,10 @@ OVERRIDE_EOF
          mv *velocity_truncations CPU_stats MOM_parameter_doc* extra.results/
 
          ]]></csh>
-      <!--REFINE DIAG SCRIPT to untar the files under history/ -->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh $(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
+      <!--REFINE DIAG SCRIPT -->
+      <!--refineDiag_data_stager.csh calculates global averages of basic quantities and stores them in a sqlit database file-->
+      <!--By default a refineDiag script causes the annual history files to be unpacked and saved in /ptmp/$USER-->
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
