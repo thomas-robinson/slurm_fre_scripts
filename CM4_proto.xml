@@ -114,6 +114,9 @@ be controlled by changing properties below.
   <property name="ANA_CLIMO_END" value="0011"/>
   <property name="ANA_CLIMO_LEN" value="10yr"/>
   <property name="PP_CLIMO_CHUNK" value="5yr"/>
+  <property name="PP_CLIMO_CHUNK_B" value="20yr"/>
+  <property name="PP_OCEAN_CHUNK" value="5yr"/> 
+  <property name="PP_OCEAN_CHUNK_B" value="20yr"/> 
 
 <!--====================-->
 <!--= CMIP EXPERIMENTS =-->
@@ -133,7 +136,6 @@ properties below.
   <property name="ANA_CMIP_END" value="0030"/>
   <property name="ANA_CMIP_LEN" value="30yr"/>
   <property name="PP_CMIP_CHUNK" value="5yr"/>
-  <property name="PP_OCEAN_CHUNK" value="5yr"/> 
 
 
 <!--=========================================-->
@@ -1199,7 +1201,8 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
             <xi:fallback/>
           </xi:include>
         </timeAverage>
-        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK)" calcInterval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK)"   calcInterval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK_B)" calcInterval="$(PP_CLIMO_CHUNK_B)"/>
         <timeAverage source="annual" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
             <xi:fallback/>
@@ -1264,6 +1267,8 @@ set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
             <xi:fallback/>
 	  </xi:include>
         </timeSeries>
+        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="annual" interval="$(PP_CLIMO_CHUNK_B)"/>
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/landMonthAve/*)" >
@@ -2273,6 +2278,7 @@ OVERRIDE_EOF
       </component>
 
       <component type="ocean_annual" start="$(ANA_CLIMO_START)"  source="ocean_annual">
+        <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK_B)"/>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
         </timeAverage>
@@ -2283,6 +2289,7 @@ OVERRIDE_EOF
 	   <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
 	</timeSeries>   
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
+        <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK_B)"/>
       </component>
       
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
