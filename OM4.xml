@@ -23,8 +23,8 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
    <property name="RELEASE"      value="tikal_201406"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_DATE"    value="2014.07.01"/>     <!-- git tag date for MOM6 source code -->
-   <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
+   <property name="MOM6_DATE"    value="2014.07.23"/>     <!-- git tag date for MOM6 source code -->
+   <property name="FRE_STEM"     value="$(RELEASE)_plus_z1l_groupupdates_mom6_$(MOM6_DATE)"/>
    <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
    <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
@@ -52,7 +52,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 
    <!--Users need not change the following properties -->
-   <property name="reference_tag"  value="tikal_mom6_2014.01.17"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
+   <property name="reference_tag"  value="tikal_201406"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
    <property name="PROG_MAIN"   value="coupler/coupler_main.o"/>
    <property name="LIBS_ROOT"   value="MOM6_SIS_libs_compile"/>
    <property name="FMS_LIB_DIR" value="./$(LIBS_ROOT)/$(platform)-$(target)/exec"/>
@@ -193,6 +193,14 @@ Make the executable for ocean-ice experiments.
       <component name="fms" paths="shared" includeDir="$root/$(LIBS_ROOT)/src/shared/include">
          <source>
             <codeBase version="$(RELEASE)"> shared </codeBase>
+	    <csh>
+cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_misc.inc
+cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_util.inc
+cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_group_update.h
+cvs up -r tikal_group_update_fix_z1l shared/mpp/mpp_domains.F90
+cvs up -r tikal_group_update_fix_z1l shared/mpp/test_mpp_domains.F90
+cvs up -r rms_sdu shared/diag_manager
+	    </csh>  
          </source>
          <compile>
             <cppDefs>-Duse_libMPI -Duse_netCDF $(F2003_FLAGS)</cppDefs>
@@ -473,7 +481,7 @@ $baseDate
            <segment simTime="12" units="months" runTime="$(PROD_SEGTIME)"/>
        </production>
 
-      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.$(TAREXT)"/>
+      <reference restart="$(REFERENCE)/1x0m10d_2997pe/restart/19000111.$(TAREXT)"/>
 
    </runtime>
     <postProcess>
