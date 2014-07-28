@@ -1241,16 +1241,13 @@ OVERRIDE_EOF
 </experiment>
 
 
-<experiment name="OM4_SIS_baseline_appendDiagTable" inherit="OM4_SIS_baseline">
+<experiment name="OM4_SIS_restrat_test" inherit="OM4_SIS_baseline">
 <!--The following description tags are needed to put the experiment in the MDBI-->
-<description communityProject="TEST" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
+<description communityProject="OWG" communityModel="OM4_SIS $(FRE_STEM)" communityModelID="OWG_OM4_SIS" communityExperimentName="$(name)" >
 MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 
    <input>
-<!--
-   This works. But it's a kludge. 
--->    
      
      <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
 
@@ -1270,17 +1267,30 @@ endif
 ln -s $work/INPUT/ocean_topog.nc $work/INPUT/topog.nc
 
 touch $work/INPUT/MOM_override
+
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+MIXEDLAYER_RESTRAT = True
+FOX_KEMPER_ML_RESTRAT_COEF = 20.
+OVERRIDE_EOF
+
+
 #=========================================================
 #Append to diag_table
 #=======================
 if ( $irun == 1 ) then
 cat >> $work/diag_table << DIAG_EOF
 #================
-# Additional ICE DIAGNOSTICS
+# Additional DIAGNOSTICS
 #================
-"ice_model", "T1",         "T1",         "ice_month", "all","mean" , "none", 2
-"ice_model", "T2",         "T2",         "ice_month", "all","mean" , "none", 2
-"ice_model", "TS",         "TS",         "ice_month", "all","mean" , "none", 2
+ "ocean_model", "MLD_restrat",      "MLD_restrat",      "ocean_month", "all", "mean", "none",2
+ "ocean_model", "uml_restrat",      "uml_restrat",      "ocean_month", "all", "mean", "none",2
+ "ocean_model", "vml_restrat",      "vml_restrat",      "ocean_month", "all", "mean", "none",2
+ "ocean_model", "udml_restrat",     "udml_restrat",     "ocean_month", "all", "mean", "none",2
+ "ocean_model", "vdml_restrat",     "vdml_restrat",     "ocean_month", "all", "mean", "none",2
+ "ocean_model", "uhml",             "uhml",             "ocean_month", "all", "mean", "none",2
+ "ocean_model", "vhml",             "vhml",             "ocean_month", "all", "mean", "none",2
+ "ocean_model", "MLu_restrat_time", "MLu_restrat_time", "ocean_month", "all", "mean", "none",2
+ "ocean_model", "MLv_restrat_time", "MLv_restrat_time", "ocean_month", "all", "mean", "none",2
 DIAG_EOF
 
 endif
