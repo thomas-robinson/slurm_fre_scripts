@@ -108,10 +108,10 @@ be controlled by changing properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CLIMO_START" value="0001"/>
-  <property name="EXP_CLIMO_END" value="0011"/>
-  <property name="EXP_CLIMO_LEN" value="11"/>
-  <property name="ANA_CLIMO_START" value="0002"/>
-  <property name="ANA_CLIMO_END" value="0011"/>
+  <property name="EXP_CLIMO_END" value="0030"/>
+  <property name="EXP_CLIMO_LEN" value="30"/>
+  <property name="ANA_CLIMO_START" value="0001"/>
+  <property name="ANA_CLIMO_END" value="0030"/>
   <property name="ANA_CLIMO_LEN" value="10yr"/>
   <property name="PP_CLIMO_CHUNK" value="5yr"/>
   <property name="PP_CLIMO_CHUNK_B" value="20yr"/>
@@ -206,7 +206,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_f</project>
+      <project>gfdl_b</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -222,6 +222,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="CWG_HOME"    value="/lustre/f1/unswept/John.Krasting/cwg/input"/>
       <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
@@ -255,6 +256,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="CWG_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg/input"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
         module use ~fms/local/modulefiles
@@ -281,6 +283,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="CWG_HOME"    value="/archive/John.Krasting/cwg/input"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
@@ -590,16 +593,16 @@ $baseDate
   <experiment name="c96_data_1deg">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/John.Krasting/cwg/input/19810101.static_veg.remapped_to_C96_CM4i.v20140730.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/19810101.static_veg.remapped_to_C96_CM4i.v20140730.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/John.Krasting/cwg/input/CM4i_hydrography_20140729.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/CM4i_hydrography_20140729.tar</dataSource>
       </dataFile>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/John.Krasting/cwg/IC/CM4i_C96L48_LM3_OM4_1deg_grid_19810101.remapped.v20140730-2.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/IC/CM4i_C96L48_LM3_OM4_1deg_grid_19810101.remapped.v20140730-2.tar</dataSource>
       </dataFile>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/John.Krasting/cwg/input/CM4i_mosaic_20140729.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/CM4i_mosaic_20140729.tar</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -2486,6 +2489,7 @@ communityExperimentName="$(name)">
 
       <csh type="always"><![CDATA[
 cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override ENERGYSAVEDAYS = 73.0
 OVERRIDE_EOF
       ]]></csh>
 
@@ -2517,7 +2521,7 @@ OVERRIDE_EOF
 
     <runtime>
       <production simTime="$(EXP_CMIP_LEN)" units="years" npes="1878" runTime="12:00:00">
-        <segment simTime="12" units="months" runTime="02:20:00"/>
+        <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
         <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
