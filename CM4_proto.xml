@@ -34,7 +34,7 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
   <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
-  <property name="FRE_VERSION" value="fre/bronx-7"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
+  <property name="FRE_VERSION" value="fre/bronx-6"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
@@ -222,7 +222,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
-      <property name="CWG_HOME"    value="/lustre/f1/unswept/John.Krasting/cwg/input"/>
+      <property name="CWG_HOME"          value="/lustre/f1/unswept/John.Krasting/cwg"/>
       <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
@@ -247,23 +247,37 @@ configuration.
     <platform name="nescc.intel">
       <project>gfdlccycle</project>
       <directory stem="$(FRE_STEM)">
-        <src>$HOME/$(stem)/$(name)/src</src>
-        <scripts>$HOME/$(stem)/scripts</scripts>
+        <root>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)</root>
+        <src>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)/$(name)/src</src>
+        <exec>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)/$(name)/$(platform)-$(target)/exec</exec>
+        <scripts>$HOME/$(stem)/$(name)/$(platform)-$(target)/scripts</scripts>
         <stdout>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
+        <state>$HOME/$(stem)/$(name)/$(platform)-$(target)/state</state>
+        <work>/scratch2/portfolios/GFDL/gfdlscr/$USER/work/$FRE_JOBID</work>
+        <ptmp>/scratch2/portfolios/GFDL/gfdlscr/$USER/ptmp</ptmp>
+        <stmp>/scratch2/portfolios/GFDL/gfdlscr/$USER/stmp</stmp>
+        <archive>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)/$(name)/$(platform)-$(target)</archive>
       </directory>
       <!-- <mkmfTemplate file=""/> -->
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
-      <property name="CWG_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg/input"/>
+      <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
         module use ~fms/local/modulefiles
         module load intel/12-12.0.4.191
         module load netcdf/4.1.1-intel-12
         module load mpt/2.06
-        module load fre/$(FRE_VERSION)
+        module load $(FRE_VERSION)
+        setenv MPICH_CPUMASK_DISPLAY
+        setenv KMP_STACKSIZE 512m
+        setenv NC_BLKSZ 1M
+        setenv F_UFMTENDIAN big
+        setenv SMA_SHMALLOC_FORCE_EQUAL off
+        setenv MPI_BUFS_PER_PROC 512
+        setenv MPI_BUFS_PER_HOST 512
       ]]></csh>
     </platform>
 
@@ -283,7 +297,7 @@ configuration.
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
-      <property name="CWG_HOME"    value="/archive/John.Krasting/cwg/input"/>
+      <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
@@ -593,16 +607,16 @@ $baseDate
   <experiment name="c96_data_1deg">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CWG_HOME)/19810101.static_veg.remapped_to_C96_CM4i.v20140730.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/input/19810101.static_veg.remapped_to_C96_CM4i.v20140730.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CWG_HOME)/CM4i_hydrography_20140729.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/input/CM4i_hydrography_20140729.tar</dataSource>
       </dataFile>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(CWG_HOME)/IC/CM4i_C96L48_LM3_OM4_1deg_grid_19810101.remapped.v20140730-2.tar</dataSource>
       </dataFile>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CWG_HOME)/CM4i_mosaic_20140729.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/input/CM4i_mosaic_20140729.tar</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -713,14 +727,33 @@ else
 endif
 
 # runCommand:
-alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+if ("${platform_domain}" == "ncrc.gov") then
+  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t"
+else
+  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
+  exit 53
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
 cd INPUT
 
 # adjustment of dry mass first time only
-set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
+set adjust_dry_mass = ".true."
+if (-e coupler.res) then
+   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
 
 # create dummy MOM6 parameter file
 touch MOM_input
@@ -838,14 +871,33 @@ else
 endif
 
 # runCommand:
+set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+if ("${platform_domain}" == "ncrc.gov") then
   alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t"
+else
+  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
+  exit 53
+endif
       ]]></csh>
 
       <csh type="always"><![CDATA[
 cd INPUT
 
 # adjustment of dry mass first time only
-set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
+set adjust_dry_mass = ".true."
+if (-e coupler.res) then
+   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
+
 
 # create dummy MOM6 parameter file
 touch MOM_input
@@ -879,6 +931,46 @@ else if ( "$npes" == "462" ) then
   set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
   set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "30"
+
+#else if ( "$npes" == "894" ) then
+#  set atmos_npes = "432"
+#  set atmos_nthreads = "2"
+#  set physics_window = "32,2"
+#  set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
+#  set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
+#  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
+#  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+#  set ocean_npes = "30"
+
+else if ( "$npes" == "894" ) then
+  set atmos_npes = "288"
+  set atmos_nthreads = "3"
+  set physics_window = "16,4"
+  set fv_layout    =   "2,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "2,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "30"
+
+else if ( "$npes" == "924" ) then
+  set atmos_npes = "432"
+  set atmos_nthreads = "2"
+  set physics_window = "32,2"
+  set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "10,6";  set ocn_io_layout   =  "1,6"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "60"
+
+else if ( "$npes" == "1182" ) then
+  set atmos_npes = "576"
+  set atmos_nthreads = "2"
+  set physics_window = "24,2"
+  set fv_layout    =   "4,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "4,24";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "192,3"; set ice_io_layout   =  "1,3"
   set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "30"
 
@@ -1000,7 +1092,7 @@ else
   exit 1
 endif
 
-if ("$npes" == "462" || "$npes" == "1878") then
+if ("$npes" == "462" || "$npes" == "894" || "$npes" == "924" || "$npes" == "1182" || "$npes" == "1878") then
 cat > $work/INPUT/MOM_layout << LAYOUT_EOF
 LAYOUT = $ocn_layout
 #override IO_LAYOUT = $ocn_io_layout
@@ -1016,14 +1108,34 @@ endif
 
 
 # runCommand:
+set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+if ("${platform_domain}" == "ncrc.gov") then
   alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
+else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t : -np $ocean_npes -v omplace -nt 1 ./$executable:t"
+else 
+  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
+  exit 53
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
 cd INPUT
 
 # adjustment of dry mass first time only
-set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
+set adjust_dry_mass = ".true."
+if (-e coupler.res) then
+   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
+
 
       ]]></csh>
     </input>
@@ -1187,14 +1299,34 @@ MASKTABLE = $ocn_mask_table
 LAYOUT_EOF
 
 # runCommand:
+set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+if ("${platform_domain}" == "ncrc.gov") then
   alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
+else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt  $atmos_nthreads ./$executable:t : -n- $ocean_npes -v omplace -nt 1 ./$executable:t"
+else
+  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
+  exit 53
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
 cd INPUT
 
 # adjustment of dry mass first time only
-set adjust_dry_mass = `/ncrc/home1/Larry.Horowitz/bin/adjust_dry_mass.csh`
+set adjust_dry_mass = ".true."
+if (-e coupler.res) then
+   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
+
 
       ]]></csh>
     </input>
@@ -2531,6 +2663,9 @@ OVERRIDE_EOF
         <run days="5 5" npes="1440" runTimePerJob="01:20:00"/><!---->
         <run days="10" npes="720"   runTimePerJob="01:20:00"/><!---->
         <run days="10" npes="462"   runTimePerJob="02:00:00"/><!---->
+        <run days="10" npes="894"   runTimePerJob="02:00:00"/><!---->
+        <run days="10" npes="924"   runTimePerJob="02:00:00"/><!---->
+        <run days="10" npes="1182"   runTimePerJob="02:00:00"/><!---->
         <run days="10" npes="1878"  runTimePerJob="01:20:00"/><!---->
         <run days="10" npes="3168"  runTimePerJob="00:20:00"/><!---->
      </regression>
@@ -3068,14 +3203,30 @@ LAYOUT_EOF
 \rm -f land.res.tile* soil.res.tile* lake.res.tile* vegn* snow.res.tile* river.res.tile* cana.res.tile* glac.res.tile*
 
 # runCommand:
-if ( $do_ocean == "true" ) then
- if( $serial  == "true" ) then
-  alias runCommand "aprun -d 1  -n $ocean_npes ./$executable:t"
- else
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
- endif  	
+set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+if ("${platform_domain}" == "ncrc.gov") then
+  if ( $do_ocean == "true" ) then
+   if( $serial  == "true" ) then
+    alias runCommand "aprun -d 1  -n $ocean_npes ./$executable:t"
+   else
+    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
+   endif  	
+  else
+    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+  endif
+else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+  if ( $do_ocean == "true" ) then
+   if( $serial  == "true" ) then
+    alias runCommand "mpiexec_mpt -np $ocean_npes -v omplace -nt 1 ./$executable:t"
+   else
+    alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t : -np $ocean_npes -v omplace -nt 1 ./$executable:t"
+   endif  	
+  else
+    alias runCommand "mpiexec_mpt -np $atmos_nthreads -np $atmos_npes ./$executable:t"
+  endif
 else
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
+  exit 53
 endif
       ]]></csh>
 
