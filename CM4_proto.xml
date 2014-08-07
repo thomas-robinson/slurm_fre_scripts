@@ -465,7 +465,19 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
         <codeBase version="$(MOM6_GIT_TAG)"> noaa-gfdl-mom6.git </codeBase>
-        <csh> mv noaa-gfdl-mom6 mom6 </csh>
+        <csh>
+          mv noaa-gfdl-mom6 mom6
+          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+            pushd mom6/examples; rm -f .datasets
+            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
+            popd
+          endif
+          test -e mom6/examples/.datasets
+          if ($status != 0) then
+            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
+          endif
+        </csh>
       </source>
       <compile>
         <cppDefs><![CDATA[ $(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
@@ -973,6 +985,16 @@ else if ( "$npes" == "1182" ) then
   set ice_layout   =   "192,3"; set ice_io_layout   =  "1,3"
   set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "30"
+
+#else if ( "$npes" == "1182" ) then
+#  set atmos_npes = "288"
+#  set atmos_nthreads = "4"
+#  set physics_window = "48,1"
+#  set fv_layout    =   "2,24";  set fv_io_layout    =  "1,4"
+#  set land_layout  =   "2,24";  set land_io_layout  =  "1,4"
+#  set ice_layout   =   "96,3";  set ice_io_layout   =  "1,3"
+#  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+#  set ocean_npes = "30"
 
 else if ( "$npes" == "1440" ) then
   set atmos_npes = "432"
@@ -2947,6 +2969,11 @@ Experiment name = $(name)
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_monthly.frepp"/>
         </timeSeries>
+      </component>
+
+      <component type="ocean_z"         start="$(ANA_CLIMO_START)" source="ocean_month_z">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
+        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
       </component>
 
       <component type="ocean_annual" start="$(ANA_CLIMO_START)"  source="ocean_annual">
