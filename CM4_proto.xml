@@ -2210,8 +2210,29 @@ touch $work/INPUT/MOM_override
      -->
      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
+        <dataSource site="nescc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
      </dataFile>
+
+     <!--Diag Table Additions to Match ESM2G-->
+     <diagTable>
+"ocean_month_snap",     1,  "months", 1, "days", "time",
+"ocean_annual_z",       1,  "years", 1, "days", "time",
+
+"ocean_model","h","h","ocean_month_snap","all",.false.,"none",2
+"ocean_model","e","e","ocean_month_snap","all",.false.,"none",2
+"ocean_model", "temp_int","temp_int","ocean_month_snap","all",.false.,"none",2
+"ocean_model", "salt_int","salt_int","ocean_month_snap","all",.false.,"none",2
+"ocean_model", "col_mass","col_mass","ocean_month_snap","all",.false.,"none",2
+"ocean_model", "mass_wt","mass_wt","ocean_month_snap","all",.false.,"none",2
+"ocean_model", "col_height","col_height","ocean_month_snap","all",.false.,"none",2
+
+"ocean_model","temp_z","temp","ocean_annual_z","all",.true.,"none",2
+"ocean_model","salt_z","salt","ocean_annual_z","all",.true.,"none",2
+"ocean_model","age_z","age","ocean_annual_z","all",.true.,"none",2
+"ocean_model","uh_z" ,"uh" ,"ocean_annual_z","all",.true.,"none",2
+"ocean_model","vh_z" ,"vh" ,"ocean_annual_z","all",.true.,"none",2
+     </diagTable>
 
      <namelist name="MOM_input_nml" >
          output_directory = './',
@@ -2804,23 +2825,7 @@ OVERRIDE_EOF
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96_v20140324.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_v20140324.nml"/>
 
-      <namelist name="aerosol_nml">  <!--***NEEDS CORRECTIONS***-->
-        family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA", "SOA"
-        in_family1 = F,T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,
-        in_family2 = F,F,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-        in_family3 = F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F,
-        in_family4 = T,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
-        in_family5 = F,F,F,F,F,F,F,T,T,T,T,T,F,F,F,F,
-        in_family6 = F,F,F,F,F,F,T,F,F,F,F,F,F,F,F,F,
-        in_family7 = T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
-        in_family8 = T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,
-        in_family9 = F,T,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-        in_family10= F,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
-        in_family11= T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,
-        aerosol_data_source = "predicted"
-      </namelist>
-      
-      <namelist name="aerosolrad_package_nml">  <!--***NEEDS CORRECTION***-->
+      <namelist name="aerosolrad_package_nml">
     force_to_repro_quebec = .true.
     using_im_bcsul = .true.
     volcanic_dataset_entry = 1,1,1,0,0,
@@ -3088,8 +3093,54 @@ OVERRIDE_EOF
                             "seasalt5_95%", "seasalt5_96%", "seasalt5_97%", "seasalt5_98%",
                             "seasalt5_99%"
       </namelist>
-      
-      <namelist name="ozone_nml">
+ 
+      <namelist name="carbon_aerosol_nml">
+        bcff_source = 'gocart_2007',
+          bcff_input_name(1)='anthro',
+          bcff_filename='emissions.bc.1x1.1859_2020.nc',
+          bcff_time_dependency_type='fixed_year',bcff_dataset_entry=1860,1,1,0,0,
+        omff_source = 'gocart_2007',
+          omff_input_name(1)='anthro',
+          omff_filename='emissions.om.1x1.1859_2020.nc',
+          omff_time_dependency_type='fixed_year',omff_dataset_entry=1860,1,1,0,0,
+        omsh_source = 'gocart_2007',
+          omsh_input_name(1)='ship',
+          omsh_filename='emissions.om.1x1.1859_2020.nc',
+          omsh_time_dependency_type='fixed_year',omsh_dataset_entry=1860,1,1,0,0,
+        bcsh_source = 'gocart_2007',
+          bcsh_input_name(1)='ship',
+          bcsh_filename='emissions.bc.1x1.1859_2020.nc',
+          bcsh_time_dependency_type='fixed_year',bcsh_dataset_entry=1860,1,1,0,0,
+        bcav_source = 'do_aircraft'
+          bcav_input_name(1)='fuel',
+          bcav_filename='emissions.aircraft.aero.1x1.1859_2020.nc',
+          bcav_time_dependency_type='fixed_year',bcav_dataset_entry=1860,1,1,0,0,
+        bcbb_source = 'AEROCOM',
+          bcbb_filename='emissions.bc.1x1.1859_2020.nc',
+          bcbb_input_name(1)='bb_l1'
+          bcbb_input_name(2)='bb_l2'
+          bcbb_input_name(3)='bb_l3'
+          bcbb_input_name(4)='bb_l4'
+          bcbb_input_name(5)='bb_l5'
+          bcbb_input_name(6)='bb_l6'
+          bcbb_time_dependency_type='fixed_year',bcbb_dataset_entry=1860,1,1,0,0,
+        ombb_source = 'AEROCOM',
+          ombb_filename='emissions.om.1x1.1859_2020.nc',
+          ombb_input_name(1)='bb_l1'
+          ombb_input_name(2)='bb_l2'
+          ombb_input_name(3)='bb_l3'
+          ombb_input_name(4)='bb_l4'
+          ombb_input_name(5)='bb_l5'
+          ombb_input_name(6)='bb_l6'
+          ombb_time_dependency_type='fixed_year',ombb_dataset_entry=1860,1,1,0,0,
+        omna_source = 'gunther',
+          omna_filename='oc8_natural_emission.nc'
+          omna_input_name='omemisnat'
+        omss_source = 'ODowd'
+          omss_coef = 0.05
+      </namelist>
+     
+      <namelist name="ozone_nml">  <!-- -Expecting seasonal cycle of CM3 ozone-->
         basic_ozone_type = 'fixed_year' ,
         ozone_dataset_entry = 1860,1,1,0,0,
         data_name = "ozone",
@@ -3100,7 +3151,7 @@ OVERRIDE_EOF
       <namelist name="radiation_driver_nml">
         rad_time_step= 10800,
         time_varying_solar_constant = .false.,
-        solar_dataset_entry = 2000,1,1,0,0,
+        solar_dataset_entry = 1860,1,1,0,0,
         rad_package = 'sea_esf',
         do_clear_sky_pass=.true.,
         calc_hemi_integrals = .false.,
@@ -3158,29 +3209,30 @@ OVERRIDE_EOF
         f22_specification_type = 'time_series'
         f22_data_source = 'input'
       </namelist>
-      
-      <namelist name="sealw99_nml">
-        do_thick = .false.,
-        do_nlte = .false.,
-        do_lwcldemiss = .true.,
-        continuum_form = 'ckd2.1',
-        linecatalog_form = 'hitran_2000',
 
-        calc_co2_tfs_on_first_step = .true.,
-        calc_co2_tfs_monthly = .false.,
-        co2_tf_time_displacement = 0.0,
-
-        calc_ch4_tfs_on_first_step = .true.,
-        calc_ch4_tfs_monthly = .false.,
-        ch4_tf_time_displacement = 0.0,
-
-        calc_n2o_tfs_on_first_step = .true.,
-        calc_n2o_tfs_monthly = .false.,
-        n2o_tf_time_displacement = 0.0,
-  
-        verbose = 5
+      <namelist name="simple_sulfate_nml">
+        gas_conc_filename='gas_conc_3D48L_am3p9.nc'
+        gas_conc_time_dependency_type='constant'
+        cont_volc_source='do_cont_volc'
+        expl_volc_source='do_expl_volc'
+          aerocom_emission_filename='so2_0.25_volcanoes.nc'
+        aircraft_source='do_aircraft',
+          aircraft_filename='emis_fuel_aircraft.1859_2010.nc',
+          aircraft_emission_name(1)='fuel'
+          so2_aircraft_EI=0.001
+          aircraft_time_dependency_type='fixed_year',aircraft_dataset_entry=1860,1,1,0,0,
+        anthro_source='do_anthro',
+          anthro_emission_name(1)='so2ff',
+          anthro_emission_name(2)='so4ff',
+          anthro_filename='anthro_so2.1859_2010.nc',
+          anthro_time_dependency_type='fixed_year',anthro_dataset_entry=1860,1,1,0,0,
+        biobur_source='do_biobur',
+          biobur_emission_name(1)='so2bb',
+          biobur_emission_name(2)='so4bb',
+          biobur_filename='anthro_so2.1859_2010.nc',
+          biobur_time_dependency_type='fixed_year',biobur_dataset_entry=1860,1,1,0,0,
       </namelist>
-      
+
       <namelist name="static_veg_nml">
         use_static_veg = .false.
         write_static_veg = .false.
@@ -3190,7 +3242,16 @@ OVERRIDE_EOF
         fill_land_mask = .TRUE.
         input_file = ''
       </namelist>
-      
+
+      <namelist name="vegn_nml">
+        init_Tv = 288.0
+        rad_to_use = 'two-stream'
+        photosynthesis_to_use = 'leuning'
+        snow_rad_to_use = 'paint-leaves'
+        co2_to_use_for_photosynthesis ='prescribed'
+        co2_for_photosynthesis = 286.0e-6
+      </namelist>
+
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data_1deg']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_coupled_domain_decomp']/input/node())"/>
@@ -3218,6 +3279,7 @@ OVERRIDE_EOF
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data_1deg']/input/node())"/>
       <!--SIS Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+
     </input>
 
     <runtime>
