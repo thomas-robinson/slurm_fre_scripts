@@ -221,7 +221,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
       <property name="CWG_HOME"          value="/lustre/f1/unswept/John.Krasting/cwg"/>
       <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
@@ -244,7 +244,7 @@ configuration.
       <xi:include xpointer="xpointer(//setup/platform[@name='ncrc2.intel']/node())" />
     </platform>
 
-    <platform name="nescc.intel">
+    <platform name="nescc.default">
       <project>gfdlccycle</project>
       <directory stem="$(FRE_STEM)">
         <root>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)</root>
@@ -262,7 +262,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
       <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -281,10 +281,6 @@ configuration.
       ]]></csh>
     </platform>
 
-    <platform name="nescc.default">
-      <xi:include xpointer="xpointer(//setup/platform[@name='nescc.intel']/node())" />
-    </platform>
-
     <platform name="gfdl.ncrc2-intel">
       <directory stem="$(FRE_STEM)">
 <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
@@ -296,7 +292,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
       <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -323,13 +319,43 @@ configuration.
       <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc2-intel']/node())" />
     </platform>
 
-    <platform name="gfdl.nescc-default">
-      <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc2-intel']/node())" />
+      <platform name="gfdl.nescc-default">
+         <directory>
+           <root>/home/$USER/$(FRE_STEM)</root>
+           <src>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/src</src>
+           <exec>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/exec</exec>
+           <scripts>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/scripts</scripts>
+           <stdout>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/stdout</stdout>
+           <state>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/state</state>
+           <work>$TMPDIR/$(FRE_STEM)/$(name)/$(platform)-$(target)</work>
+           <ptmp>/ptmp/$USER</ptmp>
+           <stmp>/work/$USER</stmp>
+           <archive>/archive/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)</archive>
+           <postProcess>$(archiveDir)/pp</postProcess>
+           <analysis>/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis</analysis>
+         </directory>
+         <project></project>
+         <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
+         <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
+         <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
+         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+         <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
+         <property name="REFERENCE"         value=""/>
+         <csh><![CDATA[
+           source $MODULESHOME/init/csh
+           module use -a /home/fms/local/modulefiles
+           module purge
+           module load $(FRE_VERSION)
+           module load fre-analysis
+           setenv FREVERSION $(FRE_VERSION)           
+           setenv NBROOT $(NB_ROOT)
+           mkdir -p $NBROOT
+           cd $NBROOT
+           /home/Niki.Zadeh/bin/git_clone_mom6_fix.csh 
+        ]]>
+      </csh>
     </platform>
 
-    <platform name="gfdl.nescc">
-      <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc2-intel']/node())" />
-    </platform>
   </setup>
 
 <!--===========-->
@@ -2679,7 +2705,7 @@ communityExperimentName="$(name)">
             stack_size =0
       </namelist>
       <namelist name="xgrid_nml">
-        make_exchange_reproduce = .true.
+        make_exchange_reproduce = .false.
         interp_method = 'second_order'
       </namelist>
 
@@ -2716,8 +2742,8 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="1878" runTime="12:00:00">
-        <segment simTime="12" units="months" runTime="03:00:00"/>
+      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="900" runTime="08:00:00">
+        <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
         <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
@@ -2857,7 +2883,7 @@ Ocean:
             stack_size =0
       </namelist>
       <namelist name="xgrid_nml">
-        make_exchange_reproduce = .true.
+        make_exchange_reproduce = .false.
         interp_method = 'second_order'
       </namelist>
 
@@ -3338,7 +3364,7 @@ Ocean:
 
       <!-- Ozone Climatology File From CM3 -->
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CWG_HOME)/input/ozone/o3_climatology_accmip_1860.nc</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/input/ozone/CM3_mean_o3_climatology_accmip_1860.nc</dataSource>
       </dataFile>
 
       <!-- Mean Solar Cycle 1856 to 1866:  From Dan Schwarzkopf and Larry Horowitz -->
@@ -3352,7 +3378,34 @@ Ocean:
            This is not ideal for the long term. -->
 
       <csh type="always"><![CDATA[
+grep "ADDITIONAL 1860 DIAGNOSTICS" $work/diag_table
+
+if ( "$status" == "1") then
+cat >> $work/diag_table << DIAGTABLE_EOF
+#ADDITIONAL 1860 DIAGNOSTICS
+"atmos_level",                 1,  "months", 1, "days", "time",
+"atmos_co2",                  "pwt",                "pwt",                "atmos_level", "all", .true.,  "none", 2
+"atmos_co2_restoring",        "co2_restore",        "co2_restore",        "atmos_level", "all", .true.,  "none", 2
+"dynamics",                   "area",               "area",               "atmos_level", "all", .false., "none", 2
+"dynamics",                   "co2",                "co2",                "atmos_level", "all", .true.,  "none", 2
+"dynamics",                   "co2_dvmr",           "co2_dvmr",           "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_atm",            "co2_atm",            "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_surf",           "co2_surf",           "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_flux",           "co2_flux",           "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_mol_flux",       "co2_mol_flux",       "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_atm_dvmr",       "co2_atm_dvmr",       "atmos_level", "all", .true.,  "none", 2
+"flux",                       "co2_surf_dvmr",      "co2_surf_dvmr",      "atmos_level", "all", .true.,  "none", 2
+DIAGTABLE_EOF
+
+endif
+      ]]></csh>
+
+      <csh type="always"><![CDATA[
+grep "ADDITIONAL 1860 TRACERS" $work/field_table
+if ( "$status" == "1") then
+
 cat >> $work/field_table << FIELDTABLE_EOF
+# ADDITIONAL 1860 TRACERS
 # CO2 tracer
 ## Note: atm transport and land model expect moist mmr. 
 ##       set co2 units: kg/kg  (mass mixing ratio) for both atm and lnd field table entries.
@@ -3370,6 +3423,8 @@ cat >> $work/field_table << FIELDTABLE_EOF
            "longname",     "carbon dioxide"
            "units",        "kg/kg" /
 FIELDTABLE_EOF
+
+endif
       ]]></csh>
 
       <csh type="always"><![CDATA[
@@ -3387,8 +3442,8 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="900" runTime="12:00:00">
-        <segment simTime="12" units="months" runTime="03:00:00"/>
+      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="900" runTime="08:00:00">
+        <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
         <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
@@ -3685,22 +3740,22 @@ Experiment name = $(name)
         </timeSeries>
       </component>
 
-      <component type="ocean_z"         start="$(ANA_CLIMO_START)5yy" source="ocean_month_z">
+      <component type="ocean_z"         start="$(ANA_CLIMO_START)" source="ocean_month_z">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
         <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
       </component>
 
-      <component type="ocean_scalar_month" start="$(ANA_CLIMO_START)5yy" source="ocean_scalar_month">
+      <component type="ocean_scalar_month" start="$(ANA_CLIMO_START)" source="ocean_scalar_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"   />
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)" />
       </component>
 
-      <component type="ocean_scalar_annual" start="$(ANA_CLIMO_START)5yy" source="ocean_scalar_annual">
+      <component type="ocean_scalar_annual" start="$(ANA_CLIMO_START)" source="ocean_scalar_annual">
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"   />
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)" />
       </component>
 
-      <component type="ocean_snap"      start="$(PP_START_YEAR)" source="ocean_month_snap">
+      <component type="ocean_snap"      start="$(ANA_CLIMO_START)" source="ocean_month_snap">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
         <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)"/>
@@ -3714,7 +3769,7 @@ Experiment name = $(name)
         </timeAverage>
       </component>
 
-      <component type="ocean_annual_z"  start="$(PP_START_YEAR)" source="ocean_annual_z">
+      <component type="ocean_annual_z"  start="$(ANA_CLIMO_START)" source="ocean_annual_z">
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
         <timeAverage source="annual" interval="$(PP_OCEAN_CHUNK)" />
