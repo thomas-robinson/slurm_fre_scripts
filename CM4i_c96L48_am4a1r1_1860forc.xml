@@ -110,11 +110,11 @@ be controlled by changing properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CLIMO_START" value="0001"/>
-  <property name="EXP_CLIMO_END" value="0030"/>
-  <property name="EXP_CLIMO_LEN" value="30"/>
+  <property name="EXP_CLIMO_END" value="0100"/>
+  <property name="EXP_CLIMO_LEN" value="100"/>
   <property name="ANA_CLIMO_START" value="0001"/>
-  <property name="ANA_CLIMO_END" value="0030"/>
-  <property name="ANA_CLIMO_LEN" value="10yr"/>
+  <property name="ANA_CLIMO_END" value="0100"/>
+  <property name="ANA_CLIMO_LEN" value="20yr"/>
   <property name="PP_CLIMO_CHUNK" value="5yr"/>
   <property name="PP_CLIMO_CHUNK_B" value="20yr"/>
   <property name="PP_OCEAN_CHUNK" value="5yr"/> 
@@ -132,11 +132,11 @@ properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CMIP_START" value="0001"/>
-  <property name="EXP_CMIP_END" value="0030"/>
-  <property name="EXP_CMIP_LEN" value="30"/>
+  <property name="EXP_CMIP_END" value="0100"/>
+  <property name="EXP_CMIP_LEN" value="100"/>
   <property name="ANA_CMIP_START" value="0001"/>
-  <property name="ANA_CMIP_END" value="0030"/>
-  <property name="ANA_CMIP_LEN" value="30yr"/>
+  <property name="ANA_CMIP_END" value="0100"/>
+  <property name="ANA_CMIP_LEN" value="20yr"/>
   <property name="PP_CMIP_CHUNK" value="5yr"/>
 
 
