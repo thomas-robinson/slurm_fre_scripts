@@ -30,6 +30,8 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
+  <property name="EXP_NAME" value="" />
+
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
   <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
@@ -221,7 +223,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
       <property name="CWG_HOME"          value="/lustre/f1/unswept/John.Krasting/cwg"/>
       <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
@@ -262,7 +264,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
       <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -292,7 +294,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
       <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -338,7 +340,7 @@ configuration.
          <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
          <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
          <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
-         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
          <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
          <property name="REFERENCE"         value=""/>
          <csh><![CDATA[
@@ -3732,7 +3734,7 @@ Experiment name = $(name)
       <!--REFINE DIAG SCRIPT -->
       <!--refineDiag_data_stager.csh calculates global averages of basic quantities and stores them in a sqlit database file-->
       <!--By default a refineDiag script causes the annual history files to be unpacked and saved in /ptmp/$USER-->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
+      <refineDiag script="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/gfdl.nescc-default-prod-openmp/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
