@@ -30,7 +30,7 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="EXP_NAME" value="" />
+  <property name="EXP_NAME" value="CM4i_c96L48_am4a1r1_2000climo" />
 
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
   <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
@@ -110,11 +110,11 @@ be controlled by changing properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CLIMO_START" value="0001"/>
-  <property name="EXP_CLIMO_END" value="0030"/>
-  <property name="EXP_CLIMO_LEN" value="30"/>
+  <property name="EXP_CLIMO_END" value="0100"/>
+  <property name="EXP_CLIMO_LEN" value="100"/>
   <property name="ANA_CLIMO_START" value="0001"/>
-  <property name="ANA_CLIMO_END" value="0030"/>
-  <property name="ANA_CLIMO_LEN" value="10yr"/>
+  <property name="ANA_CLIMO_END" value="0100"/>
+  <property name="ANA_CLIMO_LEN" value="20yr"/>
   <property name="PP_CLIMO_CHUNK" value="5yr"/>
   <property name="PP_CLIMO_CHUNK_B" value="20yr"/>
   <property name="PP_OCEAN_CHUNK" value="5yr"/> 
@@ -132,11 +132,11 @@ properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CMIP_START" value="0001"/>
-  <property name="EXP_CMIP_END" value="0030"/>
-  <property name="EXP_CMIP_LEN" value="30"/>
+  <property name="EXP_CMIP_END" value="0100"/>
+  <property name="EXP_CMIP_LEN" value="100"/>
   <property name="ANA_CMIP_START" value="0001"/>
-  <property name="ANA_CMIP_END" value="0030"/>
-  <property name="ANA_CMIP_LEN" value="30yr"/>
+  <property name="ANA_CMIP_END" value="0100"/>
+  <property name="ANA_CMIP_LEN" value="20yr"/>
   <property name="PP_CMIP_CHUNK" value="5yr"/>
 
 
@@ -735,19 +735,7 @@ else if ( "$npes" == "4608" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set domains_stack_size = "2097152"
 #npes= 4608  main_loop= 432.950591  ATM= 431.919848  OCN= 0.000000000000000E+00  SYPD= 16.4023
-
 else if ( "$npes" == "3456" ) then
-  set atmos_npes = "1728"
-  set atmos_nthreads = "2"
-  set physics_window = "8,2"
-  set fv_layout    =   "12,24";   set fv_io_layout    =  "1,3"
-  set land_layout  =   "12,24";   set land_io_layout  =  "1,3"
-  set ocean_layout =   "144,12";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,12";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-#npes= 3456  main_loop= 469.061346  ATM= 468.106034  OCN= 0.000000000000000E+00 SYPD= 15.1395
-
-else if ( "$npes" == "3456_8th" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "8"
   set physics_window = "8,2"
@@ -885,15 +873,6 @@ else if ( "$npes" == "2304" ) then
 #npes= 2304  main_loop= 2490.004335  ATM= 2488.745754  OCN= 0.000000000000000E+00  SYPD= 2.85195
 
 else if ( "$npes" == "3456" ) then
-  set atmos_npes = "1728"
-  set atmos_nthreads = "2"
-  set physics_window = "8,8"
-  set fv_layout    =   "12,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,24";  set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,12"; set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,12"; set ice_io_layout   =  "1,3"
-
-else if ( "$npes" == "3456_4th" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "4"
   set physics_window = "32,1"
@@ -903,16 +882,7 @@ else if ( "$npes" == "3456_4th" ) then
   set ice_layout   =   "144,6"; set ice_io_layout   =  "1,3"
 #npes= 3456  main_loop= 1869.711378  ATM= 1868.383645  OCN= 0.000000000000000E+00  SYPD= 3.79811
 
-else if ( "$npes" == "4608_1" ) then
-  set atmos_npes = "2304"
-  set atmos_nthreads = "2"
-  set physics_window = "8,6"
-  set fv_layout    =   "12,32"; set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,32"; set land_io_layout  =  "1,4"
-  set ocean_layout =   "144,16"; set ocean_io_layout =  "1,4"
-  set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
-
-else if ( "$npes" == "4608_4th" ) then
+else if ( "$npes" == "4608" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
   set physics_window = "16,3"
@@ -922,25 +892,7 @@ else if ( "$npes" == "4608_4th" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
 #npes= 4608  main_loop= 1500.457654  ATM= 1498.723635  OCN= 0.000000000000000E+00  SYPD= 4.7328
 
-else if ( "$npes" == "6144" ) then
-  set atmos_npes = "1536"
-  set atmos_nthreads = "4"
-  set physics_window = "12,3"
-  set fv_layout    =   "8,32"; set fv_io_layout    =  "1,4"
-  set land_layout  =   "8,32"; set land_io_layout  =  "1,4"
-  set ice_layout   =   "128,12"; set ice_io_layout   =  "1,4"
-
 else if ( "$npes" == "6912" ) then
-  set atmos_npes = "1728"
-  set atmos_nthreads = "4"
-  set physics_window = "8,4"
-  set fv_layout    =   "12,24";   set fv_io_layout    =  "1,3"
-  set land_layout  =   "12,24";   set land_io_layout  =  "1,3"
-  set ocean_layout =   "144,12";  set ocean_io_layout =  "1,3"
-  set ice_layout   =   "144,12";  set ice_io_layout   =  "1,3"
-  set domains_stack_size = "2097152"
-
-else if ( "$npes" == "6912_8th" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "8"
   set physics_window = "8,4"
@@ -1012,35 +964,15 @@ if ( "$npes" == "720" ) then
 
 #npes= 720  main_loop= 3324.007522  ATM= 891.693204  OCN= 3314.492429  SYPD= 0.712129
 
-else if ( "$npes" == "1376" ) then
+else if ( "$npes" == "462" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "1"
   set physics_window = "0,0"
   set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
   set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.242.32x36"
-  set ocean_npes = "910"
-
-else if ( "$npes" == "1472" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "36,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.274.36x36"
-  set ocean_npes = "1022"
-
-else if ( "$npes" == "1600" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "32,45"; set ocn_io_layout   =  "1,5"; set ocn_mask_table = "mask_table.315.32x45"
-  set ocean_npes = "1125"
+  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "30"
 
 #else if ( "$npes" == "894" ) then
 #  set atmos_npes = "432"
@@ -1124,16 +1056,6 @@ else if ( "$npes" == "1440" ) then
   set ocean_npes = "576"
 
 #npes= 1440  main_loop= 1714.841968  ATM= 509.483819  OCN= 1698.589424  SYPD= 1.38037
-
-else if ( "$npes" == "2620" ) then
-  set atmos_npes = "432"
-  set atmos_nthreads = "2"
-  set physics_window = "32,2"
-  set fv_layout    =   "3,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "3,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "32,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.548.32x72"
-  set ocean_npes = "1756"
 
 else if ("$npes" == "1878" ) then
   set atmos_npes = "864"
@@ -1306,16 +1228,6 @@ if ( "$npes" == "1152" ) then
   set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "288"
 
-else if ( "$npes" == "1119" ) then
-  set atmos_npes = "864"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,6"; set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "16,18"; set ocn_io_layout   =  "4,2"; set ocn_mask_table = "mask_table.33.16x18"
-  set ocean_npes = "255"
-
 else if ( "$npes" == "1728" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
@@ -1325,16 +1237,6 @@ else if ( "$npes" == "1728" ) then
   set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "0,0"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "576"
-
-else if ( "$npes" == "1632" ) then
-  set atmos_npes = "1152"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "32,18"; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "mask_table.96.32x18"
-  set ocean_npes = "480"
 
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "1152"
@@ -1376,18 +1278,6 @@ else if ( "$npes" == "13824" ) then
   set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "64,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "4608"
-
-else if ( "$npes" == "6912" ) then
-  set atmos_npes = "1152"
-  set atmos_nthreads = "4"
-  set physics_window = "16,3"
-  set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
-  set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,8"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "32,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
-  set do_ocean = "true"
-  set ocean_npes   = "2304"
-#SYPD= 4.27491  npes= 6912  main_loop= 553.724798  ATM= 523.916859  OCN= 515.782269
 
 else if ( "$npes" == "7040" ) then
   set atmos_npes = "1152"
@@ -1465,29 +1355,6 @@ else if ( "$npes" == "8576" ) then
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
   set do_ocean = "true"
   set ocean_npes   = "2432"
-
-else if ( "$npes" == "9344" ) then
-  set atmos_npes = "1728"
-  set atmos_nthreads = "4"
-  set physics_window = "8,4"
-  set fv_layout    =   "12,24";   set fv_io_layout    =  "1,3"
-  set land_layout  =   "12,24";   set land_io_layout  =  "1,3"
-  set ice_layout   =   "144,12";  set ice_io_layout   =  "1,3"
-  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
-  set do_ocean = "true"
-  set ocean_npes   = "2432"
-#SYPD= 5.71746  npes= 9344  main_loop= 414.016546  ATM= 392.145506  OCN= 381.589754
-
-else if ( "$npes" == "12595" ) then
-  set atmos_npes = "2304"
-  set atmos_nthreads = "4"
-  set physics_window = "8,3"
-  set fv_layout    =   "24,16"; set fv_io_layout    =  "1,4"
-  set land_layout  =   "24,16"; set land_io_layout  =  "1,4"
-  set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "64,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.1229.64x72"
-  set ocean_npes = "3379"
-#npes= 12595  main_loop= 349.973723  ATM= 345.592016  OCN= 292.770137  SYPD= 6.76372
 
 else
   if ( $echoOn ) unset echo
@@ -2124,18 +1991,17 @@ Experiment name = $(name)
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4"  npes="432"  runTimePerJob="00:30:00"/>
-        <run days="8"    npes="864"  runTimePerJob="00:30:00"/>
+        <run days="4 4"   npes="432"  runTimePerJob="00:30:00"/>
+        <run days="8"   npes="864"  runTimePerJob="00:30:00"/>
       </regression>
 
       <regression name="restarts">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       
-      <regression name="timing2">
-        <run months="1" npes="3456"  runTimePerJob="02:00:00"/>
+      <regression name="timing1">
+        <run months="1" npes="4608"  runTimePerJob="00:30:00"/>
       </regression>
-
       <regression name="timing">
         <run months="1" npes="432"  runTimePerJob="02:00:00"/>
         <run months="1" npes="864"  runTimePerJob="01:00:00"/>
@@ -2242,12 +2108,10 @@ Experiment name = $(name)
         <run months="1"   npes="1152" runTimePerJob="02:00:00"/> 
         <run months="1"   npes="2304" runTimePerJob="01:30:00"/>
         <run months="1"   npes="3456" runTimePerJob="01:00:00"/>
-        <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
-        <run months="1"   npes="6144" runTimePerJob="00:30:00"/>
-        <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
       </regression>
       <regression name="timing2">
-        <run months="1"   npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
+        <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m8d_864pe/restart/19800109.tar"/>
@@ -2298,24 +2162,6 @@ Experiment name = $(name)
      </dataFile>
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1309.90x54     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.96.32x18     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.242.32x36     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.274.36x36     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.548.32x72     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.33.16x18     
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.315.32x45    
      </dataFile>
      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
@@ -2773,18 +2619,11 @@ OVERRIDE_EOF
       <regression name="rts"> <!--fits on t1-->
         <run days="5 5" npes="1440" runTimePerJob="01:20:00"/><!---->
         <run days="10" npes="720" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
+        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
      </regression>
 
       <regression name="timing">
         <run days="10" npes="5279" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="1376" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="2620" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="1600" runTimePerJob="00:20:00"/><!---->
-      </regression>
-
-      <regression name="timing2">
-        <run days="10" npes="1472" runTimePerJob="00:20:00"/><!---->
       </regression>
 
       <regression name="bigrts">
@@ -3753,7 +3592,6 @@ OVERRIDE_EOF
 
       <regression name="rts"> <!--fits on t1-->
         <run days="5 5" npes="1728" runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
-	<run days="10" npes="3456" runTimePerJob="00:30:00"/>
       </regression>
 
       <regression name="bigrts">
@@ -3763,12 +3601,7 @@ OVERRIDE_EOF
         <run days="10" npes="8169" runTimePerJob="00:30:00"/><!--npes= 8169  main_loop= 624.676531  ATM= 459.766339  OCN= 592.720540  SYPD= 3.78936-->
         <run days="10" npes="7848" runTimePerJob="00:30:00"/><!--npes= 7848  main_loop= 532.500004  ATM= 529.401630  OCN= 397.083122  SYPD= 4.4453-->
         <run days="10" npes="7008" runTimePerJob="00:30:00"/><!--npes= 7008  main_loop= 555.280044  ATM= 524.772877  OCN= 521.962257  SYPD= 4.26294-->
-	<run days="10" npes="6912" runTimePerJob="00:20:00"/>	
-      </regression>
-
-      <regression name="timing2">
-	<run days="10" npes="1119" runTimePerJob="01:30:00"/>	
-	<run days="10" npes="1632" runTimePerJob="01:30:00"/>	
+        <run days="10" npes="7008" runTimePerJob="00:30:00"/><!---->
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m10d_1728pe/restart/00010111.tar"/>
