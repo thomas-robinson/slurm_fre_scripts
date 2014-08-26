@@ -476,6 +476,9 @@ $baseDate
          <run days="10"   npes="3240"  runTimePerJob="00:30:00"/>
          <run days="10"   npes="2432"  runTimePerJob="00:30:00"/>
        </regression>
+       <regression name="36days">
+         <run days="36"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       </regression>
 
       <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
            <segment simTime="12" units="months" runTime="$(PROD_SEGTIME)"/>
@@ -1069,6 +1072,9 @@ cd $work
        </regression>
        <regression name="rts">
          <run days="5 5"   npes="2996"  runTimePerJob="00:30:00"/>
+       </regression>
+       <regression name="36days">
+         <run days="36"   npes="2996"  runTimePerJob="00:30:00"/>
        </regression>
 
       <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
