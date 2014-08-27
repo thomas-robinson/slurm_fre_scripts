@@ -36,7 +36,7 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
   <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
-  <property name="FRE_VERSION" value="fre/bronx-6"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
+  <property name="FRE_VERSION" value="fre/bronx-7"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
@@ -208,7 +208,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_b</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -1070,7 +1070,7 @@ else if ( "$npes" == "900" ) then
   set fv_layout    = "12,12";   set fv_io_layout    = "1,4"
   set land_layout  = "12,12";   set land_io_layout  = "1,4"
   set ice_layout   = "144,6";   set ice_io_layout   = "1,6"
-  set ocn_layout   = "6,6";     set ocn_io_layout   = "1,6"  #360x210
+  set ocn_layout   = "6,6";     set ocn_io_layout   = "1,6"; set ocn_mask_table = "MOM_mask_table"  #360x210
   set ocean_npes = 36
 
 else if ( "$npes" == "924" ) then
@@ -1110,7 +1110,7 @@ else if ( "$npes" == "1200" )
    set fv_layout    = "12,16";   set fv_io_layout    = "1,4"
    set land_layout  = "12,16";   set land_io_layout  = "1,4"
    set ice_layout   = "144,8";   set ice_io_layout  = "1,4"
-   set ocn_layout   = "8,6";     set ocn_io_layout    = "1,6"  #360x210
+   set ocn_layout   = "8,6";     set ocn_io_layout    = "1,6"; set ocn_mask_table = "MOM_mask_table"  #360x210
    set ocean_npes = 48
 
 else if ( "$npes" == "1440" ) then
@@ -1241,19 +1241,11 @@ else
   exit 1
 endif
 
-if ("$npes" == "462" || "$npes" == "894" || "$npes" == "924" || "$npes" == "900" || "$npes" == "1200" || "$npes" == "1878") then
-cat > $work/INPUT/MOM_layout << LAYOUT_EOF
-LAYOUT = $ocn_layout
-#override IO_LAYOUT = $ocn_io_layout
-LAYOUT_EOF
-else 
 cat > $work/INPUT/MOM_layout << LAYOUT_EOF
 LAYOUT = $ocn_layout
 #override IO_LAYOUT = $ocn_io_layout
 MASKTABLE = $ocn_mask_table
 LAYOUT_EOF
-
-endif
 
 
 # runCommand:
@@ -2910,35 +2902,15 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
-      <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="1440" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="720"   runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="462"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="894"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="924"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="900"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="1200"  runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="1878"  runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="3168"  runTimePerJob="00:20:00"/><!---->
-     </regression>
+      <regression name="rts"> 
+        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
+    </regression>
 
-      <regression name="timing">
-        <run days="10" npes="5279" runTimePerJob="00:20:00"/><!---->
-      </regression>
 
-      <regression name="bigrts">
-        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="6975" runTimePerJob="00:20:00"/><!---->
-
-      </regression>
-
-      <reference restart="$(REFERENCE)/archive/1x0m10d_1440pe/restart/00010111.tar"/>
+      <reference restart="$(REFERENCE)/archive/1x0m10d_900pe/restart/00010111.tar"/>
 
     </runtime>
 
@@ -3610,35 +3582,14 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1440" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="1440" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="720"   runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="462"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="894"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="924"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="900"   runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="1200"  runTimePerJob="02:00:00"/><!---->
-        <run days="10" npes="1878"  runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="3168"  runTimePerJob="00:20:00"/><!---->
-     </regression>
-
-      <regression name="timing">
-        <run days="10" npes="5279" runTimePerJob="00:20:00"/><!---->
+        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
-      <regression name="bigrts">
-        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3296" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3456" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="3584" runTimePerJob="00:20:00"/><!---->
-        <run days="10" npes="6975" runTimePerJob="00:20:00"/><!---->
-
-      </regression>
-
-      <reference restart="$(REFERENCE)/archive/1x0m10d_1440pe/restart/00010111.tar"/>
+      <reference restart="$(REFERENCE)/archive/1x0m10d_900pe/restart/00010111.tar"/>
 
     </runtime>
 
