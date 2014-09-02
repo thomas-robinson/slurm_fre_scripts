@@ -30,12 +30,10 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="EXP_NAME" value="" />
-
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
   <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
+  <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates2_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
   <property name="FRE_VERSION" value="fre/bronx-7"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
@@ -120,25 +118,6 @@ be controlled by changing properties below.
   <property name="PP_OCEAN_CHUNK" value="5yr"/> 
   <property name="PP_OCEAN_CHUNK_B" value="20yr"/> 
 
-<!--====================-->
-<!--= CMIP EXPERIMENTS =-->
-<!--====================-->
-
-<!--
-CMIP simulations are configured to start in year 0001 as well as postprocessing and 
-analysis. The length of the simulation and analysis period can be controlled by changing 
-properties below.
--->
-
-  <!-- make sure to change current_date in coupler_nml accordingly -->
-  <property name="EXP_CMIP_START" value="0001"/>
-  <property name="EXP_CMIP_END" value="0030"/>
-  <property name="EXP_CMIP_LEN" value="30"/>
-  <property name="ANA_CMIP_START" value="0001"/>
-  <property name="ANA_CMIP_END" value="0030"/>
-  <property name="ANA_CMIP_LEN" value="30yr"/>
-  <property name="PP_CMIP_CHUNK" value="5yr"/>
-
 
 <!--=========================================-->
 <!--= Properties needed for OM4 EXPERIMENTS =-->
@@ -146,8 +125,10 @@ properties below.
    <property name="PROD_SIMTIME_OM4"   value="5"/>
    <property name="PROD_RUNTIME_OM4"   value="16:00:00"/>
    <property name="PROD_SEGTIME_OM4"   value="03:15:00"/>
-   <property name="reference_tag"      value="tikal_201403_mom6_2014.07.01_with_cjgUpdates"/> 
 <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
+   <property name="reference_tag"      value="tikal_201407_plus_3cjgUpdates_mom6_2014.07.23"/>
+                              <!--reproduces "tikal_201403_mom6_2014.07.01_with_cjgUpdates"/-->
+                              <!--reproduces "tikal_201407_plus_3cjgUpdates_mom6_2014.07.23"/-->
 
 
 <!--=================-->
@@ -208,7 +189,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_f</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -223,7 +204,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"    value="/ncrc/home2/Chris.Golaz/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
       <property name="CWG_HOME"          value="/lustre/f1/unswept/John.Krasting/cwg"/>
       <property name="REFERENCE"         value="/lustre/f1/unswept/Niki.Zadeh/$(reference_tag)/$(name)/$(platform)-$(target)"/>
       <csh><![CDATA[
@@ -264,7 +245,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
-         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
       <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -284,17 +265,17 @@ configuration.
     </platform>
 
     <platform name="gfdl.ncrc2-intel">
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
       <directory stem="$(FRE_STEM)">
 <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
         <archive>$ARCHIVE/$(stem)/$(name)/$(platform)-$(target)</archive>
-        <analysis>/nbhome/$USER/$(stem)/$(name)</analysis>
+        <analysis>$(NB_ROOT)</analysis>
 	<ptmp>/ptmp/$USER</ptmp>
 <!-- /MDBI -->
       </directory>
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
-         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
       <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <csh><![CDATA[
@@ -303,7 +284,6 @@ configuration.
         module purge
         module load $(FRE_VERSION)
         module load fre-analysis
-#git MOM6 analysis scripts
            setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
            mkdir -p $NBROOT
@@ -322,6 +302,7 @@ configuration.
     </platform>
 
       <platform name="gfdl.nescc-default">
+         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
          <directory>
            <root>/home/$USER/$(FRE_STEM)</root>
            <src>/home/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/src</src>
@@ -334,13 +315,12 @@ configuration.
            <stmp>/work/$USER</stmp>
            <archive>/archive/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)</archive>
            <postProcess>$(archiveDir)/pp</postProcess>
-           <analysis>/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis</analysis>
+           <analysis>$(NB_ROOT)</analysis>
          </directory>
          <project></project>
          <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
          <property name="AWG_INPUT_HOME"    value="/home/cjg/awg/tikal_201403/input"/>
          <property name="AWG_ARCHIVE_ROOT"  value="/archive/cjg/mdt"/>
-         <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/$(platform)-$(target)"/>
          <property name="CWG_HOME"          value="/archive/John.Krasting/cwg"/>
          <property name="REFERENCE"         value=""/>
          <csh><![CDATA[
@@ -382,6 +362,7 @@ Experiment to build executable.
 * bug fix from Zhi (tikal_bugfix_z1l)
 * bug fix from Huan Guo for CLUBB and MG microphysics (clubb20140516_h1g_MG1p5Interface clubb20140414_h1g_simpleInterface clubb20140516_h1g_MGbug_fix)
 * new TKE turbulence from Chris Golaz (tikal_tke_v20140611_cjg)
+* new activation options from Chris Golaz (tikal_201403_act_options_cjg)
  
     </description>
 
@@ -391,7 +372,7 @@ Experiment to build executable.
         <codeBase version="$(RELEASE)"> shared </codeBase>
         <!--The following update is needed to run in debug mode with Intel-->
         <csh>
-	  cvs up -r tikal_bugfix_z1l shared/mpp/include/mpp_update_domains2D.h
+cvs up -r tikal_bugfix_z1l shared/mpp/include/mpp_update_domains2D.h
 cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_misc.inc
 cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_util.inc
 cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_group_update.h
@@ -424,6 +405,8 @@ cvs up -r rms_sdu shared/diag_manager
 #==================
            cvs co -r tikal_tke_v20140611_cjg atmos_param/tke_turb/tke_turb.F90
            cvs update -r tikal_tke_v20140611_cjg atmos_param/vert_turb_driver/vert_turb_driver.F90
+
+           cvs up -r tikal_201403_act_options_cjg atmos_param/strat_cloud/aerosol_cloud.F90 atmos_param/strat_cloud/strat_cloud.F90 atmos_param/strat_cloud/strat_cloud_utilities.F90 atmos_param/strat_cloud/strat_nml.h
 
 	</csh>
       </source>
@@ -1103,7 +1086,7 @@ else if ( "$npes" == "924" ) then
 #  set ocn_layout   =   "6,5";   set ocn_io_layout   =  "1,5"; set ocn_mask_table = "MOM_mask_table"
 #  set ocean_npes = "30"
 
-else if ( "$npes" == "1200" )
+else if ( "$npes" == "1200" ) then
    set atmos_npes = 1152
    set atmos_nthreads = 1
    set physics_window = "8,2"
@@ -2291,6 +2274,7 @@ Experiment name = $(name)
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1309.90x54     
      </dataFile>
+<!--
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.96.32x18     
      </dataFile>
@@ -2309,6 +2293,7 @@ Experiment name = $(name)
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.315.32x45    
      </dataFile>
+-->
      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
@@ -2474,11 +2459,66 @@ touch $work/INPUT/MOM_override
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
      </dataFile>
 
-     <!-- Commented out for testing the 1deg configuration
      <dataFile label="input" target="INPUT/ice_model.res.nc" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc
-     </dataFile> -->
+     </dataFile> 
 
+     <namelist name="ice_model_nml">
+           layout = $ice_layout
+           io_layout = $ice_io_layout
+           nsteps_dyn=144
+           nsteps_adv=2
+           num_part = 6
+           wd_turn = 0.0
+           spec_ice=.false.
+           ice_bulk_salin = 0.0
+           alb_sno = 0.85                    ! keep CM2 setting
+           alb_ice = 0.65                    ! keep CM2 setting
+           t_range_melt = 1.0                ! NOTE: CM2 uses 1.0
+           heat_rough_ice = 5.0e-4
+           cm2_bugs = .false.
+           do_icebergs = .true.
+           add_diurnal_sw = .false.
+           do_ice_limit=.false.
+           max_ice_limit=4.0
+           channel_viscosity=0.e5
+           h_lo_lim = 1.e-10
+      </namelist>
+      <namelist name="icebergs_nml">
+        really_debug=.FALSE.
+        debug=.FALSE.
+        verbose=.FALSE.
+        verbose_hrs=7200
+        use_operator_splitting=.TRUE.
+        bergy_bit_erosion_fraction=0.0
+        sicn_shift=0.1
+        parallel_reprod=.TRUE.
+        traj_sample_hrs=0
+        add_weight_to_ocean=.false.
+      </namelist>
+
+      <namelist name="ocean_albedo_nml">
+            ocean_albedo_option = 5
+      </namelist>
+      <namelist name="ocean_rough_nml">
+            rough_scheme = 'beljaars'
+      </namelist>
+     </input>
+  </experiment>
+
+  <experiment name="SIS_data_1deg">
+    <input>
+     <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+        <dataSource site="nescc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.SIS</dataSource>
+     </dataFile>
+
+     <!--
+     <dataFile label="input" target="INPUT/ice_model.res.nc" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc
+     </dataFile> 
+     -->
      <namelist name="ice_model_nml">
            layout = $ice_layout
            io_layout = $ice_io_layout
@@ -2639,6 +2679,9 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="10"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
+      <regression name="rts">
+        <run days="5 5"  npes="432"  runTimePerJob="00:30:00"/>
+      </regression>
       <regression name="restarts">
         <run days="5 5" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
@@ -2674,8 +2717,8 @@ communityExperimentName="$(name)">
     </communityComment>
     <scenario 
       communityForcing="N/A"
-      startTime="$(EXP_CMIP_START)"
-      endTime="$(EXP_CMIP_END)" 
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
       parentExperimentID="N/A" 
       parentExperimentRIP="N/A" 
       branch_time="0.0">
@@ -2755,7 +2798,7 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="3584" runTime="12:00:00">
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="3584" runTime="12:00:00">
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
@@ -2818,8 +2861,8 @@ communityExperimentName="$(name)">
     </communityComment>
     <scenario 
       communityForcing="N/A"
-      startTime="$(EXP_CMIP_START)"
-      endTime="$(EXP_CMIP_END)" 
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
       parentExperimentID="N/A" 
       parentExperimentRIP="N/A" 
       branch_time="0.0">
@@ -2894,11 +2937,11 @@ OVERRIDE_EOF
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data_1deg']/input/node())"/>
       <!--SIS Input datasets-->
-      <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='SIS_data_1deg']/input/node())"/>
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="900" runTime="08:00:00">
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="900" runTime="08:00:00">
         <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
@@ -2917,6 +2960,7 @@ OVERRIDE_EOF
     <postProcess>
       <xi:include xpointer="xpointer(//experiment[@name='c96_climo_postprocess']/postProcess/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='OM4_postprocess']/postProcess/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='OM4i_postprocess']/postProcess/node())"/>
     </postProcess>
 
   </experiment>
@@ -2970,8 +3014,8 @@ Ocean:
     </communityComment>
     <scenario 
       communityForcing="N/A"
-      startTime="$(EXP_CMIP_START)"
-      endTime="$(EXP_CMIP_END)" 
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
       parentExperimentID="N/A" 
       parentExperimentRIP="N/A" 
       branch_time="0.0">
@@ -3573,12 +3617,12 @@ OVERRIDE_EOF
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data_1deg']/input/node())"/>
       <!--SIS Input datasets-->
-      <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='SIS_data_1deg']/input/node())"/>
 
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="900" runTime="08:00:00">
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="900" runTime="08:00:00">
         <segment simTime="12" units="months" runTime="02:30:00"/>
       </production>
       <regression name="basic">
@@ -3622,8 +3666,8 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
     </communityComment>
     <scenario 
       communityForcing="N/A"
-      startTime="$(EXP_CMIP_START)"
-      endTime="$(EXP_CMIP_END)" 
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
       parentExperimentID="N/A" 
       parentExperimentRIP="N/A" 
       branch_time="0.0">
@@ -3695,7 +3739,7 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CMIP_LEN)" units="years" npes="7040" runTime="12:00:00">
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="7040" runTime="12:00:00">
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
@@ -3828,6 +3872,39 @@ Experiment name = $(name)
   </experiment>
  
   <!-- OCEAN  and ICE post-processing-->
+  <experiment name="OM4i_postprocess">
+    <postProcess>
+      <component type="ocean_snap"      start="$(ANA_CLIMO_START)" source="ocean_month_snap">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
+        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)"/>
+        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK_B)"/>
+      </component>
+      <component type="ocean_annual_z"  start="$(ANA_CLIMO_START)" source="ocean_annual_z">
+        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"/>
+        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
+        <timeAverage source="annual" interval="$(PP_OCEAN_CHUNK)" />
+        <timeAverage source="annual" interval="$(PP_OCEAN_CHUNK_B)" />
+      </component>
+      <component type="ocean_z"         start="$(ANA_CLIMO_START)" source="ocean_month_z">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
+        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
+      </component>
+
+      <component type="ocean_scalar_month" start="$(ANA_CLIMO_START)" source="ocean_scalar_month">
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"   />
+        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)" />
+      </component>
+
+      <component type="ocean_scalar_annual" start="$(ANA_CLIMO_START)" source="ocean_scalar_annual">
+        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"   />
+        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)" />
+      </component>
+
+    </postProcess>
+  </experiment> 
+
+      
   <experiment name="OM4_postprocess">
     <postProcess>
         <csh><![CDATA[
@@ -3853,7 +3930,7 @@ Experiment name = $(name)
       <!--REFINE DIAG SCRIPT -->
       <!--refineDiag_data_stager.csh calculates global averages of basic quantities and stores them in a sqlit database file-->
       <!--By default a refineDiag script causes the annual history files to be unpacked and saved in /ptmp/$USER-->
-      <refineDiag script="/nbhome/$USER/$(FRE_STEM)/$(EXP_NAME)/gfdl.nescc-default-prod-openmp/mom6/tools/analysis/refineDiag_data_stager.csh"/>
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
@@ -3861,40 +3938,11 @@ Experiment name = $(name)
         </timeSeries>
       </component>
 
-      <component type="ocean_z"         start="$(ANA_CLIMO_START)" source="ocean_month_z">
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
-        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month_z"/>
-      </component>
-
-      <component type="ocean_scalar_month" start="$(ANA_CLIMO_START)" source="ocean_scalar_month">
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"   />
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)" />
-      </component>
-
-      <component type="ocean_scalar_annual" start="$(ANA_CLIMO_START)" source="ocean_scalar_annual">
-        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"   />
-        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)" />
-      </component>
-
-      <component type="ocean_snap"      start="$(ANA_CLIMO_START)" source="ocean_month_snap">
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
-        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK)"/>
-        <timeSeries freq="annual"  chunkLength="$(PP_OCEAN_CHUNK_B)"/>
-      </component>
-
       <component type="ocean_annual"    start="$(ANA_CLIMO_START)"  source="ocean_annual">
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK_B)"/>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
         </timeAverage>
-      </component>
-
-      <component type="ocean_annual_z"  start="$(ANA_CLIMO_START)" source="ocean_annual_z">
-        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"/>
-        <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
-        <timeAverage source="annual" interval="$(PP_OCEAN_CHUNK)" />
-        <timeAverage source="annual" interval="$(PP_OCEAN_CHUNK_B)" />
       </component>
 
       <component type="ice"  start="$(ANA_CLIMO_START)"  source="ice_month">
@@ -4195,4 +4243,258 @@ endif
     </postProcess>
 
   </experiment>
-</experimentSuite>
+
+
+  <experiment name="am4a2c_nml">
+
+    <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.27, !Ming Zhao
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="deep_conv_nml">
+        rkm_dp1 = 3
+        rkm_dp2 = 0.1
+        norder = 1
+        cbmf_dp_frac1 = 1.
+        cbmf_dp_frac2 = 1.
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cape_th = 100.
+        tau_dp = 28800.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.8
+        auto_th0_d = 1.0e-3
+        tcrit_d    = -110.0,
+        frac_limit_d = 0.25
+        dcapedm_th = 100
+        lofactor_d = 0.75
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_forcedlifting_d = .false.
+      </namelist>
+      <namelist name="rotstayn_klein_mp_nml">
+        rk_act_only_if_ql_gt_qmin = .true.
+      </namelist>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 1
+        do_rescale      = .true.
+        use_sub_seasalt = .false.
+        wrel_min=1.
+      </namelist>
+      <namelist name="uw_plume_nml">
+        rmaxfrac = 0.15
+        auto_th0 = 1.5e-3,
+        tcrit    = -80.0,
+        frac_drs = 0.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .true.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 2
+        mp_choice = 1
+        do_pevap = .true.
+        hcevap   = 0.9
+        cfrac    = 0.15
+      </namelist>
+      <namelist name="strat_cloud_nml">
+        up_strat_opt = 2
+        var_limit_opt = 2
+        var_limit = 0.3
+        aerosol_activation_scheme = "total"
+        qthalfwidth    = 0.2
+        do_pdf_clouds = .true.
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.0,
+        Dmin = 1.0e-07,
+        n_land = 300.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 3.e-6,
+        eros_scale_t = 3.e-6,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 1.4
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 1.0
+        use_sub_seasalt = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L48_am4a2cr1_2000climo" inherit="c96L48_am4a1r1_2000climo">
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a2c1" 
+communityModelID="am4a2c"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c96L48_am4a1r1, but with the improved implied heat transport settings
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!--namelists for a2c. -->
+      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+    </input>
+  </experiment>
+
+  <experiment name="c192L48_am4a2cr1_2000climo" inherit="c192L48_am4a1r1_2000climo">
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a2c1" 
+communityModelID="am4a2c"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c192L48_am4a1r1, but with the improved implied heat transport settings
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!--namelists for a2c. -->
+      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+    </input>
+  </experiment>
+
+
+ 
+ <experiment name="CM4_c96L48_am4a2cr1_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="CM4_c96L48_am4a1r1_SIS  $(MOM6_GIT_TAG)" 
+communityModelID="CM4_c96L48_am4a1r1_SIS"
+communityExperimentName="$(name)">
+<!-- /MDBI -->
+
+    </description>
+<!-- MDBI -->
+    <communityComment>
+      Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!--namelists for a2c. -->
+      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+    </input>
+
+  </experiment>
+
+
+ <experiment name="CM4_c192L48_am4a2cr1_2000climo" inherit="CM4_c192L48_am4a1r1_2000climo"> 
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="CM4_AM4a1_SIS  $(MOM6_GIT_TAG)" 
+communityModelID="CM4_AM4a1_SIS"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c192L48_am4a1r1, but
+configuration with present-day climatological SSTs, present-day GHGs and aerosols.
+
+    </description>
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+      Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!--namelists for a2c. -->
+      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+    </input>
+
+  </experiment>
+
+
+ 
+ </experimentSuite>
