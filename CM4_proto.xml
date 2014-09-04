@@ -31,9 +31,9 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
   <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
-  <property name="MOM6_DATE" value="2014.07.23"/>                <!-- git tag date for MOM6 source code -->
+  <property name="MOM6_DATE" value="2014.08.29"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM" value="mdt/$(RELEASE)_awgUpdates2_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
+  <property name="FRE_STEM" value="$(RELEASE)_awgUpdates2_mom6_$(MOM6_DATE)"/>  <!-- customize as needed -->
   <property name="FRE_VERSION" value="fre/bronx-7"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
@@ -189,7 +189,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
         <!--unswept locations--><!-- CPERM=/lustre/f1/unswept -->
 	<root>$HOME/$(stem)</root>
@@ -227,7 +227,7 @@ configuration.
       <xi:include xpointer="xpointer(//setup/platform[@name='ncrc2.intel']/node())" />
     </platform>
 
-    <platform name="nescc.default">
+    <platform name="nescc.intel">
       <project>gfdlccycle</project>
       <directory stem="$(FRE_STEM)">
         <root>/scratch2/portfolios/GFDL/gfdlscr/$USER/$(stem)</root>
@@ -262,6 +262,10 @@ configuration.
         setenv MPI_BUFS_PER_PROC 512
         setenv MPI_BUFS_PER_HOST 512
       ]]></csh>
+    </platform>
+
+    <platform name="nescc.default">
+      <xi:include xpointer="xpointer(//setup/platform[@name='nescc.intel']/node())" />
     </platform>
 
     <platform name="gfdl.ncrc2-intel">
@@ -577,6 +581,11 @@ $baseDate
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_land_v20140325</dataSource>
       </dataFile>
+<!-- Extra variables -->
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="ncrc2.intel">/ncrc/home2/Chris.Golaz/awg/tikal_201403/xml/diagtable_extra</dataSource>
+        <dataSource platform="gfdl.ncrc2-intel">/home/Chris.Golaz/ncrc/awg/tikal_201403/xml/diagtable_extra</dataSource>
+      </dataFile>
     </input>
   </experiment>
 
@@ -674,6 +683,16 @@ if ( "$npes" == "432" ) then
   set domains_stack_size = "2097152"
 #npes= 432  main_loop= 2450.045358  ATM= 2448.129781  OCN= 0.000000000000000E+00  SYPD= 2.89846
 #num_phys_windows=1
+
+else if ( "$npes" == "3072" ) then
+  set atmos_npes = "768"
+  set atmos_nthreads = "4"
+  set physics_window = "6,3"
+  set fv_layout    =   "8,16";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,16";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "128,6"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "128,6";   set ocn_io_layout =  "1,3"
+
 else if ( "$npes" == "864" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "2"
@@ -994,6 +1013,16 @@ if ( "$npes" == "720" ) then
   set ocean_npes = "288"
 
 #npes= 720  main_loop= 3324.007522  ATM= 891.693204  OCN= 3314.492429  SYPD= 0.712129
+
+else if ( "$npes" == "3840" ) then
+  set atmos_npes = "768"
+  set atmos_nthreads = "4"
+  set physics_window = "6,3"
+  set fv_layout    =   "8,16";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,16";  set land_io_layout  =  "1,4"
+  set ice_layout   =   "128,6"; set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "128,6";   set ocn_io_layout   =  "1,3"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "768"
 
 else if ( "$npes" == "1376" ) then
   set atmos_npes = "432"
@@ -1363,7 +1392,6 @@ else if ( "$npes" == "6912" ) then
   set do_ocean = "true"
   set ocean_npes   = "2304"
 #SYPD= 4.27491  npes= 6912  main_loop= 553.724798  ATM= 523.916859  OCN= 515.782269
-
 else if ( "$npes" == "7040" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
@@ -1440,6 +1468,28 @@ else if ( "$npes" == "8576" ) then
   set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
   set do_ocean = "true"
   set ocean_npes   = "2432"
+else if ( "$npes" == "9344" ) then
+  set atmos_npes = "1728"
+  set atmos_nthreads = "4"
+  set physics_window = "8,4"
+  set fv_layout    =   "12,24";   set fv_io_layout    =  "1,3"
+  set land_layout  =   "12,24";   set land_io_layout  =  "1,3"
+  set ice_layout   =   "144,12";  set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "45,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.808.45x72"
+  set do_ocean = "true"
+  set ocean_npes   = "2432"
+#SYPD= 5.71746  npes= 9344  main_loop= 414.016546  ATM= 392.145506  OCN= 381.589754
+
+else if ( "$npes" == "12595" ) then
+  set atmos_npes = "2304"
+  set atmos_nthreads = "4"
+  set physics_window = "8,3"
+  set fv_layout    =   "24,16"; set fv_io_layout    =  "1,4"
+  set land_layout  =   "24,16"; set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,16"; set ice_io_layout   =  "1,4"
+  set ocn_layout   =   "64,72"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "mask_table.1229.64x72"
+  set ocean_npes = "3379"
+#npes= 12595  main_loop= 349.973723  ATM= 345.592016  OCN= 292.770137  SYPD= 6.76372
 
 else if ( "$npes" == "9344" ) then
   set atmos_npes = "1728"
@@ -1543,8 +1593,11 @@ endif
             <xi:fallback/>
           </xi:include>
         </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage>  
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAve/*)">
             <xi:fallback/>
           </xi:include>
@@ -1665,7 +1718,12 @@ endif
             <xi:fallback/>
           </xi:include>
         </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage>
+        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK_B)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage>	
         <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAve/*)">
             <xi:fallback/>
@@ -1790,8 +1848,11 @@ endif
             <xi:fallback/>
           </xi:include>
         </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage>
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAve/*)">
             <xi:fallback/>
           </xi:include>
@@ -1811,8 +1872,11 @@ endif
             <xi:fallback/>
           </xi:include>
         </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage>
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_amip.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
             <xi:fallback/>
           </xi:include>
@@ -1912,7 +1976,12 @@ endif
             <xi:fallback/>
           </xi:include>
         </timeSeries>
-        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage> 
+        <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK_B)">
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.atmos.csh"/>
+	</timeAverage> 
         <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="/home/fms/local/opt/fre-analysis/test/niz/xml/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAve/*)">
             <xi:fallback/>
@@ -2007,6 +2076,113 @@ endif
     </postProcess>
   </experiment>
 
+
+<experiment name="c96L48_am4a2c_namelists">
+   <input>
+      <namelist name="deep_conv_nml">
+        rkm_dp1 = 3
+        rkm_dp2 = 0.1
+        norder = 1
+        cbmf_dp_frac1 = 1.
+        cbmf_dp_frac2 = 1.
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cape_th = 100.
+        tau_dp = 28800.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.8
+        auto_th0_d = 1.0e-3
+        tcrit_d    = -110.0,
+        frac_limit_d = 0.25
+        dcapedm_th = 100
+        lofactor_d = 0.75
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_forcedlifting_d = .false.
+      </namelist>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.27,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="rotstayn_klein_mp_nml">
+        rk_act_only_if_ql_gt_qmin = .true.
+      </namelist>
+      <namelist name="strat_cloud_nml">
+        up_strat_opt = 2
+        var_limit_opt = 2
+        var_limit = 0.3
+        aerosol_activation_scheme = "total"
+        qthalfwidth    = 0.2
+        do_pdf_clouds = .true.
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.0,
+        Dmin = 1.0e-07,
+        n_land = 300.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 3.e-6,
+        eros_scale_t = 3.e-6,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 1.4
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 1.0
+        use_sub_seasalt = .false.
+      </namelist>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 1
+        do_rescale      = .true.
+        use_sub_seasalt = .false.
+        wrel_min=1.
+      </namelist>
+      <namelist name="uw_plume_nml">
+        rmaxfrac = 0.15
+        auto_th0 = 1.5e-3,
+        tcrit    = -80.0,
+        frac_drs = 0.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .true.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 2
+        mp_choice = 1
+        do_pevap = .true.
+        hcevap   = 0.9
+        cfrac    = 0.15
+      </namelist>
+   </input>
+</experiment>
 
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
@@ -2108,7 +2284,7 @@ Experiment name = $(name)
       </regression>
       
       <regression name="timing2">
-        <run months="1" npes="3456"  runTimePerJob="02:00:00"/>
+        <run months="1" npes="3072"  runTimePerJob="02:00:00"/>
       </regression>
 
       <regression name="timing">
@@ -2235,7 +2411,7 @@ Experiment name = $(name)
 
   </experiment>
 
- 
+
 <!--================================-->
 <!--= OCEAN-ICE DATA (0.25 degree) =-->
 <!--================================-->
@@ -2274,7 +2450,6 @@ Experiment name = $(name)
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.1309.90x54     
      </dataFile>
-<!--
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.96.32x18     
      </dataFile>
@@ -2293,7 +2468,6 @@ Experiment name = $(name)
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        $(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/mask_table.315.32x45    
      </dataFile>
--->
      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
         <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/diag_table.MOM6</dataSource>
@@ -2357,7 +2531,10 @@ touch $work/INPUT/MOM_override
         $(MOM6_SRC)/examples/coupled_AM2_SIS/CM2G63L/INPUT/salt_restore.nc
      </dataFile>      
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        $(MOM6_SRC)/examples/coupled_AM2_SIS/CM2G63L/INPUT/GOLD_IC.2010.11.15.nc
+        $(MOM6_SRC)/examples/coupled_AM2_SIS/CM2G63L/INPUT/Vertical_coordinate.nc
+     </dataFile>      
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       $(MOM6_SRC)/examples/coupled_AM2_SIS/CM2G63L/INPUT/WOA05_pottemp_salt.nc 
      </dataFile>      
      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         $(MOM6_SRC)/examples/coupled_AM2_SIS/CM2G63L/INPUT/sst_ice_clim.nc
@@ -2443,6 +2620,7 @@ endif
 ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc 
 
 touch $work/INPUT/MOM_override
+
 
       ]]></csh>
  
@@ -2941,8 +3119,8 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="900" runTime="08:00:00">
-        <segment simTime="12" units="months" runTime="02:30:00"/>
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1878" runTime="12:00:00">
+        <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
         <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
@@ -2950,7 +3128,7 @@ OVERRIDE_EOF
 
       <regression name="rts"> 
         <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
-    </regression>
+      </regression>
 
 
       <reference restart="$(REFERENCE)/archive/1x0m10d_900pe/restart/00010111.tar"/>
@@ -2964,6 +3142,13 @@ OVERRIDE_EOF
     </postProcess>
 
   </experiment>
+
+ <experiment name="CM4i_c96L48_am4a2c_2000climo" inherit="CM4i_c96L48_am4a1r1_2000climo">
+   <input> 
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
+   </input> 
+</experiment>
+
 
  <experiment name="CM4i_c96L48_am4a1r1_1860forc" inherit="cm4p1_compile">
 
@@ -3622,8 +3807,8 @@ OVERRIDE_EOF
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="900" runTime="08:00:00">
-        <segment simTime="12" units="months" runTime="02:30:00"/>
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1878" runTime="12:00:00">
+        <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
         <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
@@ -3936,6 +4121,13 @@ Experiment name = $(name)
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_monthly.frepp"/>
         </timeSeries>
+
+        <timeAverage source="monthly" interval="$(PP_OCEAN_CHUNK)" >
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.ocean.csh"/>
+	</timeAverage>
+        <timeAverage source="monthly" interval="$(PP_OCEAN_CHUNK_B)" >
+	  <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="/home/fms/local/opt/fre-analysis/test/eem/code/pcmdi_metrics/frepp.pcmdi_metrics.ocean.csh"/>
+	</timeAverage>
       </component>
 
       <component type="ocean_annual"    start="$(ANA_CLIMO_START)"  source="ocean_annual">
@@ -4244,115 +4436,6 @@ endif
 
   </experiment>
 
-
-  <experiment name="am4a2c_nml">
-
-    <input>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.27, !Ming Zhao
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
-      </namelist>
-      <namelist name="deep_conv_nml">
-        rkm_dp1 = 3
-        rkm_dp2 = 0.1
-        norder = 1
-        cbmf_dp_frac1 = 1.
-        cbmf_dp_frac2 = 1.
-        crh_th_ocean = 0.5
-        crh_th_land  = 0.5
-        cape_th = 100.
-        tau_dp = 28800.
-        mixing_assumption_d = 4
-        do_ppen_d  = .true.
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.8
-        auto_th0_d = 1.0e-3
-        tcrit_d    = -110.0,
-        frac_limit_d = 0.25
-        dcapedm_th = 100
-        lofactor_d = 0.75
-        do_lod_rkm   = .false.
-        do_lod_cfrac = .false.
-        do_lod_tcrit = .false.
-        do_forcedlifting_d = .false.
-      </namelist>
-      <namelist name="rotstayn_klein_mp_nml">
-        rk_act_only_if_ql_gt_qmin = .true.
-      </namelist>
-      <namelist name="uw_conv_nml">
-        use_online_aerosol = .true.,
-        iclosure        = 0,
-        rkm_sh          = 3.0,
-        cldhgt_max      = 50.e3,
-        do_uwcmt        = .false.,
-        apply_tendency  = .true.,
-        wmin_ratio      = 0.05,
-        do_lands        = .false.
-        landfact_m      = 0.5
-        lochoice        = 0
-        lofactor0       = 0.75
-        do_deep         = .true.,
-        idpchoice       = 1
-        do_rescale      = .true.
-        use_sub_seasalt = .false.
-        wrel_min=1.
-      </namelist>
-      <namelist name="uw_plume_nml">
-        rmaxfrac = 0.15
-        auto_th0 = 1.5e-3,
-        tcrit    = -80.0,
-        frac_drs = 0.0
-        wmin     = 0.5
-        deltaqc0 = 0.5e-3 
-        do_pdfpcp= .true.
-        do_pmadjt= .true.
-        do_emmax = .true.
-        do_pnqv  = .true.
-        mixing_assumption = 2
-        mp_choice = 1
-        do_pevap = .true.
-        hcevap   = 0.9
-        cfrac    = 0.15
-      </namelist>
-      <namelist name="strat_cloud_nml">
-        up_strat_opt = 2
-        var_limit_opt = 2
-        var_limit = 0.3
-        aerosol_activation_scheme = "total"
-        qthalfwidth    = 0.2
-        do_pdf_clouds = .true.
-        use_online_aerosol = .true.,
-        U00 = 0.80,
-        U00_profile = .true.,
-        rthresh = 8.0,
-        Dmin = 1.0e-07,
-        n_land = 300.e6,
-        diff_thresh = 0.1,
-        mc_thresh = 0.001,
-        eros_scale = 1.e-6,
-        eros_choice = .true.,
-        eros_scale_c = 3.e-6,
-        eros_scale_t = 3.e-6,
-        super_choice = .true.,
-        tracer_advec = .true.
-        vfact = 1.4
-        cfact = 1.0
-        do_liq_num = .true.
-        use_kk_auto = .false.
-        num_mass_ratio1 = 1.0
-        num_mass_ratio2 = 1.0
-        use_sub_seasalt = .false.
-      </namelist>
-    </input>
-  </experiment>
-
   <experiment name="c96L48_am4a2cr1_2000climo" inherit="c96L48_am4a1r1_2000climo">
 <!-- MDBI -->
     <description
@@ -4384,7 +4467,7 @@ Experiment name = $(name)
 
     <input>
       <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
     </input>
   </experiment>
 
@@ -4419,7 +4502,7 @@ Experiment name = $(name)
 
     <input>
       <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
     </input>
   </experiment>
 
@@ -4452,7 +4535,7 @@ communityExperimentName="$(name)">
 
     <input>
       <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
     </input>
 
   </experiment>
@@ -4490,7 +4573,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <input>
       <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='am4a2c_nml']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
     </input>
 
   </experiment>
