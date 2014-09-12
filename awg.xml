@@ -1604,4 +1604,212 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
     </input>
   </experiment>
 
+  <experiment name="c96L48_am4a2r1_2000climo" inherit="cm4p1_v20140909">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a1" 
+communityModelID="am4a1"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c96L48_am4a2r1, but
+configuration with present-day climatological SSTs, present-day GHGs and aerosols.
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1,1,1,0,0,0,
+        calendar = 'noleap'
+        dt_atmos = 1200,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1728" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_climo_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+  <experiment name="c96L48_am4a2r1_1860climo" inherit="c96L48_am4a2r1_2000climo">
+    <description>
+Same model as c96L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_1860climo.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L48_am4a2r1_2000aero" inherit="c96L48_am4a2r1_2000climo">
+    <description>
+Same model as c96L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000aero.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L48_am4a2r1_2000climo_p2K" inherit="c96L48_am4a2r1_2000climo">
+    <description>
+Same model as c96L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_p2K.nml"/>
+    </input>
+  </experiment>
+
+
+  <experiment name="c192L48_am4a2r1_2000climo" inherit="cm4p1_v20140909">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a1" 
+communityModelID="am4a1"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c192L48_am4a2r1, but
+configuration with present-day climatological SSTs, present-day GHGs and aerosols.
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_c192.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1,1,1,0,0,0,
+        calendar = 'noleap'
+        dt_atmos = 1200,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="5:20:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="864" runTimePerJob="01:00:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_climo_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+  <experiment name="c192L48_am4a2r1_1860climo" inherit="c192L48_am4a2r1_2000climo">
+    <description>
+Same model as c192L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_1860climo.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c192L48_am4a2r1_2000aero" inherit="c192L48_am4a2r1_2000climo">
+    <description>
+Same model as c192L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000aero.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c192L48_am4a2r1_2000climo_p2K" inherit="c192L48_am4a2r1_2000climo">
+    <description>
+Same model as c192L48_am4a2r1_2000climo, but
+configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_p2K.nml"/>
+    </input>
+  </experiment>
+
+
 </experimentSuite>
