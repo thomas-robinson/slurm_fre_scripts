@@ -534,10 +534,12 @@ endif
 # runCommand:
 alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 
-## Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-#if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-#  gcp -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-#endif
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
       ]]></csh>
 
       <csh type="always"><![CDATA[
@@ -628,10 +630,12 @@ endif
 # runCommand:
 alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 
-## Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-#if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-#  gcp -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-#endif
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
       ]]></csh>
 
       <csh type="always"><![CDATA[
