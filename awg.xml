@@ -40,7 +40,7 @@
   <property name="MOM6_SRC" value="$HOME/$(FRE_STEM)/cm4p1_v20140909/src/mom6"/>
   <property name="FRE_VERSION" value="bronx-7"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
-  <property name="MDBIswitch" value="off"/>                      <!-- on/off switch for MDBI database -->
+  <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
   <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/tikal_201403/xml_v20140909/awg_include"/>
