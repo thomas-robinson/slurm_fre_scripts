@@ -1,0 +1,27 @@
+# AWG quick-start. For more information
+# http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+# Load modules
+module load git
+module load fre/bronx-7
+
+# Checkout xml
+mkdir -p $home/awg/tikal_201403
+cd $home/awg/tikal_201403
+git clone -b awg_v20140909 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20140909
+
+# Set your group in the xml
+cd xml_v20140909
+#  edit awg.xml and replace YOURGROUPLETTER with your actual group
+
+# Checkout out code and compile
+cd $home/awg/tikal_201403/xml_v20140909
+fremake -x awg.xml -p ncrc2.intel -t openmp cm4p1_v20140909
+#  follow on-screen instructions to submit compilation script
+
+# Submit regression test
+frerun -S -x awg.xml -r basic -p ncrc2.intel -t openmp c96L48_am4a1r1
+
+# Submit production experiment
+frerun -S -x awg.xml -p ncrc2.intel -t openmp c96L48_am4a1r1
+
