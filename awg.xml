@@ -135,7 +135,7 @@ Available options for c96L48:
 
   +========+======================+======================+
   |npes    |  Suggested run time for 12 month segment    |
-  |        |    am4a1*            |    am4b1             |
+  |        |    am4a1r1/2         |    am4b1             |
   +========+======================+======================+
   |   432  |    09:00:00          |    09:00:00          |
   |   864  |    05:20:00          |    05:20:00          |
@@ -149,7 +149,7 @@ Available options for c192L48:
 
   +========+======================+======================+
   |npes    |  Suggested run time for 12 month segment    |
-  |        |    am4a1*            |    am4b1             |
+  |        |    am4a1r1/2         |    am4b1             |
   +========+======================+======================+
   |  1152  |    16:00:00 (?)      |    16:00:00 (?)      |
   |  2304  |    09:00:00          |    09:00:00          |
@@ -1202,223 +1202,178 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4a2r1" inherit="c96L48_am4a1r1">
+  <experiment name="c96L48_am4a2r1" inherit="cm4p1_v20140909">
 
-   <input>
-      <namelist name="deep_conv_nml">
-        rkm_dp1 = 3
-        rkm_dp2 = 0.1
-        norder = 1
-        cbmf_dp_frac1 = 1.
-        cbmf_dp_frac2 = 1.
-        crh_th_ocean = 0.5
-        crh_th_land  = 0.5
-        cape_th = 100.
-        tau_dp = 28800.
-        mixing_assumption_d = 4
-        do_ppen_d  = .true.
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.8
-        auto_th0_d = 1.0e-3
-        tcrit_d    = -110.0,
-        frac_limit_d = 0.25
-        dcapedm_th = 100
-        lofactor_d = 0.75
-        do_lod_rkm   = .false.
-        do_lod_cfrac = .false.
-        do_lod_tcrit = .false.
-        do_forcedlifting_d = .false.
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a2" 
+communityModelID="am4a2"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+AM4 prototype configuration "am4a2r1" from MDT Atmosphere Working Group.
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_amip.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1200,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
       </namelist>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.27,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
-      </namelist>
-      <namelist name="strat_cloud_nml">
-        up_strat_opt = 2
-        var_limit_opt = 2
-        var_limit = 0.3
-        aerosol_activation_scheme = "total"
-        qthalfwidth    = 0.2
-        do_pdf_clouds = .true.
-        use_online_aerosol = .true.,
-        U00 = 0.80,
-        U00_profile = .true.,
-        rthresh = 8.0,
-        Dmin = 1.0e-07,
-        n_land = 300.e6,
-        diff_thresh = 0.1,
-        mc_thresh = 0.001,
-        eros_scale = 1.e-6,
-        eros_choice = .true.,
-        eros_scale_c = 3.e-6,
-        eros_scale_t = 3.e-6,
-        super_choice = .true.,
-        tracer_advec = .true.
-        vfact = 1.4
-        cfact = 1.0
-        do_liq_num = .true.
-        use_kk_auto = .false.
-        num_mass_ratio1 = 1.0
-        num_mass_ratio2 = 1.0
-        use_sub_seasalt = .false.
-      </namelist>
-      <namelist name="rotstayn_klein_mp_nml">
-        rk_act_only_if_ql_gt_qmin = .true.
-      </namelist>
-      <namelist name="uw_conv_nml">
-        use_online_aerosol = .true.,
-        iclosure        = 0,
-        rkm_sh          = 3.0,
-        cldhgt_max      = 50.e3,
-        do_uwcmt        = .false.,
-        apply_tendency  = .true.,
-        wmin_ratio      = 0.05,
-        do_lands        = .false.
-        landfact_m      = 0.5
-        lochoice        = 0
-        lofactor0       = 0.75
-        do_deep         = .true.,
-        idpchoice       = 1
-        do_rescale      = .true.
-        use_sub_seasalt = .false.
-        wrel_min=1.
-      </namelist>
-      <namelist name="uw_plume_nml">
-        rmaxfrac = 0.15
-        auto_th0 = 1.5e-3,
-        tcrit    = -80.0,
-        frac_drs = 0.0
-        wmin     = 0.5
-        deltaqc0 = 0.5e-3 
-        do_pdfpcp= .true.
-        do_pmadjt= .true.
-        do_emmax = .true.
-        do_pnqv  = .true.
-        mixing_assumption = 2
-        mp_choice = 1
-        do_pevap = .true.
-        hcevap   = 0.9
-        cfrac    = 0.15
-      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
     </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restarts">
+        <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1" npes="432"  runTimePerJob="02:00:00"/>
+        <run months="1" npes="864"  runTimePerJob="01:00:00"/>
+        <run months="1" npes="1152" runTimePerJob="00:45:00"/>
+        <run months="1" npes="1728" runTimePerJob="00:45:00"/>
+        <run months="1" npes="2304" runTimePerJob="00:30:00"/>
+        <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
 
   </experiment>
 
-  <experiment name="c192L48_am4a2r1" inherit="c192L48_am4a1r1">
+  <experiment name="c192L48_am4a2r1" inherit="cm4p1_v20140909">
 
-   <input>
-      <namelist name="deep_conv_nml">
-        rkm_dp1 = 3
-        rkm_dp2 = 0.1
-        norder = 1
-        cbmf_dp_frac1 = 1.
-        cbmf_dp_frac2 = 1.
-        crh_th_ocean = 0.5
-        crh_th_land  = 0.5
-        cape_th = 100.
-        tau_dp = 28800.
-        mixing_assumption_d = 4
-        do_ppen_d  = .true.
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.8
-        auto_th0_d = 1.0e-3
-        tcrit_d    = -110.0,
-        frac_limit_d = 0.25
-        dcapedm_th = 100
-        lofactor_d = 0.75
-        do_lod_rkm   = .false.
-        do_lod_cfrac = .false.
-        do_lod_tcrit = .false.
-        do_forcedlifting_d = .false.
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a2" 
+communityModelID="am4a2"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+AM4 prototype configuration "am4a2r1" from MDT Atmosphere Working Group.
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_c192.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_amip.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1200,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
       </namelist>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.27,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
-      </namelist>
-      <namelist name="strat_cloud_nml">
-        up_strat_opt = 2
-        var_limit_opt = 2
-        var_limit = 0.3
-        aerosol_activation_scheme = "total"
-        qthalfwidth    = 0.2
-        do_pdf_clouds = .true.
-        use_online_aerosol = .true.,
-        U00 = 0.80,
-        U00_profile = .true.,
-        rthresh = 8.0,
-        Dmin = 1.0e-07,
-        n_land = 300.e6,
-        diff_thresh = 0.1,
-        mc_thresh = 0.001,
-        eros_scale = 1.e-6,
-        eros_choice = .true.,
-        eros_scale_c = 3.e-6,
-        eros_scale_t = 3.e-6,
-        super_choice = .true.,
-        tracer_advec = .true.
-        vfact = 1.4
-        cfact = 1.0
-        do_liq_num = .true.
-        use_kk_auto = .false.
-        num_mass_ratio1 = 1.0
-        num_mass_ratio2 = 1.0
-        use_sub_seasalt = .false.
-      </namelist>
-      <namelist name="rotstayn_klein_mp_nml">
-        rk_act_only_if_ql_gt_qmin = .true.
-      </namelist>
-      <namelist name="uw_conv_nml">
-        use_online_aerosol = .true.,
-        iclosure        = 0,
-        rkm_sh          = 3.0,
-        cldhgt_max      = 50.e3,
-        do_uwcmt        = .false.,
-        apply_tendency  = .true.,
-        wmin_ratio      = 0.05,
-        do_lands        = .false.
-        landfact_m      = 0.5
-        lochoice        = 0
-        lofactor0       = 0.75
-        do_deep         = .true.,
-        idpchoice       = 1
-        do_rescale      = .true.
-        use_sub_seasalt = .false.
-        wrel_min=1.
-      </namelist>
-      <namelist name="uw_plume_nml">
-        rmaxfrac = 0.15
-        auto_th0 = 1.5e-3,
-        tcrit    = -80.0,
-        frac_drs = 0.0
-        wmin     = 0.5
-        deltaqc0 = 0.5e-3 
-        do_pdfpcp= .true.
-        do_pmadjt= .true.
-        do_emmax = .true.
-        do_pnqv  = .true.
-        mixing_assumption = 2
-        mp_choice = 1
-        do_pevap = .true.
-        hcevap   = 0.9
-        cfrac    = 0.15
-      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
     </input>
 
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="5:20:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="864" runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restarts">
+        <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
+        <run months="1"   npes="1152" runTimePerJob="02:00:00"/> 
+        <run months="1"   npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1"   npes="3456" runTimePerJob="01:00:00"/>
+        <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
+        <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
+
   </experiment>
+
 
 <!--=====================-->
 <!--= CLIMO EXPERIMENTS =-->
