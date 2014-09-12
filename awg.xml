@@ -107,10 +107,10 @@ be controlled by changing properties below.
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
   <property name="EXP_CLIMO_START" value="0001"/>
-  <property name="EXP_CLIMO_END" value="0010"/>
-  <property name="EXP_CLIMO_LEN" value="10"/>
-  <property name="ANA_CLIMO_START" value="0001"/>
-  <property name="ANA_CLIMO_END" value="0010"/>
+  <property name="EXP_CLIMO_END" value="0011"/>
+  <property name="EXP_CLIMO_LEN" value="11"/>
+  <property name="ANA_CLIMO_START" value="0002"/>
+  <property name="ANA_CLIMO_END" value="0011"/>
   <property name="ANA_CLIMO_LEN" value="10yr"/>
   <property name="PP_CLIMO_CHUNK" value="5yr"/>
 
@@ -1062,8 +1062,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_amip.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1078,16 +1078,6 @@ Experiment name = $(name)
         ocean_npes = 0
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
-      </namelist>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.45,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
       </namelist>
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
@@ -1163,8 +1153,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c192.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c192.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_amip.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1469,8 +1459,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1485,16 +1475,6 @@ Experiment name = $(name)
         ocean_npes = 0
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
-      </namelist>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.45,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
       </namelist>
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
@@ -1562,8 +1542,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_1860climo.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1610,7 +1590,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4a1_2000aero" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a1r1_2000aero" inherit="cm4p1_v20140909">
 
 <!-- MDBI -->
     <description
@@ -1645,8 +1625,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000aero.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1693,7 +1673,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4a1_2000climo_p2K" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a1r1_2000climo_p2K" inherit="cm4p1_v20140909">
 
 <!-- MDBI -->
     <description
@@ -1728,8 +1708,8 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_physics_dpc3.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_c96.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo_p2K.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1772,6 +1752,90 @@ Experiment name = $(name)
 
     <postProcess>
       <xi:include xpointer="xpointer(//experiment[@name='c96_climo_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+  <experiment name="c192L48_am4a1r1_2000climo" inherit="cm4p1_v20140909">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4a1" 
+communityModelID="am4a1"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Same model as c192L48_am4a1r1, but
+configuration with present-day climatological SSTs, present-day GHGs and aerosols.
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_CLIMO_START)"
+      endTime="$(EXP_CLIMO_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c192.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1,1,1,0,0,0,
+        calendar = 'noleap'
+        dt_atmos = 1200,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="5:20:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="864" runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restarts">
+        <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
+        <run months="1"   npes="1152" runTimePerJob="02:00:00"/> 
+        <run months="1"   npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1"   npes="3456" runTimePerJob="01:00:00"/>
+        <run months="1"   npes="4608" runTimePerJob="01:00:00"/>
+        <run months="1"   npes="6912" runTimePerJob="01:00:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c192_climo_postprocess']/postProcess/node())"/>
     </postProcess>
 
   </experiment>

@@ -74,17 +74,6 @@
       limit_pztm_to_tropo = .true.
 /
 
- &entrain_nml
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.27,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
-/
-
  &moist_processes_nml
         do_lsc=.false., 
         do_strat=.true.,
