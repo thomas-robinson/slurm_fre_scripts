@@ -1609,8 +1609,8 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)" 
-communityModel="am4a1" 
-communityModelID="am4a1"
+communityModel="am4a2" 
+communityModelID="am4a2"
 communityExperimentName="$(name)" 
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
@@ -1713,8 +1713,8 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)" 
-communityModel="am4a1" 
-communityModelID="am4a1"
+communityModel="am4a2" 
+communityModelID="am4a2"
 communityExperimentName="$(name)" 
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
