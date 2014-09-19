@@ -30,17 +30,17 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
+  <property name="RELEASE" value="tikal_201409"/>                <!-- CVS tag for source code -->
   <property name="MOM6_DATE" value="2014.08.29"/>                <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM"  value="$(RELEASE)_awgUpdates2_mom6_$(MOM6_DATE)"/>   <!--  customize as needed -->
+  <property name="FRE_STEM"  value="$(RELEASE)_awgUpdates_mom6_$(MOM6_DATE)"/>   <!--  customize as needed -->
   <property name="FRE_VERSION" value="fre/bronx-7"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
   <property name="DEBUGLEVEL" value=""/>
 
-  <property name="AWG_INPUT_HOME_GAEA" value="./awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="awg_include"/>
   <property name="AWG_INPUT_HOME_GFDL" value="/nbhome/$USER/$(FRE_STEM)/$(name)/mdt_xml/awg_include"/>
 
 <!--
@@ -247,7 +247,7 @@ configuration.
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
       <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
       <property name="REFERENCE"         value=""/>
       <property name="REFERENCE_awg"     value=""/>
@@ -272,12 +272,12 @@ configuration.
     </platform>
 
     <platform name="gfdl.default">
-      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)/$(platform)-$(target)/analysis"/>
+      <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
       <directory stem="$(FRE_STEM)">
 <!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
         <archive>$ARCHIVE/$(stem)/$(name)/$(platform)-$(target)</archive>
         <postProcess>$(archiveDir)/pp</postProcess>
-        <analysis>$(NB_ROOT)</analysis>
+        <analysis>$(NB_ROOT)/$(platform)-$(target)/analysis</analysis>
 	<ptmp>/ptmp/$USER</ptmp>
 <!-- /MDBI -->
       </directory>
@@ -351,16 +351,6 @@ Experiment to build executable.
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> shared </codeBase>
-        <!--The following update is needed to run in debug mode with Intel-->
-        <csh>
-cvs up -r tikal_bugfix_z1l shared/mpp/include/mpp_update_domains2D.h
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_misc.inc
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_util.inc
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_group_update.h
-cvs up -r tikal_group_update_fix_z1l shared/mpp/mpp_domains.F90
-cvs up -r tikal_group_update_fix_z1l shared/mpp/test_mpp_domains.F90
-cvs up -r rms_sdu shared/diag_manager
-	</csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
@@ -372,20 +362,6 @@ cvs up -r rms_sdu shared/diag_manager
       <source>
         <codeBase version="$(RELEASE)"> atmos_shared atmos_param_am3 </codeBase>
         <csh>
-#==In tikal_201406==
-           cvs update -r tikal_ncar1p5_micro_rsh atmos_param/strat_cloud/aerosol_cloud.F90 atmos_param/strat_cloud/cldwat2m_micro.F90 atmos_param/strat_cloud/microphysics.F90 atmos_param/strat_cloud/morrison_gettelman_microp.F90 atmos_param/strat_cloud/rotstayn_klein_mp.F90 atmos_param/strat_cloud/strat_cloud.F90 atmos_param/strat_cloud/strat_cloud_utilities.F90 atmos_param/strat_cloud/strat_nml.h atmos_param/strat_cloud/micro_mg.F90
-           cvs update -r tikal_precip_paths_rsh atmos_param/moist_processes/moist_processes.F90
-           cvs update -r tikal_ncar1p5_micro_rsh_wfc atmos_param/strat_cloud/rotstayn_klein_mp.F90
-           cvs update -r tikal_rad_diag_xlh_cjg atmos_param/sea_esf_rad/longwave_driver.F90 atmos_param/sea_esf_rad/rad_output_file.F90 atmos_param/sea_esf_rad/sealw99.F90
-           cvs update -r tikal_pbl_depth_cjg atmos_param/physics_driver/physics_driver.F90 atmos_param/vert_turb_driver/vert_turb_driver.F90
-           cvs update -r dpconv20140318_miz atmos_param/shallow_cu/conv_plumes_k.F90 atmos_param/shallow_cu/conv_plumes_k.F90
-           cvs update -r tikal_topo_drag_garner_cjg atmos_param/damping_driver/damping_driver.F90 atmos_param/topo_drag/topo_drag.F90
-           cvs update -r clubb20140516_h1g_MG1p5Interface atmos_param/clubb/MG_microp_3D.F90
-           cvs update -r clubb20140414_h1g_simpleInterface   atmos_param/physics_driver/physics_driver.F90  atmos_param/moist_processes/moist_processes.F90
-           cvs update -r clubb20140516_h1g_MGbug_fix  atmos_param/strat_cloud/cldwat2m_micro.F90  atmos_param/strat_cloud/micro_mg.F90
-#==In tikal_201407==
-           cvs co -r tikal_tke_v20140611_cjg atmos_param/tke_turb/tke_turb.F90
-           cvs update -r tikal_tke_v20140611_cjg atmos_param/vert_turb_driver/vert_turb_driver.F90
 #==For Ulm==
            cvs up -r tikal_201403_act_options_cjg atmos_param/strat_cloud/aerosol_cloud.F90 atmos_param/strat_cloud/strat_cloud.F90 atmos_param/strat_cloud/strat_cloud_utilities.F90 atmos_param/strat_cloud/strat_nml.h
 
@@ -402,11 +378,6 @@ cvs up -r rms_sdu shared/diag_manager
         <codeBase version="$(RELEASE)">
           atmos_coupled cubed_sphere_coupled
         </codeBase>
-        <csh>
-#==In tikal_201407==
-          cvs update -r tikal_pbl_depth_cjg atmos_coupled/atmos_model.F90 
-          cvs update -r tikal_pbl_depth_cjg atmos_cubed_sphere/driver/coupled/atmosphere.F90 atmos_cubed_sphere/driver/coupled/fv_physics.F90
-        </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DSPMD -DUSE_OCEAN_BGC -DOLD_PT_TO_T -DOLD_COS_SG</cppDefs>
@@ -494,10 +465,6 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>  
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> coupler.git </codeBase>
-          <csh>
-#==In tikal_201407==
-          cd coupler; git checkout user/nnz/merge_tikal_pbl_depth_cjg 
-          </csh>
       </source>
       <compile>
         <cppDefs><![CDATA[$(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'"]]></cppDefs>
@@ -764,6 +731,14 @@ else
   exit 53
 endif
 
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  set xmldirlocal = `dirname $rtsxml`
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
@@ -925,6 +900,16 @@ else
   echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
   exit 53
 endif
+
+
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  set xmldirlocal = `dirname $rtsxml`
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
@@ -1236,6 +1221,14 @@ else
   exit 53
 endif
 
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  set xmldirlocal = `dirname $rtsxml`
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
@@ -1501,6 +1494,14 @@ else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
 else
   echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
   exit 53
+endif
+
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  set xmldirlocal = `dirname $rtsxml`
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
 endif
 
       ]]></csh>
@@ -2350,9 +2351,9 @@ Experiment name = $(name)
 
   </experiment>
 
-<!--=======================-->
-<!--= CLIMO EXPERIMENTS =-->
-<!--=======================-->
+<!--==========================================-->
+<!--= CLIMO EXPERIMENTS with do_ocean=.false.=-->
+<!--==========================================-->
  <experiment name="c96L48_am4a2r1_2000climo" inherit="c96L48_am4a1r1_2000climo">
    <input> 
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
@@ -3318,11 +3319,12 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="1878" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> 
-        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="1878" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="restarts">
@@ -3341,113 +3343,6 @@ OVERRIDE_EOF
 
   </experiment>
 
-
-<experiment name="c96L48_am4a2c_namelists">
-   <input>
-      <namelist name="deep_conv_nml">
-        rkm_dp1 = 3
-        rkm_dp2 = 0.1
-        norder = 1
-        cbmf_dp_frac1 = 1.
-        cbmf_dp_frac2 = 1.
-        crh_th_ocean = 0.5
-        crh_th_land  = 0.5
-        cape_th = 100.
-        tau_dp = 28800.
-        mixing_assumption_d = 4
-        do_ppen_d  = .true.
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.8
-        auto_th0_d = 1.0e-3
-        tcrit_d    = -110.0,
-        frac_limit_d = 0.25
-        dcapedm_th = 100
-        lofactor_d = 0.75
-        do_lod_rkm   = .false.
-        do_lod_cfrac = .false.
-        do_lod_tcrit = .false.
-        do_forcedlifting_d = .false.
-      </namelist>
-      <namelist name="entrain_nml">
-        convect_shutoff = .true.,
-        apply_entrain = .true.,
-        parcel_buoy   = 0.25,
-        parcel_option = 2,
-        beta_rad      = 0.27,
-        Ashear        = 25.0, 
-        radperturb    = 0.10, 
-        critjump      = 0.10,
-      </namelist>
-      <namelist name="rotstayn_klein_mp_nml">
-        rk_act_only_if_ql_gt_qmin = .true.
-      </namelist>
-      <namelist name="strat_cloud_nml">
-        up_strat_opt = 2
-        var_limit_opt = 2
-        var_limit = 0.3
-        aerosol_activation_scheme = "total"
-        qthalfwidth    = 0.2
-        do_pdf_clouds = .true.
-        use_online_aerosol = .true.,
-        U00 = 0.80,
-        U00_profile = .true.,
-        rthresh = 8.0,
-        Dmin = 1.0e-07,
-        n_land = 300.e6,
-        diff_thresh = 0.1,
-        mc_thresh = 0.001,
-        eros_scale = 1.e-6,
-        eros_choice = .true.,
-        eros_scale_c = 3.e-6,
-        eros_scale_t = 3.e-6,
-        super_choice = .true.,
-        tracer_advec = .true.
-        vfact = 1.4
-        cfact = 1.0
-        do_liq_num = .true.
-        use_kk_auto = .false.
-        num_mass_ratio1 = 1.0
-        num_mass_ratio2 = 1.0
-        use_sub_seasalt = .false.
-      </namelist>
-      <namelist name="uw_conv_nml">
-        use_online_aerosol = .true.,
-        iclosure        = 0,
-        rkm_sh          = 3.0,
-        cldhgt_max      = 50.e3,
-        do_uwcmt        = .false.,
-        apply_tendency  = .true.,
-        wmin_ratio      = 0.05,
-        do_lands        = .false.
-        landfact_m      = 0.5
-        lochoice        = 0
-        lofactor0       = 0.75
-        do_deep         = .true.,
-        idpchoice       = 1
-        do_rescale      = .true.
-        use_sub_seasalt = .false.
-        wrel_min=1.
-      </namelist>
-      <namelist name="uw_plume_nml">
-        rmaxfrac = 0.15
-        auto_th0 = 1.5e-3,
-        tcrit    = -80.0,
-        frac_drs = 0.0
-        wmin     = 0.5
-        deltaqc0 = 0.5e-3 
-        do_pdfpcp= .true.
-        do_pmadjt= .true.
-        do_emmax = .true.
-        do_pnqv  = .true.
-        mixing_assumption = 2
-        mp_choice = 1
-        do_pevap = .true.
-        hcevap   = 0.9
-        cfrac    = 0.15
-      </namelist>
-   </input>
-</experiment>
 
 <experiment name="CM4i_c96L48_am4a2r1_2000climo" inherit="CM4i_c96L48_am4a1r1_2000climo">
    <input> 
@@ -4388,7 +4283,7 @@ communityExperimentID="$(name)" >
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
       </dataFile>
       <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p1_v20140324</dataSource>
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p1</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/gas_conc_3D48L_am3p9.nc</dataSource>
@@ -4501,6 +4396,16 @@ else
   echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
   exit 53
 endif
+
+
+# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.1
+  set xmldirlocal = `dirname $rtsxml`
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  module switch gcp/2.1 gcp/2.2
+endif
+
       ]]></csh>
 
     </input>
@@ -4530,149 +4435,6 @@ endif
     </postProcess>
 
   </experiment>
-
-  <experiment name="c96L48_am4a2cr1_2000climo" inherit="c96L48_am4a1r1_2000climo">
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="am4a2c1" 
-communityModelID="am4a2c"
-communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Same model as c96L48_am4a1r1, but with the improved implied heat transport settings
-
-    </description>
-
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
-    </input>
-  </experiment>
-
-  <experiment name="c192L48_am4a2cr1_2000climo" inherit="c192L48_am4a1r1_2000climo">
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="am4a2c1" 
-communityModelID="am4a2c"
-communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Same model as c192L48_am4a1r1, but with the improved implied heat transport settings
-
-    </description>
-
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
-    </input>
-  </experiment>
-
-
- 
- <experiment name="CM4_c96L48_am4a2cr1_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="CM4_c96L48_am4a1r1_SIS  $(MOM6_GIT_TAG)" 
-communityModelID="CM4_c96L48_am4a1r1_SIS"
-communityExperimentName="$(name)">
-<!-- /MDBI -->
-
-    </description>
-<!-- MDBI -->
-    <communityComment>
-      Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
-    </input>
-
-  </experiment>
-
-
- <experiment name="CM4_c192L48_am4a2cr1_2000climo" inherit="CM4_c192L48_am4a1r1_2000climo"> 
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="CM4_AM4a1_SIS  $(MOM6_GIT_TAG)" 
-communityModelID="CM4_AM4a1_SIS"
-communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Same model as c192L48_am4a1r1, but
-configuration with present-day climatological SSTs, present-day GHGs and aerosols.
-
-    </description>
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-      Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <!--namelists for a2c. -->
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_am4a2c_namelists']/input/node())"/>
-    </input>
-
-  </experiment>
-
 
  
  </experimentSuite>
