@@ -22,33 +22,34 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
-   <property name="RELEASE"      value="tikal_201406"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_DATE"    value="2014.07.23"/>     <!-- git tag date for MOM6 source code -->
-   <property name="FRE_STEM"     value="$(RELEASE)_plus_z1l_groupupdates_mom6_$(MOM6_DATE)"/>
+   <property name="RELEASE"      value="tikal_201409"/> <!-- CVS tag for shared source code -->
+   <property name="MOM6_DATE"    value="2014.09.23"/>     <!-- git tag date for MOM6 source code -->
+   <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
    <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
-   <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
+   <property name="SIS2_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for SIS2 source code -->
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
 
    <!--Production run properties. Users can modify these according to their need and/or performance analysis-->
-   <property name="PROD_SIMTIME"   value="10"/>
+   <property name="PROD_SIMTIME"   value="20"/>
    <!-- Post-processing start date and chunk lengths -->
    <property name="PP_START_YEAR"  value="1900"/>
-   <property name="PP_END_YEAR"    value="1909"/>
+   <property name="PP_END_YEAR"    value="1919"/>
    <property name="CHUNK_LENGTH_A" value="5yr"/>
    <property name="CHUNK_LENGTH_B" value="10yr"/>
    <property name="ANALYSIS_SWITCH" value="on"/>
 
    <property name="PROD_RUNTIME"         value="16:00:00"/>
    <property name="PROD_SEGTIME"         value="03:45:00"/>
-   <property name="MASK_TABLE"           value="mask_table.1054.90x45"/> <!--layouts must be 90,45-->
-   <property name="PROD_NPES"            value="2997"/> <!-- 90*45 - 1053 -->
+   <property name="PROD_NPES"            value="3240"/> 
+<!-- Not used anymore
+   <property name="MASK_TABLE"           value="mask_table.1053.90x45"/>
    <property name="OCN_PROD_LAYOUT"      value="90,45"/>
    <property name="OCN_PROD_IO_LAYOUT"   value="9,5"/>
    <property name="ICE_PROD_LAYOUT"      value="90,45"/>
    <property name="ICE_PROD_IO_LAYOUT"   value="9,5"/>
    <property name="LND_PROD_LAYOUT"      value="90,45"/>
    <property name="FV_PROD_LAYOUT"       value="90,45"/>
-  
+-->  
 
 
    <!--Users need not change the following properties -->
@@ -70,7 +71,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 <!-- ncrc platforms -->
 	
     <platform name="ncrc2.intel">
-      <project>gfdl_o</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)"/>
          <directory>
             <!--unswept locations-->
@@ -193,14 +194,6 @@ Make the executable for ocean-ice experiments.
       <component name="fms" paths="shared" includeDir="$root/$(LIBS_ROOT)/src/shared/include">
          <source>
             <codeBase version="$(RELEASE)"> shared </codeBase>
-	    <csh>
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_misc.inc
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_domains_util.inc
-cvs up -r tikal_group_update_fix_z1l shared/mpp/include/mpp_group_update.h
-cvs up -r tikal_group_update_fix_z1l shared/mpp/mpp_domains.F90
-cvs up -r tikal_group_update_fix_z1l shared/mpp/test_mpp_domains.F90
-cvs up -r rms_sdu shared/diag_manager
-	    </csh>  
          </source>
          <compile>
             <cppDefs>-Duse_libMPI -Duse_netCDF $(F2003_FLAGS)</cppDefs>
@@ -223,7 +216,7 @@ cvs up -r rms_sdu shared/diag_manager
 
 <!--Since SIS2 needs ice_param there is a dependency that may damage the compile if bith ice_sis and sis2 try to cvs co ice_params at the same time. We should put ice_param files under sis2 git 
 -->
-      <component name="sis2" paths="sis2 ice_param" requires="fms mom6" includeDir="$root/$(LIBS_ROOT)/src/mom6/src/framework" > 
+      <component name="sis2" paths="sis2/ ice_param" requires="fms mom6" includeDir="$root/$(LIBS_ROOT)/src/mom6/src/framework" > 
          <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
 	   <codeBase version="$(SIS2_GIT_TAG)"> noaa-gfdl-sis2.git </codeBase> 
             <csh> mv noaa-gfdl-sis2 sis2 ; cvs co -r $(RELEASE) ice_param </csh> 
@@ -305,6 +298,9 @@ cvs up -r rms_sdu shared/diag_manager
       <component name="coupler" paths="coupler" requires="fms land_null atmos_null sis2 mom6">
          <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
             <codeBase version="$(RELEASE)"> coupler.git </codeBase>
+            <csh>
+              (cd coupler; git checkout user/nnz/merge_bobs_into_tikal)
+            </csh>
          </source>
          <compile>
             <cppDefs><![CDATA[$(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'"]]></cppDefs>
@@ -337,76 +333,18 @@ cvs up -r rms_sdu shared/diag_manager
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
       <!--SIS Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
+      <!--OM4 gridSpec mosaic datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_grid']/input/node())"/>
+      <!--CORE forcing datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='CORE_data']/input/node())"/>
 
       <dataFile label="namelist" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/input.nml</dataSource>
-     </dataFile>
-     <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+      </dataFile>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/field_table</dataSource>
-     </dataFile>
-
-      <!--OM4 gridSpec mosaic datasets-->
-      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/grid_spec.nc</dataSource>
-        <dataSource site="gfdl">/archive/gold/datasets/OM4_025/mosaic.v20140610.unpacked/grid_spec.nc</dataSource> 
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xland_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mask.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_hgrid.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mask.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mosaic.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_topog.nc</dataSource>
-       <!--hsmget cannot get this  <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/topog.nc</dataSource> -->
       </dataFile>
 
-      <!--OM4 CORE forcing datasets-->
-      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/data_table</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_precip.clim.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_rad.clim.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/q_10_mod.clim.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/runoff.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/salt_restore.v20140616.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/slp.clim.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/t_10_mod.clim.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/u_10_mod.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/v_10_mod.clim.nc</dataSource>
-      </dataFile>
 
       <diagTable>
 $name
@@ -468,6 +406,7 @@ $baseDate
        </regression>
        <regression name="rts">
          <run days="5 5"  npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="576"  runTimePerJob="00:30:00"/>
        </regression>
        <regression name="timing">
          <run days="10"   npes="576"   runTimePerJob="00:30:00"/>
@@ -574,8 +513,22 @@ else
 endif
 
 cat > $work/INPUT/MOM_layout << LAYOUT_EOF
-LAYOUT = $ocn_layout
+#override undef NIPROC
+#override undef NJPROC
+#override undef NIPROC_IO
+#override undef NJPROC_IO
+#override LAYOUT = $ocn_layout
 #override IO_LAYOUT = $ocn_io_layout
+MASKTABLE = $ocn_mask_table
+LAYOUT_EOF
+
+cat > $work/INPUT/SIS_layout << LAYOUT_EOF
+#override undef NIPROC
+#override undef NJPROC
+#override undef NIPROC_IO
+#override undef NJPROC_IO
+#override LAYOUT = $ice_layout
+#override IO_LAYOUT = $ice_io_layout
 MASKTABLE = $ocn_mask_table
 LAYOUT_EOF
 
@@ -586,10 +539,83 @@ LAYOUT_EOF
     </input>
   </experiment>
 
+  <experiment name="OM4_grid">
+    <input>
+      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/grid_spec.nc</dataSource>
+        <dataSource site="gfdl">/archive/gold/datasets/OM4_025/mosaic.v20140610.unpacked/grid_spec.nc</dataSource> 
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xland_mosaic_tile1.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/atmos_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mask.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/land_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_hgrid.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mask.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_mosaic.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ocean_topog.nc</dataSource>
+       <!--hsmget cannot get this  <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/topog.nc</dataSource> -->
+      </dataFile>
+    </input>
+  </experiment>
+
+      <!--OM4 CORE forcing datasets-->
+  <experiment name="CORE_data">
+    <input>
+      <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/data_table</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_precip.clim.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/ncar_rad.clim.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/q_10_mod.clim.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/runoff.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/salt_restore.v20140616.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/slp.clim.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/t_10_mod.clim.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/u_10_mod.clim.nc</dataSource>
+      </dataFile>      
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/v_10_mod.clim.nc</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+  
   <experiment name="OM4_data">
     <input>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/MOM_input</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/MOM_saltrestore</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
        <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/layer_coord.nc</dataSource>
@@ -625,7 +651,7 @@ LAYOUT_EOF
          input_filename = '$restart_flag'
          restart_input_dir = 'INPUT/',
          restart_output_dir = 'RESTART/',
-         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_override'
+         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_saltrestore','INPUT/MOM_override'
      </namelist>
 
      <csh type="always"><![CDATA[
@@ -643,6 +669,7 @@ endif
 ln -s $work/INPUT/ocean_topog.nc $work/INPUT/topog.nc 
 
 touch $work/INPUT/MOM_override
+touch $work/INPUT/SIS_override
 
       ]]></csh>
  
@@ -684,22 +711,36 @@ touch $work/INPUT/MOM_override
            channel_viscosity=5.e5
            h_lo_lim = 1.e-10
       </namelist>
-      <namelist name="icebergs_nml">
-        really_debug=.FALSE.
-        debug=.FALSE.
-        verbose=.FALSE.
-        verbose_hrs=2400
-      </namelist>
 
-      <namelist name="ocean_albedo_nml">
-            ocean_albedo_option = 2
-      </namelist>
-      <namelist name="ocean_rough_nml">
-            rough_scheme = 'beljaars'
-      </namelist>
      </input>
   </experiment>
 
+  <experiment name="SIS2_data">
+    <input>
+
+     <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/OM4_025/diag_table.SIS</dataSource>
+        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS2/OM4_025/diag_table.SIS</dataSource>
+     </dataFile>
+     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/OM4_025/SIS_input</dataSource>
+     </dataFile>
+
+<!-- No init ice yet
+     <dataFile label="input" target="INPUT/ice_model.res.nc" chksum="" size="" timestamp="">
+       <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS/OM4_025/INPUT/.datasets/OM4_025/INPUT/ice_model.res.v20140620.nc</dataSource>
+     </dataFile>
+-->
+     <namelist name="SIS_input_nml" >
+         output_directory = './',
+         input_filename = '$restart_flag'
+         restart_input_dir = 'INPUT/',
+         restart_output_dir = 'RESTART/',
+         parameter_filename = 'INPUT/SIS_input','INPUT/SIS_layout','INPUT/SIS_override'
+     </namelist>
+
+     </input>
+  </experiment>
 
   <!-- OCEAN  and ICE post-processing-->
   <experiment name="OM4_postprocess">
@@ -781,7 +822,7 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 </description>
 </experiment>
 
-<experiment name="MOM6z_SIS2_baseline" inherit="MOM6_SIS2_compile">
+<experiment name="OM4_SIS2_baseline" inherit="MOM6_SIS2_compile">
 <!--The following description tags are needed to put the experiment in the MDBI-->
 <description communityProject="OWG" communityModel="OM4_SIS2 $(FRE_STEM)" communityModelID="OWG_OM4_SIS2" communityExperimentName="$(name)" >
  global 1/4 degree z test case
@@ -798,157 +839,30 @@ MOM6 wiki: http://wiki.gfdl.noaa.gov/index.php/MOM6
 <!-- /MDBI -->
 
      <input>
+
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_domain_decomp']/input/node())"/>
+
+      <!--MOM6 Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
+      <!--SIS2 Input datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='SIS2_data']/input/node())"/>
+      <!--OM4 gridSpec mosaic datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='OM4_grid']/input/node())"/>
+      <!--CORE forcing datasets-->
+      <xi:include xpointer="xpointer(//experiment[@name='CORE_data']/input/node())"/>
+
+     
      <dataFile label="namelist" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/input.nml</dataSource>
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/OM4_025/input.nml</dataSource>
      </dataFile>
      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/field_table</dataSource>
+        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/OM4_025/field_table</dataSource>
      </dataFile>
-     <dataFile label="dataTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/data_table</dataSource>
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/MOM_input</dataSource>
-     </dataFile>
-     <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/SIS_input</dataSource>
-     </dataFile>
-
-      <!--gridSpec mosaic datasets-->
-      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/grid_spec.nc</dataSource>
-        <dataSource site="gfdl">/archive/gold/datasets/MOM6z_SIS_025/siena/mosaic.unpacked/grid_spec.nc</dataSource> 
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/atmos_mosaic_tile1Xland_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/atmos_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/land_mask.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/land_mosaic_tile1Xocean_mosaic_tile1.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/layer_coord.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ocean_hgrid.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ocean_mask.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ocean_mosaic.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ocean_topog.nc</dataSource>
-       <!--hsmget cannot get this  <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/topog.nc</dataSource> -->
-      </dataFile>
-
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/seawifs_1998-2006_smoothed_2x_v2.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/tidal_amplitude.v20140328.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/MOM_channels_global_025</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-	 <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/vgrid_cm4.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-	 <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/WOA05_pottemp_salt.nc </dataSource>
-      </dataFile>
-
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ncar_precip.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/ncar_rad.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/q_10_mod.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/runoff.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/salt_restore_v3.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/slp.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/sst_ice_clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/t_10_mod.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/u_10_mod.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/v_10_mod.clim.nc</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/sit_sic_MOM6z_025_v1.nc</dataSource>
-      </dataFile>
-
-      <!--Get the masktables too, since they may be needed in the children tests-->
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.34.16x18</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.99.32x18</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.246.32x36</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.548.32x72</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.808.45x72</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.1029.45x90</dataSource> 
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.1404.45x120</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.1054.90x45</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.703.180x18</dataSource>
-      </dataFile>      
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/INPUT/mask_table.873.120x30</dataSource>
-      </dataFile>
-
-<!--With the followin initCond crashed in 1 day
-      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">/lustre/f1/Niki.Zadeh/tikal_201403_mom6_20140506/MOM6z_SIS2_025_baseline_493days/ncrc2.intel-prod/1x0m128d_2996pe/restart/19010509.tar</dataSource>
-      </dataFile>
--->
       
       <diagTable>
 $name
 $baseDate
       </diagTable>
-      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS/MOM6z_SIS_025/diag_table.MOM6</dataSource>
-        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS/MOM6z_SIS_025/diag_table.MOM6</dataSource>
-      </dataFile>
-
-      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource site="ncrc">$(MOM6_SRC)/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS2</dataSource>
-        <dataSource site="gfdl">$(NB_ROOT)/mom6/examples/ocean_SIS2/MOM6z_SIS2_025/diag_table.SIS2</dataSource>
-      </dataFile>
 
       <namelist name="coupler_nml">
        months = $months,
@@ -970,21 +884,6 @@ $baseDate
        use_lag_fluxes=.false. 
      </namelist>
 
-     <namelist name="MOM_input_nml" >
-         output_directory = './',
-         input_filename = '$restart_flag'
-         restart_input_dir = 'INPUT/',
-         restart_output_dir = 'RESTART/',
-         parameter_filename = 'INPUT/MOM_input','INPUT/MOM_layout','INPUT/MOM_override'  
-     </namelist>
-
-      <namelist name="SIS_input_nml" >
-        output_directory = './',
-        input_filename = 'n'
-        restart_input_dir = 'INPUT/',
-        restart_output_dir = 'RESTART/',
-        parameter_filename = 'INPUT/SIS_input','INPUT/SIS_layout','INPUT/SIS_override' 
-     </namelist>
 
     <namelist name="fms_nml">
             clock_grain='ROUTINE'
@@ -1001,80 +900,28 @@ $baseDate
          max_files_w = 200
          checksum_required = .false. ! This is needed to be able to restart the Ice under GNU. ref. Redmine issue 2000
      </namelist>
-     <!-- The following namelist modifications are necessary for production runs since overrideParams won't work for production
-       overrideParams="
-         atmos_model_nml:layout=90,45;atmos_model_nml:mask_table='INPUT/mask_table.1054.90x45';
-         land_model_nml:layout=90,45;land_model_nml:mask_table='INPUT/mask_table.1054.90x45';
-         ice_model_nml:layout=90,45;ice_model_nml:io_layout=3,3;ice_model_nml:mask_table='INPUT/mask_table.1054.90x45'
-                      "
-      -->
+
      <namelist name="atmos_model_nml" >
-       layout=$(FV_PROD_LAYOUT)
-       mask_table='INPUT/$(MASK_TABLE)'
+       layout=$fv_layout
+       mask_table='INPUT/$ocn_mask_table'
      </namelist>
      <namelist name="land_model_nml" >
-       layout=$(LND_PROD_LAYOUT)
-       mask_table='INPUT/$(MASK_TABLE)'
+       layout=$land_layout
+       mask_table='INPUT/$ocn_mask_table'
      </namelist>
-     <namelist name="ice_model_nml" >
-       layout=$(ICE_PROD_LAYOUT)
-       io_layout=$(ICE_PROD_IO_LAYOUT)
-       mask_table='INPUT/$(MASK_TABLE)'
-    </namelist>
 
-    <csh><![CDATA[
-cd $work/INPUT
-ln -s ocean_topog.nc topog.nc   #hsmget has problem with topog.nc
-cd $work
-touch $work/INPUT/SIS_override
-cat > $work/INPUT/SIS_layout << OVERRIDE_EOF
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-LAYOUT = $(ICE_PROD_LAYOUT)
-#override IO_LAYOUT = $(ICE_PROD_IO_LAYOUT)
-#override MASKTABLE = $(MASK_TABLE)
-OVERRIDE_EOF
-
-touch $work/INPUT/MOM_override 
-cat > $work/INPUT/MOM_layout << LAYOUT_EOF
-#override undef NIPROC_IO
-#override undef NJPROC_IO
-LAYOUT = $(OCN_PROD_LAYOUT)
-#override IO_LAYOUT = $(OCN_PROD_IO_LAYOUT) 
-#override MASKTABLE = $(MASK_TABLE)
-LAYOUT_EOF
-    ]]></csh>
-  
-    <csh type="always">
-      <![CDATA[
-#------------------------------------------
-## Find out whether to restart.
-
-if ( $ireload == 1 ) then
- if ( $irun == 1 ) then
-  set restart_flag = 'n'
- else
-  set restart_flag = 'r'
- endif
-else
-  set restart_flag = 'r'
-endif
-cd $work
-## Run the model
-#------------------------------------------
-      ]]>
-    </csh>    
    </input>
 
    <runtime>   
        <regression name="basic">
-         <run days="10"   npes="2996"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
        </regression>
        <regression name="rts">
-         <run days="5 5"   npes="2996"  runTimePerJob="00:30:00"/>
+         <run days="5 5"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="576"  runTimePerJob="00:30:00"/>
        </regression>
        <regression name="36days">
-         <run days="36"   npes="2996"  runTimePerJob="00:30:00"/>
+         <run days="36"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
        </regression>
 
       <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
