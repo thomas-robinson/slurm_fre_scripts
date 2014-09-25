@@ -41,6 +41,7 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
   <property name="DEBUGLEVEL" value=""/>
 
   <property name="AWG_INPUT_HOME_GAEA" value="awg_include"/>
+  <property name="AWG_INPUT_HOME_ZEUS" value="awg_include"/>
   <property name="AWG_INPUT_HOME_GFDL" value="/nbhome/$USER/$(FRE_STEM)/$(name)/mdt_xml/awg_include"/>
 
 <!--
@@ -245,7 +246,7 @@ configuration.
       </directory>
       <mkmfTemplate file="/home/Niki.Zadeh/fre/fre-commands/site/nescc/intel.mk"/>
       <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
-      <property name="AWG_INPUT_HOME"    value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/input"/>
+      <property name="AWG_INPUT_HOME"    value="$(AWG_INPUT_HOME_ZEUS)"/>
       <property name="AWG_ARCHIVE_ROOT"  value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/awg/mdt"/>
       <property name="NB_ROOT"           value="/nbhome/$USER/$(FRE_STEM)/$(name)"/>
       <property name="CWG_HOME"          value="/scratch2/portfolios/GFDL/gfdlscr/John.Krasting/cwg"/>
@@ -720,12 +721,30 @@ else
   exit 1
 endif
 
+      ]]></csh>
+      
+    </input>
+  </experiment>
+
+
+  <experiment name="common_csh_blocks">
+    <input>
+      <csh><![CDATA[
+
 # runCommand:
 set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
 if ("${platform_domain}" == "ncrc.gov") then
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+  if ( $do_ocean == "true" ) then
+    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
+   else
+    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
+  endif
 else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t"
+  if ( $do_ocean == "true" ) then
+    alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t : -np $ocean_npes -v omplace -nt 1 ./$executable:t"
+   else
+     alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t"
+  endif
 else
   echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
   exit 53
@@ -735,7 +754,9 @@ endif
 if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
   module switch gcp/2.2 gcp/2.1
   set xmldirlocal = `dirname $rtsxml`
+  set xmldirRemote = `echo $xmldirlocal | sed -r "$patternSedHome;$patternSedCTMP;$patternSedCPERM;$patternSedFS;$patternSedLTFS"`
   gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$xmldirRemote/
   module switch gcp/2.1 gcp/2.2
 endif
 
@@ -757,12 +778,13 @@ if (-e coupler.res) then
    end
 endif
 
-# create dummy MOM6 parameter file
+# create dummy MOM6 parameter file for do_ocean=.false.
 touch MOM_input
       ]]></csh>
-    </input>
+      
+     </input>
   </experiment>
-
+ 
   <experiment name="c192_data">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -889,49 +911,8 @@ else
   if ( $echoOn ) set echo
   exit 1
 endif
-
-# runCommand:
-set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-if ("${platform_domain}" == "ncrc.gov") then
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
-else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t"
-else
-  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
-  exit 53
-endif
-
-
-# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-  module switch gcp/2.2 gcp/2.1
-  set xmldirlocal = `dirname $rtsxml`
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
-  module switch gcp/2.1 gcp/2.2
-endif
-
       ]]></csh>
 
-      <csh type="always"><![CDATA[
-cd INPUT
-
-# adjustment of dry mass first time only
-set adjust_dry_mass = ".true."
-if (-e coupler.res) then
-   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   foreach i (1 2 3 4 5 6)
-      if ( $t1[$i] != $t2[$i] ) then
-         set adjust_dry_mass = ".false."
-         break   
-      endif      
-   end
-endif
-
-
-# create dummy MOM6 parameter file
-touch MOM_input
-      ]]></csh>
     </input>
   </experiment>
 
@@ -1208,47 +1189,8 @@ LAYOUT = $ocn_layout
 #override IO_LAYOUT = $ocn_io_layout
 MASKTABLE = $ocn_mask_table
 LAYOUT_EOF
-
-
-# runCommand:
-set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-if ("${platform_domain}" == "ncrc.gov") then
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
-else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t : -np $ocean_npes -v omplace -nt 1 ./$executable:t"
-else 
-  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
-  exit 53
-endif
-
-# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-  module switch gcp/2.2 gcp/2.1
-  set xmldirlocal = `dirname $rtsxml`
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
-  module switch gcp/2.1 gcp/2.2
-endif
-
       ]]></csh>
 
-      <csh type="always"><![CDATA[
-cd INPUT
-
-# adjustment of dry mass first time only
-set adjust_dry_mass = ".true."
-if (-e coupler.res) then
-   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   foreach i (1 2 3 4 5 6)
-      if ( $t1[$i] != $t2[$i] ) then
-         set adjust_dry_mass = ".false."
-         break   
-      endif      
-   end
-endif
-
-
-      ]]></csh>
     </input>
   </experiment>
 
@@ -1485,46 +1427,10 @@ LAYOUT = $ocn_layout
 MASKTABLE = $ocn_mask_table
 LAYOUT_EOF
 
-# runCommand:
-set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-if ("${platform_domain}" == "ncrc.gov") then
-  alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
-else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-  alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt  $atmos_nthreads ./$executable:t : -n- $ocean_npes -v omplace -nt 1 ./$executable:t"
-else
-  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
-  exit 53
-endif
-
-# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-  module switch gcp/2.2 gcp/2.1
-  set xmldirlocal = `dirname $rtsxml`
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
-  module switch gcp/2.1 gcp/2.2
-endif
-
       ]]></csh>
 
-      <csh type="always"><![CDATA[
-cd INPUT
 
-# adjustment of dry mass first time only
-set adjust_dry_mass = ".true."
-if (-e coupler.res) then
-   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   foreach i (1 2 3 4 5 6)
-      if ( $t1[$i] != $t2[$i] ) then
-         set adjust_dry_mass = ".false."
-         break   
-      endif      
-   end
-endif
-
-
-      ]]></csh>
-    </input>
+      </input>
   </experiment>
 
 
@@ -2115,6 +2021,8 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_atmos_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
+
     </input>
 
     <runtime>
@@ -2266,6 +2174,7 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_atmos_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
     </input>
 
     <runtime>
@@ -2418,6 +2327,7 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_atmos_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
     </input>
 
     <runtime>
@@ -2509,6 +2419,7 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='climo_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_atmos_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
     </input>
 
     <runtime>
@@ -2645,6 +2556,7 @@ OVERRIDE_EOF
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_coupled_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
 
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
@@ -2795,8 +2707,8 @@ OVERRIDE_EOF
 
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c192_data']/input/node())"/>
-      
       <xi:include xpointer="xpointer(//experiment[@name='c192_coupled_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
 
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
@@ -3307,6 +3219,7 @@ OVERRIDE_EOF
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data_1deg']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_coupled_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
 
       <!--MOM6 Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data_1deg']/input/node())"/>
@@ -3920,6 +3833,7 @@ Ocean:
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data_1deg']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_coupled_domain_decomp']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='common_csh_blocks']/input/node())"/>
 
       <!-- Time Mean Volcanic Aerosol Forcing:  From Larry Horowitz -->
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -4397,14 +4311,6 @@ else
   exit 53
 endif
 
-
-# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
-if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-  module switch gcp/2.2 gcp/2.1
-  set xmldirlocal = `dirname $rtsxml`
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
-  module switch gcp/2.1 gcp/2.2
-endif
 
       ]]></csh>
 
