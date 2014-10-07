@@ -258,6 +258,7 @@ configuration.
         module load netcdf/4.1.1-intel-12
         module load mpt/2.06
         module load $(FRE_VERSION)
+        module load nco
         setenv MPICH_CPUMASK_DISPLAY
         setenv KMP_STACKSIZE 512m
         setenv NC_BLKSZ 1M
@@ -613,6 +614,7 @@ MUST HAVE  num_phys_windows .GE. numthreads
     <input>
       <csh><![CDATA[
 # Possible domain decompositions recommended by Rusty Benson.
+set do_ocean = "false"
 if ( "$npes" == "432" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "1"
@@ -1199,6 +1201,7 @@ LAYOUT_EOF
     <input>
       <csh><![CDATA[
 # Coupled configurations
+set do_ocean = "true"
 set domains_stack_size = "3097152"
 if ( "$npes" == "1152" ) then
   set atmos_npes = "864"
@@ -3232,12 +3235,11 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1878" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> 
-        <run days="5 5" npes="1878" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="restarts">
