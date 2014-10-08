@@ -762,16 +762,31 @@ if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
   module switch gcp/2.1 gcp/2.2
 endif
 
+# create dummy MOM6 parameter file for do_ocean=.false.
+touch $work/INPUT/MOM_input
+touch $work/INPUT/MOM_override
+ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc 
+
       ]]></csh>
 
       <csh type="always"><![CDATA[
-cd INPUT
+####COMMON ALWAYS CSH BEGINS######
+# MOM6 restart switch
+if ( $ireload == 1 ) then
+ if ( $irun == 1 ) then
+  set restart_flag = 'n'
+ else
+  set restart_flag = 'r'
+ endif
+else
+  set restart_flag = 'r'
+endif
 
 # adjustment of dry mass first time only
 set adjust_dry_mass = ".true."
-if (-e coupler.res) then
-   set t1 = (`grep "Model start time"   coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
-   set t2 = (`grep "Current model time" coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+if (-e $work/INPUT/coupler.res) then
+   set t1 = (`grep "Model start time"   $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
    foreach i (1 2 3 4 5 6)
       if ( $t1[$i] != $t2[$i] ) then
          set adjust_dry_mass = ".false."
@@ -780,8 +795,13 @@ if (-e coupler.res) then
    end
 endif
 
-# create dummy MOM6 parameter file for do_ocean=.false.
-touch MOM_input
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override RESTORE_SALINITY = False
+#override ADJUST_NET_FRESH_WATER_TO_ZERO = False
+OVERRIDE_EOF
+
+####COMMON ALWAYS CSH ENDS######
+
       ]]></csh>
       
      </input>
@@ -2033,15 +2053,15 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
-        <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
+        <run days="8"   npes="432"  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4"  npes="432"  runTimePerJob="00:30:00"/>
-        <run days="8"    npes="864"  runTimePerJob="00:30:00"/>
+        <run days="4 4"  npes="432"  runTimePerJob="02:30:00"/>
+        <run days="8"    npes="864"  runTimePerJob="02:30:00"/>
       </regression>
 
       <regression name="restarts">
-        <run days="4 4" npes="432"  runTimePerJob="00:30:00"/>
+        <run days="4 4" npes="432"  runTimePerJob="02:30:00"/>
       </regression>
       
       <regression name="timing2">
@@ -2110,6 +2130,49 @@ Experiment name = $(name)
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_c96.nml"/>
    </input> 
+
+  </experiment>
+
+  <experiment name="c96L48_am4b2r1" inherit="c96L48_am4a1r1">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4b2" 
+communityModelID="am4b2"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+AM4 prototype hybrid configuration "am4b2r1" from MDT Atmosphere Working Group.
+
+c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+Convection based on hybrid "alternate closure" from Leo Donner
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_c96.nml"/>
+    </input>
 
   </experiment>
 
@@ -2266,6 +2329,31 @@ Experiment name = $(name)
 <!--==========================================-->
 <!--= CLIMO EXPERIMENTS with do_ocean=.false.=-->
 <!--==========================================-->
+ <experiment name="c96L48_am4b2r1_2000climo" inherit="c96L48_am4a1r1_2000climo">
+    <description
+communityProject="$(ProjectID)" 
+communityModel="am4b2" 
+communityModelID="am4b2"
+communityExperimentName="$(name)" 
+communityExperimentID="$(name)" >
+
+AM4 prototype hybrid configuration "am4b2r1" from MDT Atmosphere Working Group.
+
+c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+Convection based on hybrid "alternate closure" from Leo Donner
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+configuration with present-day climatological SSTs, present-day GHGs and aerosols.
+
+    </description>
+   <input> 
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_c96.nml"/>
+   </input> 
+ </experiment>
+
  <experiment name="c96L48_am4a2r1_2000climo" inherit="c96L48_am4a1r1_2000climo">
    <input> 
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
@@ -2338,13 +2426,13 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10"   npes="432"  runTimePerJob="00:30:00"/>
+        <run days="10"   npes="432"  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="rts">
-        <run days="5 5"  npes="432"  runTimePerJob="00:30:00"/>
+        <run days="5 5"  npes="432"  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="restarts">
-        <run days="5 5" npes="432"  runTimePerJob="00:30:00"/>
+        <run days="5 5" npes="432"  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="timing">
         <run months="1" npes="432"  runTimePerJob="02:00:00"/>
@@ -2473,6 +2561,13 @@ Experiment name = $(name)
 <!--= CM4 EXPERIMENTS     =-->
 <!--=======================-->
 
+<experiment name="CM4_c96L48_am4b2r1_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
+   <input> 
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4b2r1_c96.nml"/>
+   </input> 
+ </experiment>
+
 <experiment name="CM4_c96L48_am4a2r1_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
    <input> 
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
@@ -2528,8 +2623,6 @@ communityExperimentName="$(name)">
       <namelist name="fms_io_nml">
             fms_netcdf_restart=.true.
             threading_read='multi'
-            threading_write='single'
-            fileset_write='single'
             max_files_r = 200
             max_files_w = 200
       </namelist>
@@ -2543,13 +2636,6 @@ communityExperimentName="$(name)">
         make_exchange_reproduce = .true.
         interp_method = 'second_order'
       </namelist>
-
-      <csh type="always"><![CDATA[
-cat > $work/INPUT/MOM_override << OVERRIDE_EOF
-#override RESTORE_SALINITY = False
-#override ADJUST_NET_FRESH_WATER_TO_ZERO = False
-OVERRIDE_EOF
-      ]]></csh>
 
       <!--AWG Input datasets -->
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -2678,8 +2764,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
       <namelist name="fms_io_nml">
             fms_netcdf_restart=.true.
             threading_read='multi'
-            threading_write='single'
-            fileset_write='single'
             max_files_r = 200
             max_files_w = 200
       </namelist>
@@ -2693,13 +2777,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
         make_exchange_reproduce = .true.
         interp_method = 'second_order'
       </namelist>
-
-      <csh type="always"><![CDATA[
-cat > $work/INPUT/MOM_override << OVERRIDE_EOF
-#override RESTORE_SALINITY = False
-#override ADJUST_NET_FRESH_WATER_TO_ZERO = False
-OVERRIDE_EOF
-      ]]></csh>
 
       <!--AWG Input datasets -->
       <!-- Namelist -->
@@ -2840,22 +2917,6 @@ OVERRIDE_EOF
         rich_crit = 1.0,
         zeta_trans = 0.5
       </namelist>
-      <csh type="always"><![CDATA[
-if ( $ireload == 1 ) then
- if ( $irun == 1 ) then
-  set restart_flag = 'n'
- else
-  set restart_flag = 'r'
- endif
-else
-  set restart_flag = 'r'
-endif
-
-ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc 
-
-touch $work/INPUT/MOM_override
-
-      ]]></csh>
  
      </input>
 
@@ -2958,23 +3019,6 @@ touch $work/INPUT/MOM_override
         rich_crit = 1.0,
         zeta_trans = 0.5
       </namelist>
-      <csh type="always"><![CDATA[
-if ( $ireload == 1 ) then
- if ( $irun == 1 ) then
-  set restart_flag = 'n'
- else
-  set restart_flag = 'r'
- endif
-else
-  set restart_flag = 'r'
-endif
-
-ln -s $work/INPUT/topog.nc $work/INPUT/ocean_topog.nc 
-
-touch $work/INPUT/MOM_override
-
-
-      ]]></csh>
  
      </input>
 
@@ -3181,8 +3225,6 @@ communityExperimentName="$(name)">
       <namelist name="fms_io_nml">
             fms_netcdf_restart=.true.
             threading_read='multi'
-            threading_write='single'
-            fileset_write='single'
             max_files_r = 200
             max_files_w = 200
       </namelist>
@@ -3196,12 +3238,6 @@ communityExperimentName="$(name)">
         make_exchange_reproduce = .false.
         interp_method = 'second_order'
       </namelist>
-
-      <csh type="always"><![CDATA[
-cat > $work/INPUT/MOM_override << OVERRIDE_EOF
-#override ENERGYSAVEDAYS = 73.0
-OVERRIDE_EOF
-      ]]></csh>
 
       <!--AWG Input datasets -->
       <!-- Namelist -->
@@ -3228,10 +3264,50 @@ OVERRIDE_EOF
       <xi:include xpointer="xpointer(//experiment[@name='OM4_data_1deg']/input/node())"/>
       <!--SIS Input datasets-->
       <xi:include xpointer="xpointer(//experiment[@name='SIS_data_1deg']/input/node())"/>
+
+      <csh type="always"><![CDATA[
+####COMMON ALWAYS CSH BEGINS######
+# MOM6 restart switch
+if ( $ireload == 1 ) then
+ if ( $irun == 1 ) then
+  set restart_flag = 'n'
+ else
+  set restart_flag = 'r'
+ endif
+else
+  set restart_flag = 'r'
+endif
+
+# adjustment of dry mass first time only
+set adjust_dry_mass = ".true."
+if (-e $work/INPUT/coupler.res) then
+   set t1 = (`grep "Model start time"   $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
+
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override RESTORE_SALINITY = False
+#override ADJUST_NET_FRESH_WATER_TO_ZERO = False
+#override ENERGYSAVEDAYS = 73.0
+#override USE_OCMIP2_CFC = False
+
+OVERRIDE_EOF
+
+####COMMON ALWAYS CSH ENDS######
+
+      ]]></csh>
+
+
     </input>
 
     <runtime>
-      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1878" runTime="12:00:00">
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="900" runTime="12:00:00">
         <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
@@ -3359,8 +3435,6 @@ Ocean:
       <namelist name="fms_io_nml">
             fms_netcdf_restart=.true.
             threading_read='multi'
-            threading_write='single'
-            fileset_write='single'
             max_files_r = 200
             max_files_w = 200
       </namelist>
@@ -3890,6 +3964,41 @@ endif
       ]]></csh>
 
       <csh type="always"><![CDATA[
+####COMMON ALWAYS CSH BEGINS######
+# MOM6 restart switch
+if ( $ireload == 1 ) then
+ if ( $irun == 1 ) then
+  set restart_flag = 'n'
+ else
+  set restart_flag = 'r'
+ endif
+else
+  set restart_flag = 'r'
+endif
+
+# adjustment of dry mass first time only
+set adjust_dry_mass = ".true."
+if (-e $work/INPUT/coupler.res) then
+   set t1 = (`grep "Model start time"   $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   set t2 = (`grep "Current model time" $work/INPUT/coupler.res | awk '{print $1,$2,$3,$4,$5,$6}'`)
+   foreach i (1 2 3 4 5 6)
+      if ( $t1[$i] != $t2[$i] ) then
+         set adjust_dry_mass = ".false."
+         break   
+      endif      
+   end
+endif
+
+cat > $work/INPUT/MOM_override << OVERRIDE_EOF
+#override RESTORE_SALINITY = False
+#override ADJUST_NET_FRESH_WATER_TO_ZERO = False
+#override ENERGYSAVEDAYS = 73.0
+#override USE_OCMIP2_CFC = False
+
+OVERRIDE_EOF
+
+####COMMON ALWAYS CSH ENDS######
+
 grep "ADDITIONAL 1860 TRACERS" $work/field_table
 if ( "$status" == "1") then
 
@@ -3914,13 +4023,7 @@ cat >> $work/field_table << FIELDTABLE_EOF
 FIELDTABLE_EOF
 
 endif
-      ]]></csh>
 
-      <csh type="always"><![CDATA[
-cat > $work/INPUT/MOM_override << OVERRIDE_EOF
-#override ENERGYSAVEDAYS = 73.0
-#override USE_OCMIP2_CFC = False
-OVERRIDE_EOF
       ]]></csh>
 
       <!--MOM6 Input datasets-->
@@ -4062,287 +4165,6 @@ OVERRIDE_EOF
     </postProcess>
   </experiment> 
 
- <experiment name="OM4_SIS_baseline_CM4exec" inherit="cm4p1_compile">
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)" 
-communityModel="OM4_SIS  $(MOM6_GIT_TAG)" 
-communityModelID="OM4_SIS"
-communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-    </description>
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-      Experiment name = $(name)
-    </communityComment>
-    <scenario 
-      communityForcing="N/A"
-      startTime="$(EXP_CLIMO_START)"
-      endTime="$(EXP_CLIMO_END)" 
-      parentExperimentID="N/A" 
-      parentExperimentRIP="N/A" 
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1,1,1,0,0,0,
-        calendar = 'NOLEAP'
-        dt_atmos = 1200,
-        dt_cpld  = 3600,
-        use_lag_fluxes = .false.
-        concurrent = .false.
-	do_atmos = .false.
-	do_land  = .false.
-        do_ocean = .true.
-        ocean_npes = $ocean_npes
-        atmos_npes = 0
-      </namelist>
-      <namelist name="flux_exchange_nml">
-            debug_stocks = .FALSE.
-            divert_stocks_report = .TRUE.
-            do_area_weighted_flux = .FALSE.
-      </namelist>
-      <namelist name="fms_io_nml">
-            fms_netcdf_restart=.true.
-            threading_read='multi'
-            threading_write='single'
-            fileset_write='single'
-            max_files_r = 200
-            max_files_w = 200
-      </namelist>
-      <namelist name="fms_nml">
-            clock_grain='ROUTINE'
-            clock_flags='NONE'
-            domains_stack_size = 5000000
-            stack_size =0
-      </namelist>
-      <namelist name="xgrid_nml">
-        make_exchange_reproduce = .true.
-        interp_method = 'second_order'
-      </namelist>
-
-      <namelist name="static_veg_nml">
-        use_static_veg = .false.
-      </namelist>
-      <namelist name="river_nml">
-        do_rivers = .false.
-      </namelist>
-      <namelist name="topo_rough_nml">
-       use_topo_rough    = .false.
-      </namelist>
-<!--
-      <namelist name="">
-      </namelist>
-
-      <namelist name="fv_core_nml">
-        layout    = $fv_layout
-        io_layout = $fv_io_layout
-	warm_start = .false.
-        npx      = 193,
-        npy      = 193,
-        ntiles   = 6,
-        npz      = 48,
-        k_split  = 4,
-        n_split  = 5,
-        a2b_ord  = 4,
-        hord_dp = 13,
-        adjust_dry_mass = $adjust_dry_mass,
-        consv_te = 0.7,
-        fill = .true.
-        print_freq = 0,
-        grid_type = 0,
-        nord = 1,
-        dddmp = 0.0,
-        d2_bg = 0.0,
-        d4_bg = 0.16,
-        tau = 0.
-        z_tracer=.false.
- 	
-      </namelist>
--->
-      <!--AWG Input datasets -->
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_c96.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_2000climo.nml"/>
-<!--
-      <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
--->
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/common/sea_esf_aug2013.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/lm3_data_20130815.tar</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/aerosol_inputs.dec2009.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/RCP/cmip5_rcp45.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_oct2011.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/megan2.1_input.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
-      </dataFile>
-      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p1</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/gas_conc_3D48L_am3p9.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/anthro_so2.1859_2010.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.simple.so2.1x1.1859_2020.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/emis_fuel_aircraft.1859_2010.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.aircraft.aero.1x1.1859_2020.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
-      </dataFile>
-      <diagTable>
-$name
-$baseDate
-
-      </diagTable>
-
-      <!--MOM6 Input datasets-->
-      <xi:include xpointer="xpointer(//experiment[@name='OM4_data']/input/node())"/>
-      <!--SIS Input datasets-->
-      <xi:include xpointer="xpointer(//experiment[@name='SIS_data']/input/node())"/>
-      <!--CORE forcing and salt restore data and data_table-->
-      <xi:include xpointer="xpointer(//experiment[@name='OM4_CORE_data']/input/node())"/>
-
-      <!--The following are purely needed for the initialization to work
-	  river_data.nc is needed eventhough land is off -->
-      <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
-      
-      <csh><![CDATA[
-# Possible domain decomposition.
-#The following layouts are for OM4 regression testing and are not suitable for CM4 runs
-#--------------------------------------------------------------------------------------
-if ( "$npes" == "288" ) then
-  set serial = "true"
-  set atmos_npes = "288"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "2,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "2,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "24,12"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
-  set do_ocean = "true"
-  set ocean_npes = "288"
-else if ( "$npes" == "576" ) then
-  set serial = "true"
-  set atmos_npes = "576"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "4,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "4,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "24,24"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "24,24"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
-  set do_ocean = "true"
-  set ocean_npes = "576"
-
-else if ( "$npes" == "1152" ) then
-  set serial = "true"
-  set atmos_npes = "1152"
-  set atmos_nthreads = "1"
-  set physics_window = "0,0"
-  set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
-  set ice_layout   =   "36,32"; set ice_io_layout   =  "1,4"
-  set ocn_layout   =   "36,32"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
-  set do_ocean = "true"
-  set ocean_npes = "1152"
-
-#--------------------------------------------------------------------------------------
-
-else
-  if ( $echoOn ) unset echo
-  echo "*ERROR*: npes == '$npes' is not supported in xml."
-  if ( $echoOn ) set echo
-  exit 1
-endif
-
-cat > $work/INPUT/MOM_layout << LAYOUT_EOF
-LAYOUT = $ocn_layout
-#override IO_LAYOUT = $ocn_io_layout
-MASKTABLE = $ocn_mask_table
-LAYOUT_EOF
-
-\rm -f land.res.tile* soil.res.tile* lake.res.tile* vegn* snow.res.tile* river.res.tile* cana.res.tile* glac.res.tile*
-
-# runCommand:
-set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-if ("${platform_domain}" == "ncrc.gov") then
-  if ( $do_ocean == "true" ) then
-   if( $serial  == "true" ) then
-    alias runCommand "aprun -d 1  -n $ocean_npes ./$executable:t"
-   else
-    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t : -n $ocean_npes -d 1 ./$executable:t"
-   endif  	
-  else
-    alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
-  endif
-else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-  if ( $do_ocean == "true" ) then
-   if( $serial  == "true" ) then
-    alias runCommand "mpiexec_mpt -np $ocean_npes -v omplace -nt 1 ./$executable:t"
-   else
-    alias runCommand "mpiexec_mpt -np $atmos_npes -v omplace -nt $atmos_nthreads ./$executable:t : -np $ocean_npes -v omplace -nt 1 ./$executable:t"
-   endif  	
-  else
-    alias runCommand "mpiexec_mpt -np $atmos_nthreads -np $atmos_npes ./$executable:t"
-  endif
-else
-  echo "FATAL: Invalid platform ... unsure how to structure mpirun command"
-  exit 53
-endif
-
-
-      ]]></csh>
-
-    </input>
-
-    <runtime>
-       <regression name="basic">
-         <run days="10"   npes="1152"  runTimePerJob="00:30:00"/>
-       </regression>
-       <regression name="rts">
-         <run days="5 5"  npes="1152"  runTimePerJob="01:30:00"/>
-         <run days="10"   npes="288"  runTimePerJob="01:30:00"/>
-         <run days="10"   npes="576"  runTimePerJob="01:30:00"/>
-       </regression>
-       <regression name="restarts">
-         <run days="5 5"   npes="1152"  runTimePerJob="00:30:00"/>
-       </regression>
-
-      <production simTime="$(PROD_SIMTIME_OM4)" units="years" npes="2996" runTime="$(PROD_RUNTIME_OM4)">
-           <segment simTime="12" units="months" runTime="$(PROD_SEGTIME_OM4)"/>
-       </production>
-
-      <reference restart="$(REFERENCE)/1x0m10d_2996pe/restart/19000111.tar"/>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//experiment[@name='OM4_postprocess']/postProcess/node())"/>
-    </postProcess>
-
-  </experiment>
 
  
  </experimentSuite>
