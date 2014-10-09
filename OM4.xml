@@ -23,10 +23,10 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
    <property name="RELEASE"      value="tikal_201409"/> <!-- CVS tag for shared source code -->
-   <property name="MOM6_DATE"    value="2014.09.23"/>     <!-- git tag date for MOM6 source code -->
+   <property name="MOM6_DATE"    value="2014.10.09"/>     <!-- git tag date for MOM6 source code -->
    <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
    <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
-   <property name="SIS2_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for SIS2 source code -->
+   <property name="SIS2_GIT_TAG" value="dev/master"/> <!-- git tag for SIS2 source code -->
    <property name="FRE_VERSION"  value="fre/bronx-7"/>
 
    <!--Production run properties. Users can modify these according to their need and/or performance analysis-->
@@ -35,7 +35,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
    <property name="PP_START_YEAR"  value="1900"/>
    <property name="PP_END_YEAR"    value="1919"/>
    <property name="CHUNK_LENGTH_A" value="5yr"/>
-   <property name="CHUNK_LENGTH_B" value="10yr"/>
+   <property name="CHUNK_LENGTH_B" value="20yr"/>
    <property name="ANALYSIS_SWITCH" value="on"/>
 
    <property name="PROD_RUNTIME"         value="16:00:00"/>
@@ -381,8 +381,6 @@ $baseDate
      <namelist name="fms_io_nml" >
          fms_netcdf_restart=.true.
          threading_read='multi'
-         threading_write='single'
-         fileset_write='single'
          max_files_r = 200
          max_files_w = 200
          checksum_required = .false. ! This is needed to be able to restart the Ice under GNU. ref. Redmine issue 2000
@@ -402,11 +400,11 @@ $baseDate
 
    <runtime>   
        <regression name="basic">
-         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="01:30:00"/>
        </regression>
        <regression name="rts">
-         <run days="5 5"  npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
-         <run days="10"   npes="576"  runTimePerJob="00:30:00"/>
+         <run days="5 5"  npes="$(PROD_NPES)"  runTimePerJob="01:30:00"/>
+         <run days="10"   npes="512"  runTimePerJob="01:30:00"/>
        </regression>
        <regression name="timing">
          <run days="10"   npes="576"   runTimePerJob="00:30:00"/>
@@ -443,6 +441,13 @@ if ( "$npes" == "288" ) then
   set ice_layout   =   "24,12"; set ice_io_layout   =  "1,4"
   set ocn_layout   =   "24,12"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "288"
+
+else if ( "$npes" == "512" ) then
+  set fv_layout    =   "32,16"; set fv_io_layout    =  "8,4"
+  set land_layout  =   "32,16"; set land_io_layout  =  "8,4"
+  set ice_layout   =   "32,16"; set ice_io_layout   =  "8,4"
+  set ocn_layout   =   "0,0"  ; set ocn_io_layout   =  "1,1"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "512"
 
 else if ( "$npes" == "576" ) then
   set fv_layout    =   "24,24"; set fv_io_layout    =  "1,4"
@@ -749,7 +754,7 @@ touch $work/INPUT/SIS_override
          <csh><![CDATA[
          cd $work/RESTART
          ncrcat icebergs.res.nc.* icebergs.res.nc
-         rm -f icebergs.res.nc.*
+         if(-e icebergs.res.nc) rm -f icebergs.res.nc.*
          cd $work
          ncrcat iceberg_trajectories.nc.* iceberg_trajectories.nc
          rm -f iceberg_trajectories.nc.* 
@@ -780,11 +785,23 @@ touch $work/INPUT/SIS_override
         </timeSeries>
       </component>
 
+      <component type="ocean_annual_z" start="$(PP_START_YEAR)" source="ocean_annual_z">
+        <timeAverage source="annual" chunkLength="$(CHUNK_LENGTH_A)">
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual_z.frepp"/>
+        </timeAverage>
+        <timeAverage source="annual" chunkLength="$(CHUNK_LENGTH_B)">
+          <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual_z.frepp"/>
+        </timeAverage>
+
+        <timeSeries freq="annual" chunkLength="$(CHUNK_LENGTH_B)" source="ocean_annual_z"/>
+	
+      </component>
+
       <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"> 
-        <timeAverage source="annual"  interval="$(CHUNK_LENGTH_A)">
+        <timeAverage source="annual" chunkLength="$(CHUNK_LENGTH_A)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
         </timeAverage>
-        <timeAverage source="annual"  interval="$(CHUNK_LENGTH_B)">
+        <timeAverage source="annual" chunkLength="$(CHUNK_LENGTH_B)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/examples/ocean_SIS/OM4_025/ocn_annual.frepp"/>
         </timeAverage>
       </component>
@@ -894,8 +911,6 @@ $baseDate
      <namelist name="fms_io_nml" >
          fms_netcdf_restart=.true.
          threading_read='multi'
-         threading_write='single'
-         fileset_write='single'
          max_files_r = 200
          max_files_w = 200
          checksum_required = .false. ! This is needed to be able to restart the Ice under GNU. ref. Redmine issue 2000
@@ -914,14 +929,17 @@ $baseDate
 
    <runtime>   
        <regression name="basic">
-         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+         <run days="10"   npes="$(PROD_NPES)"  runTimePerJob="01:30:00"/>
        </regression>
        <regression name="rts">
-         <run days="5 5"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
-         <run days="10"   npes="576"  runTimePerJob="00:30:00"/>
+         <run days="5 5"   npes="$(PROD_NPES)"  runTimePerJob="01:30:00"/>
+         <run days="10"   npes="512"  runTimePerJob="01:30:00"/>
        </regression>
-       <regression name="36days">
-         <run days="36"   npes="$(PROD_NPES)"  runTimePerJob="00:30:00"/>
+       <regression name="scaling">
+         <run days="10"   npes="576"  runTimePerJob="01:30:00"/>
+       </regression>
+       <regression name="restart">
+         <run days="14 14"   npes="$(PROD_NPES)"  runTimePerJob="01:30:00"/>
        </regression>
 
       <production simTime="$(PROD_SIMTIME)" units="years" npes="$(PROD_NPES)" runTime="$(PROD_RUNTIME)">
