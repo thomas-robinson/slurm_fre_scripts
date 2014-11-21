@@ -22,7 +22,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
-   <property name="RELEASE"      value="ulm"/> <!-- CVS tag for shared source code -->
+   <property name="RELEASE"      value="ulm_prerelease"/> <!-- CVS tag for shared source code -->
    <property name="MOM6_DATE"    value="2014.11.17"/>     <!-- git tag date for MOM6 source code -->
    <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
    <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
@@ -203,19 +203,24 @@ Make the executable for ocean-ice experiments.
 
       <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
          <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
-            <codeBase version="$(MOM6_GIT_TAG)"> noaa-gfdl-mom6-examples.git </codeBase>
-            <csh>
-          mv noaa-gfdl-mom6-examples mom6
+        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
+        <csh>
+          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          pushd mom6
+          git submodule init src/MOM6 src/SIS2 tools/python/025gridGeneration/MIDAS
+          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
+          git submodule update
+          popd
+
+          pushd mom6
           set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
           if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-            pushd mom6
             ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
-            popd
           else
-            pushd mom6
             ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
-            popd
           endif
+          popd
+
           test -e mom6/.datasets
           if ($status != 0) then
             echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
@@ -312,9 +317,6 @@ Make the executable for ocean-ice experiments.
       <component name="coupler" paths="coupler" requires="fms land_null atmos_null sis2 mom6">
          <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
             <codeBase version="$(RELEASE)"> coupler.git </codeBase>
-            <csh>
-              (cd coupler; git checkout user/nnz/merge_bobs_into_tikal)
-            </csh>
          </source>
          <compile>
             <cppDefs><![CDATA[$(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'"]]></cppDefs>
