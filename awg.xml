@@ -8,43 +8,43 @@
 <!-- QUICK START GUIDE:
 
 # To checkout this xml (you should have done this already)
-# .. module load fre/bronx-7
+# .. module load fre/bronx-8
 # .. module load git
-# .. mkdir -p $home/awg/tikal_201403
-# .. cd $home/awg/tikal_201403
-# .. git clone -b awg_v20140909 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20140909
+# .. mkdir -p $home/awg/ulm_prerelease
+# .. cd $home/awg/ulm_prerelease
+# .. git clone -b user/nnz/ulm http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_ulm
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-7
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p1_v20140909
+# .. fremake -x awg.xml -p ncrc2.intel -t prod-openmp cm4p1_compile
 
 # To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a1r1
+# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t prod-openmp c192L48_am4a1r1
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a1r1
+# .. frerun -x awg.xml -p ncrc2.intel -t prod-openmp c192L48_am4a1r1
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp -n c192L48_am4a1r1
+# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t prod-openmp -n c192L48_am4a1r1
 
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="tikal_201403"/>                <!-- CVS tag for source code -->
+  <property name="RELEASE" value="ulm_prerelease"/>                <!-- CVS tag for source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
-  <property name="MOM6_GIT_TAG" value="dev/master/2014.03.19"/>  <!-- git tag for MOM6 source code -->
-  <property name="MOM6_SRC" value="$HOME/$(FRE_STEM)/cm4p1_v20140909/src/mom6"/>
-  <property name="FRE_VERSION" value="bronx-7"/>
+  <property name="MOM6_GIT_TAG" value="dev/master/2014.11.17"/>  <!-- git tag for MOM6 source code -->
+  <property name="MOM6_EXAMPLES"  value="$root/cm4p1_compile/src/mom6"/>
+  <property name="FRE_VERSION" value="bronx-8"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/tikal_201403/xml_v20140909/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/tikal_201403/xml_v20140909/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_prerelease/mdt_xml_ulm/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_prerelease/mdt_xml_ulm/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -182,10 +182,9 @@ configuration.
         <scripts>$HOME/$(stem)/scripts</scripts>
         <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
       </directory>
-      <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML"/>
+      <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-      <mkmfTemplate file="$(AWG_INPUT_HOME)/mkmf/intel.mk"/>
       <csh><![CDATA[
         source $MODULESHOME/init/csh
  
@@ -195,7 +194,7 @@ configuration.
         module load PrgEnv-intel/4.0.46
         module swap intel intel/12.0.5.220
         module load fre/$(FRE_VERSION)
- 
+        module load git
         setenv KMP_STACKSIZE 512m
         setenv NC_BLKSZ 1M
         setenv F_UFMTENDIAN big
@@ -228,7 +227,7 @@ configuration.
 <!--= COMPILE =-->
 <!--===========-->
 
-  <experiment name="cm4p1_v20140909">
+  <experiment name="cm4p1_compile">
     <description>
 
 Experiment to build executable.
@@ -245,14 +244,13 @@ Experiment to build executable.
 * bug fix from Huan Guo for CLUBB and MG microphysics
 * new TKE turbulence from Chris Golaz (tikal_tke_v20140611_cjg)
 * new activation options from Chris Golaz (tikal_201403_act_options_cjg)
+-The above updates are in ulm_prerelease
     </description>
 
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> shared </codeBase>
-        <!--The following update is needed to run in debug mode with Intel-->
-        <csh>cvs up -r tikal_bugfix_z1l shared/mpp/include/mpp_update_domains2D.h </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
@@ -263,21 +261,16 @@ Experiment to build executable.
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> atmos_shared atmos_param_am3 </codeBase>
+	<!--
         <csh>
-           cvs update -r tikal_ncar1p5_micro_rsh atmos_param/strat_cloud/aerosol_cloud.F90 atmos_param/strat_cloud/cldwat2m_micro.F90 atmos_param/strat_cloud/microphysics.F90 atmos_param/strat_cloud/morrison_gettelman_microp.F90 atmos_param/strat_cloud/rotstayn_klein_mp.F90 atmos_param/strat_cloud/strat_cloud.F90 atmos_param/strat_cloud/strat_cloud_utilities.F90 atmos_param/strat_cloud/strat_nml.h atmos_param/strat_cloud/micro_mg.F90
-           cvs update -r tikal_precip_paths_rsh atmos_param/moist_processes/moist_processes.F90
-           cvs update -r tikal_ncar1p5_micro_rsh_wfc atmos_param/strat_cloud/rotstayn_klein_mp.F90
-           cvs update -r tikal_rad_diag_xlh_cjg atmos_param/sea_esf_rad/longwave_driver.F90 atmos_param/sea_esf_rad/rad_output_file.F90 atmos_param/sea_esf_rad/sealw99.F90
-           cvs update -r tikal_pbl_depth_cjg atmos_param/physics_driver/physics_driver.F90 atmos_param/vert_turb_driver/vert_turb_driver.F90
-           cvs update -r dpconv20140318_miz atmos_param/shallow_cu/conv_plumes_k.F90 atmos_param/shallow_cu/conv_plumes_k.F90
-           cvs update -r tikal_topo_drag_garner_cjg atmos_param/damping_driver/damping_driver.F90 atmos_param/topo_drag/topo_drag.F90
-           cvs update -r clubb20140516_h1g_MG1p5Interface atmos_param/clubb/MG_microp_3D.F90
-           cvs update -r clubb20140414_h1g_simpleInterface   atmos_param/physics_driver/physics_driver.F90  atmos_param/moist_processes/moist_processes.F90
-           cvs update -r clubb20140516_h1g_MGbug_fix  atmos_param/strat_cloud/cldwat2m_micro.F90  atmos_param/strat_cloud/micro_mg.F90
-           cvs co -r tikal_tke_v20140611_cjg atmos_param/tke_turb/tke_turb.F90
-           cvs update -r tikal_tke_v20140611_cjg atmos_param/vert_turb_driver/vert_turb_driver.F90
-           cvs update -r tikal_201403_act_options_cjg atmos_param/strat_cloud/aerosol_cloud.F90 atmos_param/strat_cloud/strat_cloud.F90 atmos_param/strat_cloud/strat_cloud_utilities.F90 atmos_param/strat_cloud/strat_nml.h
+           #for am4c1r1 runs. Changes answers for all!
+           #cvs up -r lowsen20141106_miz atmos_param/shallow_cu/uw_conv.F90 atmos_param/shallow_cu/deep_conv.F90 atmos_param/shallow_cu/conv_plumes_k.F90
+
+           #==For JPD Drag Tests==
+           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov.F90
+           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov_kernel.F90
         </csh>
+        -->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
@@ -290,13 +283,9 @@ Experiment to build executable.
         <codeBase version="$(RELEASE)">
           atmos_coupled cubed_sphere_coupled
         </codeBase>
-        <csh>
-          cvs update -r tikal_pbl_depth_cjg atmos_coupled/atmos_model.F90 
-          cvs update -r tikal_pbl_depth_cjg atmos_cubed_sphere/driver/coupled/atmosphere.F90 atmos_cubed_sphere/driver/coupled/fv_physics.F90
-        </csh>
       </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS) -DSPMD -DUSE_OCEAN_BGC -DOLD_PT_TO_T -DOLD_COS_SG</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
       </compile>
     </component>
 
@@ -314,6 +303,12 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
+        <!--
+	<csh>
+          #==For JPD Drag Tests==
+          # cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
+        </csh>
+	-->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DUSE_LOG_DIAG_FIELD_INFO</cppDefs>
@@ -341,14 +336,35 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       </compile>
     </component>
 
-    <component name="mom6" requires="fms" paths="mom6/config_src/dynamic mom6/config_src/coupled_driver mom6/src/*/ mom6/src/*/*/">
+    <component name="mom6" requires="fms ocean_shared" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
-        <codeBase version="$(MOM6_GIT_TAG)"> noaa-gfdl-mom6.git </codeBase>
-        <csh> mv noaa-gfdl-mom6 mom6 </csh>
+        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
+        <csh>
+          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          pushd mom6
+          git submodule init src/MOM6  tools/python/025gridGeneration/MIDAS
+          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
+          git submodule update
+          popd
+
+          pushd mom6
+          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
+          else
+            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
+          endif
+          popd	  
+
+          test -e mom6/.datasets
+          if ($status != 0) then
+            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
+          endif
+        </csh>
       </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS) </cppDefs>
+        <cppDefs><![CDATA[ $(F2003_FLAGS) -D_USE_GENERIC_TRACER -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
         <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
       </compile>
     </component>
@@ -367,9 +383,6 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>  
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> coupler.git </codeBase>
-          <csh>
-            cd coupler; git checkout user/nnz/merge_tikal_pbl_depth_cjg 
-          </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS)</cppDefs>
@@ -483,7 +496,7 @@ set domains_stack_size = "2097152"
 if ( "$npes" == "432" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "1"
-  set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1" 
   set fv_layout    =   "3,24";   set fv_io_layout    =  "1,4"
   set land_layout  =   "3,24";   set land_io_layout  =  "1,4"
   set ocean_layout =   "144,3";  set ocean_io_layout =  "1,3"
@@ -491,7 +504,7 @@ if ( "$npes" == "432" ) then
 else if ( "$npes" == "864" ) then
   set atmos_npes = "432"
   set atmos_nthreads = "2"
-  set physics_window = "32,2"
+  set nxblocks = "1" ; set nyblocks = "2"
   set fv_layout    =   "3,24";   set fv_io_layout    =  "1,4"
   set land_layout  =   "3,24";   set land_io_layout  =  "1,4"
   set ocean_layout =   "144,3";  set ocean_io_layout =  "1,3"
@@ -499,7 +512,7 @@ else if ( "$npes" == "864" ) then
 else if ( "$npes" == "1152" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
-  set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1"
   set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8";  set ocean_io_layout =  "1,4"
@@ -507,7 +520,7 @@ else if ( "$npes" == "1152" ) then
 else if ( "$npes" == "1728" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "2"
-  set physics_window = "16,2"
+  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "16,2"
   set fv_layout    =   "6,24";   set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";   set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6";  set ocean_io_layout =  "1,3"
@@ -515,7 +528,7 @@ else if ( "$npes" == "1728" ) then
 else if ( "$npes" == "2304" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
-  set physics_window = "8,3"
+  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "8,3"
   set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8";  set ocean_io_layout =  "1,4"
@@ -523,7 +536,7 @@ else if ( "$npes" == "2304" ) then
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "1728"
   set atmos_nthreads = "2"
-  set physics_window = "8,2"
+  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "8,2"
   set fv_layout    =   "12,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "12,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,12"; set ocean_io_layout =  "1,4"
@@ -541,9 +554,9 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-    module switch gcp/2.2 gcp/2.1
+    #module switch gcp/2.2 gcp/2.1 #not needed in bronx-8
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-    module switch gcp/2.1 gcp/2.2
+    #module switch gcp/2.1 gcp/2.2 #not needed in bronx-8
   endif
 endif
       ]]></csh>
@@ -580,7 +593,7 @@ set do_ocean = "false"
 if ( "$npes" == "864" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "1"
-  set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1" ; set physics_window = "0,0"
   set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -588,7 +601,7 @@ if ( "$npes" == "864" ) then
 else if ( "$npes" == "1152" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
-  set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1" ; set physics_window = "0,0"
   set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -596,7 +609,7 @@ else if ( "$npes" == "1152" ) then
 else if ( "$npes" == "2304" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
-  set physics_window = "24,2"
+  set nxblocks = "1" ; set nyblocks = "4" ; set physics_window = "24,2"
   set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -604,7 +617,7 @@ else if ( "$npes" == "2304" ) then
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "4"
-  set physics_window = "32,1"
+  set nxblocks = "1" ; set nyblocks = "8" ; set physics_window = "32,1"
   set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -612,7 +625,7 @@ else if ( "$npes" == "3456" ) then
 else if ( "$npes" == "4608" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
-  set physics_window = "16,3"
+  set nxblocks = "2" ; set nyblocks = "1" ; set physics_window = "16,3"
   set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -620,7 +633,7 @@ else if ( "$npes" == "4608" ) then
 else if ( "$npes" == "6912" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "8"
-  set physics_window = "16,1"
+  set nxblocks = "2" ; set nyblocks = "4" ; set physics_window = "16,1"
   set fv_layout    =   "12,12"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,12"; set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -639,9 +652,9 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-    module switch gcp/2.2 gcp/2.1
+    #module switch gcp/2.2 gcp/2.1 #not needed in bronx-8
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-    module switch gcp/2.1 gcp/2.2
+    #module switch gcp/2.1 gcp/2.2 #not needed in bronx-8
   endif
 endif
       ]]></csh>
@@ -665,7 +678,7 @@ touch MOM_input
   <experiment name="c96_amip_postprocess">
     <postProcess>
 
-      <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,288">
+      <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
 <!-- MDBI, this switch must be on to trigger "fredb" automatically -->
@@ -691,7 +704,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,288">
+      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)"/>
@@ -702,14 +715,14 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_month_aer" start="$(ANA_AMIP_START)" source="atmos_month_aer" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="atmos_month_aer" start="$(ANA_AMIP_START)" source="atmos_month_aer" sourceGrid="atmos-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAerAve/*)"/>
         </timeAverage>
       </component>
 
-      <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" cubicToLatLon="180,288">
+      <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
       </component>
@@ -719,7 +732,7 @@ touch MOM_input
       </component>
 
 <!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_AMIP_START)" source="atmos_tracer" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="tracer_level" start="$(ANA_AMIP_START)" source="atmos_tracer" sourceGrid="atmos-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/tracerAnnualTS/*)"/>
@@ -731,7 +744,7 @@ touch MOM_input
       </component>
 
 <!-- LAND -->
-      <component type="land" start="$(ANA_AMIP_START)" source="land_month" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="land" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/landMonthTS/*)"/>
@@ -757,7 +770,7 @@ touch MOM_input
   <experiment name="c96_climo_postprocess">
     <postProcess>
 
-      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="180,288">
+      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
 <!-- MDBI, this switch must be on to trigger "fredb" automatically -->
@@ -783,7 +796,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="180,288">
+      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)"/>
@@ -801,7 +814,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" cubicToLatLon="180,288">
+      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
       </component>
@@ -811,7 +824,7 @@ touch MOM_input
       </component>
 
 <!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" sourceGrid="atmos-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/tracerAnnualTS/*)"/>
@@ -823,7 +836,7 @@ touch MOM_input
       </component>
 
 <!-- LAND -->
-      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/landMonthTS/*)"/>
@@ -849,7 +862,7 @@ touch MOM_input
   <experiment name="c192_amip_postprocess">
     <postProcess>
 
-      <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="360,576">
+      <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
 <!-- MDBI, this switch must be on to trigger "fredb" automatically -->
@@ -875,7 +888,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="360,576">
+      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)"/>
@@ -893,7 +906,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" cubicToLatLon="360,576">
+      <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
       </component>
@@ -903,7 +916,7 @@ touch MOM_input
       </component>
 
 <!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_AMIP_START)" source="atmos_tracer" cubicToLatLon="360,576" interpMethod="conserve_order1">
+      <component type="tracer_level" start="$(ANA_AMIP_START)" source="atmos_tracer" sourceGrid="atmos-cubedsphere" xyInterp="360,576" interpMethod="conserve_order1">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/tracerAnnualTS/*)"/>
@@ -915,7 +928,7 @@ touch MOM_input
       </component>
 
 <!-- LAND -->
-      <component type="land" start="$(ANA_AMIP_START)" source="land_month" cubicToLatLon="360,576" interpMethod="conserve_order1">
+      <component type="land" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="360,576" interpMethod="conserve_order1">
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/landMonthTS/*)"/>
@@ -941,7 +954,7 @@ touch MOM_input
   <experiment name="c192_climo_postprocess">
     <postProcess>
 
-      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="360,576">
+      <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
 <!-- MDBI, this switch must be on to trigger "fredb" automatically -->
@@ -967,7 +980,7 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" cubicToLatLon="360,576">
+      <component type="atmos_level" start="$(ANA_CLIMO_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)"/>
@@ -978,14 +991,14 @@ touch MOM_input
         </timeAverage>
       </component>
 
-      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer" cubicToLatLon="360,576" interpMethod="conserve_order1">
+      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer" sourceGrid="atmos-cubedsphere" xyInterp="360,576" interpMethod="conserve_order1">
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAerAve/*)"/>
         </timeAverage>
       </component>
 
-      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" cubicToLatLon="360,576">
+      <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
       </component>
@@ -995,7 +1008,7 @@ touch MOM_input
       </component>
 
 <!-- FULL CHEMISTRY -->
-      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" cubicToLatLon="360,576" interpMethod="conserve_order1">
+      <component type="tracer_level" start="$(ANA_CLIMO_START)" source="atmos_tracer" sourceGrid="atmos-cubedsphere" xyInterp="360,576" interpMethod="conserve_order1">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="annual" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/tracerAnnualTS/*)"/>
@@ -1007,7 +1020,7 @@ touch MOM_input
       </component>
 
 <!-- LAND -->
-      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="360,576" interpMethod="conserve_order1">
+      <component type="land" start="$(ANA_CLIMO_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="360,576" interpMethod="conserve_order1">
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/landMonthTS/*)"/>
@@ -1034,7 +1047,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L48_am4a1r1" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a1r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1076,6 +1089,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+	 nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1128,7 +1145,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4a1r1" inherit="cm4p1_v20140909">
+  <experiment name="c192L48_am4a1r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1167,6 +1184,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1219,7 +1240,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4a2r1" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a2r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1256,6 +1277,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1308,7 +1333,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4a2r1" inherit="cm4p1_v20140909">
+  <experiment name="c192L48_am4a2r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1346,6 +1371,10 @@ Experiment name = $(name)
 
     <input>
       <!-- Namelist -->
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+	 nyblocks = $nyblocks
+      </namelist>
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a2r1_physics.nml"/>
@@ -1397,7 +1426,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4b1r1" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4b1r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1434,6 +1463,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1485,7 +1518,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4b1r1" inherit="cm4p1_v20140909">
+  <experiment name="c192L48_am4b1r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1522,6 +1555,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+	 nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1574,7 +1611,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4b2r1" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4b2r1" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1611,6 +1648,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1666,7 +1707,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L48_am4a1r1_2000climo" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a1r1_2000climo" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1698,6 +1739,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1770,7 +1815,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
   </experiment>
 
 
-  <experiment name="c192L48_am4a1r1_2000climo" inherit="cm4p1_v20140909">
+  <experiment name="c192L48_am4a1r1_2000climo" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1802,6 +1847,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1873,7 +1922,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
     </input>
   </experiment>
 
-  <experiment name="c96L48_am4a2r1_2000climo" inherit="cm4p1_v20140909">
+  <experiment name="c96L48_am4a2r1_2000climo" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -1905,6 +1954,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -1977,7 +2030,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
   </experiment>
 
 
-  <experiment name="c192L48_am4a2r1_2000climo" inherit="cm4p1_v20140909">
+  <experiment name="c192L48_am4a2r1_2000climo" inherit="cm4p1_compile">
 
 <!-- MDBI -->
     <description
@@ -2009,6 +2062,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>

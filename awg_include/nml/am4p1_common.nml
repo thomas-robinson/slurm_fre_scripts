@@ -21,7 +21,6 @@
 /
 
  &atmosphere_nml
-        physics_window = $physics_window
 /
 
  &cana_nml
@@ -131,7 +130,6 @@
 /
 
  &esfsw_driver_nml
-        do_coupled_stratozone=.false.
 /
 
  &esfsw_parameters_nml
@@ -141,8 +139,6 @@
 
  &fms_io_nml
         threading_read  = 'multi',
-        threading_write = 'single',
-        fileset_write   = 'single'
         max_files_r = 100,
         max_files_w = 100,
 /
@@ -203,6 +199,9 @@
 
  &land_debug_nml
       watch_point = 0, 0, 0, 1
+!ulm: conservation checks were added in few places for water and carbon masses. The default tolerances are too low.
+      water_cons_tol = 1e-4
+      carbon_cons_tol = 1e-4
 /
 
  &land_model_nml
@@ -243,7 +242,6 @@
 /
 
  &physics_driver_nml
-      use_cloud_tracers_in_radiation = .false.
 /
 
  &rad_output_file_nml
