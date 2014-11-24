@@ -327,7 +327,7 @@ configuration.
 <!--===========-->
 <!--= COMPILE =-->
 <!--===========-->
-  <!--The property MOM6_EXAMPLESshould point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
+  <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4p1_compile/src/mom6"/>
 
   <!-- cm4p1_compile is the compile experiment name -->
@@ -406,6 +406,12 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
+        <!--
+	<csh>
+          #==For JPD Drag Tests==
+          # cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
+        </csh>
+	-->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS)</cppDefs>
@@ -2006,50 +2012,10 @@ Experiment name = $(name)
 <!-- /MDBI -->
 
     <input>
-
-      
       <namelist name="atmos_model_nml">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
       </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .true.,
-      solar_dataset_entry = $baseDate
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
-      </namelist>
-
-
-
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>       
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -2116,8 +2082,6 @@ Experiment name = $(name)
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m8d_432pe/restart/19800109.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m8d_432pe/restart/19800109.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m10d_432pe/restart/19800111.tar"/>
 
     </runtime>
 
@@ -2306,40 +2270,6 @@ Experiment name = $(name)
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
       </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .true.,
-      solar_dataset_entry = $baseDate
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
-      </namelist>
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4a1r1_physics.nml"/>
@@ -2395,8 +2325,6 @@ Experiment name = $(name)
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m8d_864pe/restart/19800109.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m8d_864pe/restart/19800109.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m10d_864pe/restart/19800111.tar"/>
    </runtime>
 
     <postProcess>
@@ -2642,39 +2570,6 @@ Experiment name = $(name)
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
       </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 2000,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
-      </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -2724,8 +2619,6 @@ Experiment name = $(name)
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
       </regression>
       <reference restart="$(REFERENCE)/archive/1x0m10d_432pe/restart/00010111.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m10d_432pe/restart/00010111.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m8d_432pe/restart/00010109.tar"/>
     </runtime>
 
     <postProcess>
@@ -2770,39 +2663,6 @@ Experiment name = $(name)
       <namelist name="atmos_model_nml">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
-      </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 2000,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
       </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
@@ -2857,8 +2717,6 @@ Experiment name = $(name)
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m8d_864pe/restart/00010109.tar"/>     
-      <reference restart="$(REFERENCE_awg)/1x0m8d_864pe/restart/00010109.tar"/>
-      <reference restart="$(REFERENCE_awg)/1x0m10d_864pe/restart/00010111.tar"/>
     </runtime>
 
     <postProcess>
@@ -2959,39 +2817,6 @@ communityExperimentName="$(name)">
       <namelist name="atmos_model_nml">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
-      </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 2000,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
       </namelist>
       <!--AWG Input datasets -->
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -3136,39 +2961,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
       <namelist name="atmos_model_nml">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
-      </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 2000,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
       </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p1_common.nml"/>
@@ -3643,39 +3435,6 @@ communityExperimentName="$(name)">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
       </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 2000,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
-      </namelist>
       <!-- Namelist -->
       <namelist name="entrain_nml">
         convect_shutoff = .true.,
@@ -3883,39 +3642,6 @@ Ocean:
       <namelist name="atmos_model_nml">
          nxblocks = $nxblocks
 	 nyblocks = $nyblocks
-      </namelist>
-      <namelist name="atmosphere_nml">
-!ulm     physics_window = $physics_window
-      </namelist>
-      <namelist name="fms_io_nml">
-        threading_read  = 'multi',
-!ulm
-!        threading_write = 'single',
-!        fileset_write   = 'single'
-        max_files_r = 100,
-        max_files_w = 100,
-      </namelist>
-
-      <namelist name="esfsw_driver_nml">
-!ulm move       do_coupled_stratozone=.false.
-      </namelist>
-      <namelist name="physics_driver_nml">
-!ulm move       use_cloud_tracers_in_radiation = .false.
-      </namelist>
-      <namelist name="radiation_driver_nml">
-      rad_time_step= 10800,
-      time_varying_solar_constant = .false.,
-      solar_dataset_entry = 1860,1,1,0,0,
-      rad_package = 'sea_esf',
-      do_clear_sky_pass=.true.,
-      calc_hemi_integrals = .false.,
-      renormalize_sw_fluxes=.true.,
-      all_step_diagnostics = .true.,
-      zenith_spec = 'diurnally_varying',
-      using_restart_file = .false.
- !ulm move
-      do_coupled_stratozone=.false.
-      use_cloud_tracers_in_radiation = .false.
       </namelist>
       <!-- Namelist -->
       <namelist name="entrain_nml">
