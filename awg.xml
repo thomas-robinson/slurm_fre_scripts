@@ -12,23 +12,23 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_prerelease
 # .. cd $home/awg/ulm_prerelease
-# .. git clone -b user/nnz/ulm http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_ulm
+# .. git clone -b awg_v20141124 http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_v20141124
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
-# .. module load fre/bronx-7
-# .. fremake -x awg.xml -p ncrc2.intel -t prod-openmp cm4p1_compile
+# .. module load fre/bronx-8
+# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p1_v20141124
 
 # To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t prod-openmp c192L48_am4a1r1
+# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a1r1
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg.xml -p ncrc2.intel -t prod-openmp c192L48_am4a1r1
+# .. frerun -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a1r1
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t prod-openmp -n c192L48_am4a1r1
+# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp -n c192L48_am4a1r1
 
 -->
 
@@ -37,14 +37,14 @@
   <property name="RELEASE" value="ulm_prerelease"/>                <!-- CVS tag for source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="MOM6_GIT_TAG" value="dev/master/2014.11.17"/>  <!-- git tag for MOM6 source code -->
-  <property name="MOM6_EXAMPLES"  value="$root/cm4p1_compile/src/mom6"/>
+  <property name="MOM6_EXAMPLES"  value="$root/cm4p1_v20141124/src/mom6"/>
   <property name="FRE_VERSION" value="bronx-8"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_prerelease/mdt_xml_ulm/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_prerelease/mdt_xml_ulm/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_prerelease/xml_v20141124/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_prerelease/xml_v20141124/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -227,24 +227,13 @@ configuration.
 <!--= COMPILE =-->
 <!--===========-->
 
-  <experiment name="cm4p1_compile">
+  <experiment name="cm4p1_v20141124">
     <description>
 
 Experiment to build executable.
-* tikal_201403 code base
-* MOM6 ocean code (updated to dev/master/2014.04.03)
-* code updates from Rick Hemler to allow use of ncar v1.5 microphysics (tikal_ncar1p5_micro_rsh)
-* code updates from Rick Hemler for update water path diagnostics (tikal_precip_paths_rsh)
-* bug fixes from Will Cooke (vert_turbdiff_gnu_conv_wfc, tikal_ncar1p5_micro_rsh_wfc)
-* code updates from Xianglei Huang to increase olr band diagnostics (tikal_rad_diag_xlh_cjg)
-* code updates from Chris Golaz for new PBL depth diagnostics (tikal_pbl_depth_cjg)
-* bug fix from Ming Zhao regarding entrainment rate (dpconv20140318_miz)
-* updated topo_drag from Steve Garner (tikal_topo_drag_garner_cjg)
-* bug fix from Zhi (tikal_bugfix_z1l)
-* bug fix from Huan Guo for CLUBB and MG microphysics
-* new TKE turbulence from Chris Golaz (tikal_tke_v20140611_cjg)
-* new activation options from Chris Golaz (tikal_201403_act_options_cjg)
--The above updates are in ulm_prerelease
+* ulm_prerelease code base
+* Ming Zhao's changes for low sensitivity configuration. Changes answers for all! (lowsen20141106_miz)
+* Code updates from Jhon Dunne for new surface fluxes options (drag_min_jpd_20141030)
     </description>
 
     <component name="fms" paths="shared">
@@ -261,16 +250,14 @@ Experiment to build executable.
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> atmos_shared atmos_param_am3 </codeBase>
-	<!--
         <csh>
-           #for am4c1r1 runs. Changes answers for all!
-           #cvs up -r lowsen20141106_miz atmos_param/shallow_cu/uw_conv.F90 atmos_param/shallow_cu/deep_conv.F90 atmos_param/shallow_cu/conv_plumes_k.F90
+           # For am4c1r1 runs. Changes answers for all!
+           cvs up -r lowsen20141106_miz atmos_param/shallow_cu/uw_conv.F90 atmos_param/shallow_cu/deep_conv.F90 atmos_param/shallow_cu/conv_plumes_k.F90
 
            #==For JPD Drag Tests==
-           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov.F90
-           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov_kernel.F90
+           cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov.F90
+           cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov_kernel.F90
         </csh>
-        -->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
@@ -303,12 +290,10 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
-        <!--
 	<csh>
           #==For JPD Drag Tests==
-          # cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
+          cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
         </csh>
-	-->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DUSE_LOG_DIAG_FIELD_INFO</cppDefs>
@@ -520,7 +505,7 @@ else if ( "$npes" == "1152" ) then
 else if ( "$npes" == "1728" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "2"
-  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "16,2"
+  set nxblocks = "1" ; set nyblocks = "2"
   set fv_layout    =   "6,24";   set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";   set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6";  set ocean_io_layout =  "1,3"
@@ -528,7 +513,7 @@ else if ( "$npes" == "1728" ) then
 else if ( "$npes" == "2304" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
-  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "8,3"
+  set nxblocks = "1" ; set nyblocks = "2"
   set fv_layout    =   "12,16";  set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8";  set ocean_io_layout =  "1,4"
@@ -536,7 +521,7 @@ else if ( "$npes" == "2304" ) then
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "1728"
   set atmos_nthreads = "2"
-  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "8,2"
+  set nxblocks = "1" ; set nyblocks = "2"
   set fv_layout    =   "12,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "12,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,12"; set ocean_io_layout =  "1,4"
@@ -554,9 +539,7 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-    #module switch gcp/2.2 gcp/2.1 #not needed in bronx-8
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-    #module switch gcp/2.1 gcp/2.2 #not needed in bronx-8
   endif
 endif
       ]]></csh>
@@ -593,7 +576,7 @@ set do_ocean = "false"
 if ( "$npes" == "864" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "1"
-  set nxblocks = "1" ; set nyblocks = "1" ; set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1"
   set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -601,7 +584,7 @@ if ( "$npes" == "864" ) then
 else if ( "$npes" == "1152" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "1"
-  set nxblocks = "1" ; set nyblocks = "1" ; set physics_window = "0,0"
+  set nxblocks = "1" ; set nyblocks = "1"
   set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -609,7 +592,7 @@ else if ( "$npes" == "1152" ) then
 else if ( "$npes" == "2304" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "2"
-  set nxblocks = "1" ; set nyblocks = "4" ; set physics_window = "24,2"
+  set nxblocks = "1" ; set nyblocks = "4"
   set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -617,7 +600,7 @@ else if ( "$npes" == "2304" ) then
 else if ( "$npes" == "3456" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "4"
-  set nxblocks = "1" ; set nyblocks = "8" ; set physics_window = "32,1"
+  set nxblocks = "1" ; set nyblocks = "8"
   set fv_layout    =   "6,24";  set fv_io_layout    =  "1,4"
   set land_layout  =   "6,24";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -625,7 +608,7 @@ else if ( "$npes" == "3456" ) then
 else if ( "$npes" == "4608" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
-  set nxblocks = "2" ; set nyblocks = "1" ; set physics_window = "16,3"
+  set nxblocks = "2" ; set nyblocks = "1"
   set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -633,7 +616,7 @@ else if ( "$npes" == "4608" ) then
 else if ( "$npes" == "6912" ) then
   set atmos_npes = "864"
   set atmos_nthreads = "8"
-  set nxblocks = "2" ; set nyblocks = "4" ; set physics_window = "16,1"
+  set nxblocks = "2" ; set nyblocks = "4"
   set fv_layout    =   "12,12"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,12"; set land_io_layout  =  "1,4"
   set ocean_layout =   "144,6"; set ocean_io_layout =  "1,3"
@@ -652,9 +635,7 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
-    #module switch gcp/2.2 gcp/2.1 #not needed in bronx-8
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
-    #module switch gcp/2.1 gcp/2.2 #not needed in bronx-8
   endif
 endif
       ]]></csh>
@@ -1047,7 +1028,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L48_am4a1r1" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4a1r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1145,7 +1126,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4a1r1" inherit="cm4p1_compile">
+  <experiment name="c192L48_am4a1r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1240,7 +1221,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4a2r1" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4a2r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1333,7 +1314,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4a2r1" inherit="cm4p1_compile">
+  <experiment name="c192L48_am4a2r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1426,7 +1407,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4b1r1" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4b1r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1518,7 +1499,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4b1r1" inherit="cm4p1_compile">
+  <experiment name="c192L48_am4b1r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1611,7 +1592,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4b2r1" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4b2r1" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1707,7 +1688,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L48_am4a1r1_2000climo" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4a1r1_2000climo" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1815,7 +1796,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
   </experiment>
 
 
-  <experiment name="c192L48_am4a1r1_2000climo" inherit="cm4p1_compile">
+  <experiment name="c192L48_am4a1r1_2000climo" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -1922,7 +1903,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
     </input>
   </experiment>
 
-  <experiment name="c96L48_am4a2r1_2000climo" inherit="cm4p1_compile">
+  <experiment name="c96L48_am4a2r1_2000climo" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
@@ -2030,7 +2011,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
   </experiment>
 
 
-  <experiment name="c192L48_am4a2r1_2000climo" inherit="cm4p1_compile">
+  <experiment name="c192L48_am4a2r1_2000climo" inherit="cm4p1_v20141124">
 
 <!-- MDBI -->
     <description
