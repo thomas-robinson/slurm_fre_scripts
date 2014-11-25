@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20140909 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20141124 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -155,7 +155,6 @@ Available options for c192L48:
   |npes    |  Suggested run time for 12 month segment    |
   |        |    am4a3             |    am4b3             |
   +========+======================+======================+
-  |  1152  |    16:00:00 (?)      |    16:00:00 (?)      |
   |  2304  |    09:00:00          |    09:00:00          |
   |  3456  |    07:00:00          |    07:00:00          |
   | *4608* |    05:20:00          |    06:00:00          |
@@ -292,10 +291,6 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
-	<csh>
-          #==For JPD Drag Tests==
-          cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
-        </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DUSE_LOG_DIAG_FIELD_INFO</cppDefs>
@@ -1820,8 +1815,8 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)" 
-communityModel="am4a2" 
-communityModelID="am4a2"
+communityModel="am4p3" 
+communityModelID="am4p3"
 communityExperimentName="$(name)" 
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
@@ -1928,8 +1923,8 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)" 
-communityModel="am4a2" 
-communityModelID="am4a2"
+communityModel="am4p3" 
+communityModelID="am4p3"
 communityExperimentName="$(name)" 
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
