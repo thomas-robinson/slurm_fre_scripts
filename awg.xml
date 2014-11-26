@@ -157,7 +157,7 @@ Available options for c192L48:
   +========+======================+======================+
   |  2304  |    09:00:00          |    09:00:00          |
   |  3456  |    07:00:00          |    07:00:00          |
-  | *4608* |    05:20:00          |    06:00:00          |
+  | *4608* |    07:00:00          |    07:00:00          |
   |  6912  |    04:00:00          |    05:00:00          |
   +========+======================+======================+
 
@@ -165,6 +165,9 @@ Note: default settings are *highlighted*. Suggested
 run time values may need to be adjusted for your specific
 configuration.
 
+Note: in ulm_prerelease, c192 am4 configurations appear to be substantially 
+slower with 4608 PEs than they were in tikal. Accordingly, segment length was 
+increased from 05:20:00 to 07:00:00 for the default configuration.
 -->
 
   <setup>
@@ -1191,7 +1194,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="5:20:00"/>
+        <segment simTime="12" units="months" runTime="7:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1381,7 +1384,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="5:20:00"/>
+        <segment simTime="12" units="months" runTime="7:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1567,7 +1570,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="6:00:00"/>
+        <segment simTime="12" units="months" runTime="7:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1767,7 +1770,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="5:20:00"/>
+        <segment simTime="12" units="months" runTime="7:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1982,7 +1985,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="5:20:00"/>
+        <segment simTime="12" units="months" runTime="7:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
