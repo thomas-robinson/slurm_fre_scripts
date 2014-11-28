@@ -157,7 +157,7 @@ Available options for c192L48:
   +========+======================+======================+
   |  2304  |    09:00:00          |    09:00:00          |
   |  3456  |    07:00:00          |    07:00:00          |
-  | *4608* |    07:00:00          |    07:00:00          |
+  | *4608* |    05:20:00          |    06:00:00          |
   |  6912  |    04:00:00          |    05:00:00          |
   +========+======================+======================+
 
@@ -165,9 +165,6 @@ Note: default settings are *highlighted*. Suggested
 run time values may need to be adjusted for your specific
 configuration.
 
-Note: in ulm_prerelease, c192 am4 configurations appear to be substantially 
-slower with 4608 PEs than they were in tikal. Accordingly, segment length was 
-increased from 05:20:00 to 07:00:00 for the default configuration.
 -->
 
   <setup>
@@ -539,7 +536,9 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+    module switch gcp/2.2 gcp/2.3  # to bypass bug in gcp/2.2 (default gcp in fre/bronx-8)
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
+    module switch gcp/2.3 gcp/2.2
   endif
 endif
       ]]></csh>
@@ -608,7 +607,7 @@ else if ( "$npes" == "3456" ) then
 else if ( "$npes" == "4608" ) then
   set atmos_npes = "1152"
   set atmos_nthreads = "4"
-  set nxblocks = "2" ; set nyblocks = "1"
+  set nxblocks = "1" ; set nyblocks = "4"
   set fv_layout    =   "12,16"; set fv_io_layout    =  "1,4"
   set land_layout  =   "12,16"; set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8"; set ocean_io_layout =  "1,4"
@@ -635,7 +634,9 @@ alias runCommand "aprun -d $atmos_nthreads -n $atmos_npes ./$executable:t"
 # Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?batch && ! $?FRE_STAGE ) then
   if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+    module switch gcp/2.2 gcp/2.3  # to bypass bug in gcp/2.2 (default gcp in fre/bronx-8)
     gcp --batch -cd -r --sync $(AWG_INPUT_HOME) gfdl:$(AWG_INPUT_HOME_GFDL)/..
+    module switch gcp/2.3 gcp/2.2
   endif
 endif
       ]]></csh>
@@ -1194,7 +1195,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1381,7 +1382,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="6:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1571,7 +1572,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1761,7 +1762,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1961,7 +1962,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -2176,7 +2177,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="7:00:00"/>
+        <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
