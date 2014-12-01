@@ -4001,6 +4001,9 @@ Ocean:
         all_step_diagnostics = .true.,
         zenith_spec = 'diurnally_varying',
         using_restart_file = .false.
+ !ulm move
+        do_coupled_stratozone=.false.
+        use_cloud_tracers_in_radiation = .false.
       </namelist>
       
       <namelist name="radiative_gases_nml">
@@ -4532,14 +4535,14 @@ set restart_flag = 'r'
       </component>      
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
-          The intention was not to do anything besides that update. We do not really want an annual timeseries.
-          But unfortunately frepp still tries to create a timeseries.-->      
-      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)" source="ocean_annual">
+          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
+      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
          <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
         </timeSeries>
       </component>
+
       <component type="ocean_snap"      start="$(ANA_CLIMO_START)" source="ocean_month_snap">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)"/>
@@ -4641,14 +4644,14 @@ set restart_flag = 'r'
       </component>     
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
-          The intention was not to do anything besides that update. We do not really want an annual timeseries.
-          But unfortunately frepp still tries to create a timeseries.-->      
-      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)" source="ocean_annual">
-        <timeSeries freq="monthly"  chunkLength="1yr" source="ocean_annual">
+          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
+      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
+        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
          <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
         </timeSeries>
-      </component>     
+      </component>
+
     </postProcess>
   </experiment> 
 

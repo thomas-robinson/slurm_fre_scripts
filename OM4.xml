@@ -52,7 +52,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 
    <!--Users need not change the following properties -->
-   <property name="reference_tag"  value="tikal_201406"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
+   <property name="reference_tag"  value="ulm_prerelease"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
    <property name="PROG_MAIN"   value="coupler/coupler_main.o"/>
    <property name="LIBS_ROOT"   value="MOM6_SIS_libs_compile"/>
    <property name="FMS_LIB_DIR" value="./$(LIBS_ROOT)/$(platform)-$(target)/exec"/>
@@ -165,9 +165,6 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
            #Some tricks to use the refineDiag and analysis scripts from a checkout of MOM6 at gfdl 
            setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
-           mkdir -p $NBROOT
-           cd $NBROOT
-/home/Niki.Zadeh/bin/git_clone_mom6_fix.csh 
          ]]></csh>
 <!--The following are not used, but needed by fre -->
      <property name="SGI_FLAGS" value=""/>
@@ -554,6 +551,34 @@ LAYOUT_EOF
 
 # runCommand:
   alias runCommand "aprun -n $ocean_npes -d 1 ./$executable:t"
+
+# Copy MOM6 input files needed for postprocessing  to GFDL (waiting for FRE to do this for us)
+if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  #trick to copy MOM6 directory but avoid traversing the .datasets links
+  tar cvf mom6.tar -C $(MOM6_EXAMPLES) .
+cat >  prepost_gfdl << untar_at_gfdl_EOF
+   mkdir -p $(NB_ROOT)
+   cd $(NB_ROOT)
+   module load gcp
+   gcp gaea:$workDir/mom6.tar .
+   if( -e mom6.tar ) then
+     mkdir mom6
+     tar xvf mom6.tar -C mom6
+   else
+     git clone --recursive -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+   endif
+untar_at_gfdl_EOF
+
+   msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prepost -q stage -l walltime=1:00:00 -l size=1 prepost_gfdl
+#If gcp preserved permissions we could do the following instead of the above msub
+#  mkdir mom6
+#  tar xvf mom6.tar -C ./mom6
+#  \rm mom6/.datasets
+#  gcp --batch -cd -r --sync mom6 gfdl:$(NB_ROOT)/
+
+endif
+
+
       ]]></csh>
 
     </input>
@@ -786,7 +811,7 @@ touch $work/INPUT/SIS_override
       <!--MOM6_refineDiag.csh is currently empty and is here only to cause the unpack annual history files in /ptmp-->
       <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh"/>
       <!--PostProcessing component models-->
-      <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month">
+      <component type="ocean_monthly"   start="$(PP_START_YEAR)" source="ocean_month" sourceGrid="ocean-tripolar">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)" source="ocean_month">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/ice_ocean_SIS/OM4_025/ocn_monthly.frepp"/>
         </timeSeries>
@@ -795,7 +820,7 @@ touch $work/INPUT/SIS_override
         </timeSeries>
       </component>
 
-      <component type="ocean_annual_z" start="$(PP_START_YEAR)" source="ocean_annual_z">
+      <component type="ocean_annual_z" start="$(PP_START_YEAR)" source="ocean_annual_z"  sourceGrid="ocean-tripolar">
         <timeAverage source="annual" interval="$(CHUNK_LENGTH_A)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/ice_ocean_SIS/OM4_025/ocn_annual_z.frepp"/>
         </timeAverage>
@@ -807,7 +832,7 @@ touch $work/INPUT/SIS_override
 	
       </component>
 
-      <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"> 
+      <component type="ocean_annual" start="$(PP_START_YEAR)"  source="ocean_annual"  sourceGrid="ocean-tripolar"> 
         <timeAverage source="annual" interval="$(CHUNK_LENGTH_A)">
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/ice_ocean_SIS/OM4_025/ocn_annual.frepp"/>
         </timeAverage>
@@ -816,7 +841,7 @@ touch $work/INPUT/SIS_override
         </timeAverage>
       </component>
 
-      <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month">
+      <component type="ice"  start="$(PP_START_YEAR)"  source="ice_month"  sourceGrid="ocean-tripolar">
         <timeSeries freq="monthly" chunkLength="$(CHUNK_LENGTH_A)"  source="ice_month">
 	   <analysis switch="$(ANALYSIS_SWITCH)" script="$(NB_ROOT)/mom6/tools/analysis/Krasting-SeaIce.csh"/>
 	</timeSeries>   
@@ -828,10 +853,9 @@ touch $work/INPUT/SIS_override
       </component>
 
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
-	  in order to update the "Monitoring" section of the DB.
-	  The intention was not to do anything besides that update. We do not really want an annual timeseries.
-	  But unfortunately frepp still tries to create a timeseries. -->
-      <component type="mdbi_logger"   start="$(PP_START_YEAR)">  
+          in order to update the "Monitoring" section of the DB.
+          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
+      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
          <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
