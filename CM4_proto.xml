@@ -396,6 +396,7 @@ Experiment to build executable.
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
       <source>
         <codeBase version="$(RELEASE)"> ice_sis ice_param </codeBase>
+        <csh>#cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
@@ -606,7 +607,7 @@ $baseDate
         <dataSource platform="$(platform)">$(CWG_HOME)/input/CM4i_hydrography_20140729.tar</dataSource>
       </dataFile>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CWG_HOME)/IC/CM4i_C96L48_LM3_OM4_1deg_grid_19810101.remapped.v20140730-2.tar</dataSource>
+        <dataSource platform="$(platform)">$(CWG_HOME)/IC/CM4i_C96L48_LM3_OM4_1deg_grid_19810101.remapped.v20140903.tar</dataSource>
       </dataFile>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(CWG_HOME)/input/CM4i_mosaic_20140729.tar</dataSource>
@@ -834,8 +835,9 @@ else
   exit 53
 endif
 
-# Copy AWG ascii input files to GFDL (waiting for FRE to do this for us)
+# Copy AWG and OWG ascii input files to GFDL (waiting for FRE to do this for us)
 if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
+  module switch gcp/2.2 gcp/2.3
   set xmldirlocal = `dirname $rtsxml`
   set xmldirRemote = `echo $xmldirlocal | sed -r "$patternSedHome;$patternSedCTMP;$patternSedCPERM"`
   gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
@@ -848,25 +850,25 @@ cat >  prepost_gfdl << untar_at_gfdl_EOF
    mkdir -p $(NB_ROOT)
    cd $(NB_ROOT)
    module load gcp
+   module load git
    gcp gaea:$workDir/mom6.tar .
    if( -e mom6.tar ) then
      mkdir mom6
      tar xvf mom6.tar -C mom6
    else
-     git clone --recursive -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          pushd mom6
+          git submodule init tools/python/025gridGeneration/MIDAS
+          git submodule update
+          popd
    endif
-   if(! -d mdt_xml) git clone -b dev "http://gitlab.gfdl.noaa.gov/mdt/xml.git" mdt_xml
-   ln -s mdt_xml/awg_include $xmldirRemote/
+   if(! -d mdt_xml) git clone -b user/nnz/ulm "http://gitlab.gfdl.noaa.gov/mdt/xml.git" mdt_xml
+   ln -s $(NB_ROOT)/mdt_xml/awg_include $xmldirRemote/
 untar_at_gfdl_EOF
 
    msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prepost -q stage -l walltime=1:00:00 -l size=1 prepost_gfdl
 
-#If gcp preserved permissions we could do the following instead of the above msub
-#  mkdir mom6
-#  tar xvf mom6.tar -C ./mom6
-#  \rm mom6/.datasets
-#  gcp --batch -cd -r --sync mom6 gfdl:$(NB_ROOT)/
-
+   module switch gcp/2.3 gcp/2.2
 endif
 
 # create dummy MOM6 parameter file for do_ocean=.false.
@@ -1067,6 +1069,16 @@ else if ( "$npes" == "924" ) then
   set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
   set ocn_layout   =   "10,6";  set ocn_io_layout   =  "1,6"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "60"
+
+else if ("$npes" == "1878" ) then
+  set atmos_npes = "864"
+  set atmos_nthreads = "2"
+  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "16,2"
+  set fv_layout    =   "6,24";   set fv_io_layout    =  "1,4"
+  set land_layout  =   "6,24";   set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,6";  set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "15,10";  set ocn_io_layout   =  "1,10"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "150"
 
 else if ( "$npes" == "1584" ) then
   set atmos_npes = "432"
@@ -4536,7 +4548,7 @@ set restart_flag = 'r'
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
           The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
-      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
+      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
          <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
@@ -4626,7 +4638,7 @@ set restart_flag = 'r'
           <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$(NB_ROOT)/mom6/ice_ocean_SIS/OM4_025/ocn_annual_z.frepp"/>
         </timeAverage>
 
-        <timeSeries freq="imonthly" chunkLength="$(PP_OCEAN_CHUNK_B)" source="ocean_annual_z"/>
+        <timeSeries freq="monthly"  chunkLength="$(PP_OCEAN_CHUNK_B)" source="ocean_annual_z"/>
         <timeSeries freq="annual"   chunkLength="$(PP_OCEAN_CHUNK_B)" source="ocean_annual_z"/>
 	
       </component>
@@ -4645,7 +4657,7 @@ set restart_flag = 'r'
       <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
           in order to update the "Monitoring" section of the DB.
           The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
-      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
+      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)">
         <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
          <variables>salt_flux</variables>
          <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
