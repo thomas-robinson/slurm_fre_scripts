@@ -31,10 +31,10 @@ inputfiles -x CM4_proto.xml -p ncrc2.intel
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
   <property name="RELEASE" value="ulm_prerelease"/>                <!-- CVS tag for source code -->
-  <property name="MOM6_DATE" value="2014.11.17"/>                <!-- git tag date for MOM6 source code -->
-  <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>             <!-- git tag for MOM6 source code -->
-  <property name="FRE_STEM"  value="$(RELEASE)_mom6_$(MOM6_DATE)"/>   <!--  customize as needed -->
-  <property name="FRE_VERSION" value="fre/bronx-8"/>             <!-- fre/bronx-7 not supported on Zeus; use fre/bronx-6 -->
+  <property name="MOM6_DATE" value="2014.11.17"/>                  <!-- git tag date for MOM6 source code -->
+  <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
+  <property name="FRE_STEM"  value="$(RELEASE)_plus_LowSens_Drag_mom6_$(MOM6_DATE)"/>   <!--  customize as needed -->
+  <property name="FRE_VERSION" value="fre/bronx-8"/>             <!-- -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="MDT"/>                       <!-- database top level -->
@@ -301,6 +301,7 @@ configuration.
         module load git
         setenv FREVERSION $(FRE_VERSION)           
         setenv NBROOT $(NB_ROOT)
+       /home/Niki.Zadeh/nnz_tools/bin/verify -m $(MOM6_GIT_TAG) -x user/nnz/ulm 
        ]]>
       </csh>
     </platform>
@@ -364,16 +365,14 @@ Experiment to build executable.
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> atmos_shared atmos_param_am3 </codeBase>
-	<!--
         <csh>
            #==For JPD Drag Tests==
-           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov.F90
-           #cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov_kernel.F90
+           cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov.F90
+           cvs up -r drag_min_jpd_20141030 atmos_param/monin_obukhov/monin_obukhov_kernel.F90
 
            #for am4c1r1 runs. Changes answers for all!
-           #cvs up -r lowsen20141106_miz atmos_param/shallow_cu/uw_conv.F90 atmos_param/shallow_cu/deep_conv.F90 atmos_param/shallow_cu/conv_plumes_k.F90
+           cvs up -r lowsen20141106_miz atmos_param/shallow_cu/uw_conv.F90 atmos_param/shallow_cu/deep_conv.F90 atmos_param/shallow_cu/conv_plumes_k.F90
         </csh>
-        -->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
@@ -396,7 +395,7 @@ Experiment to build executable.
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
       <source>
         <codeBase version="$(RELEASE)"> ice_sis ice_param </codeBase>
-        <csh>#cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh>
+        <csh>cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
@@ -407,12 +406,10 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
-        <!--
 	<csh>
           #==For JPD Drag Tests==
-          # cvs up -r drag_updates_jpk_20141104 land_lad2/land_model.F90
+          cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90
         </csh>
-	-->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS)</cppDefs>
@@ -447,9 +444,10 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
         <csh>
           git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
           pushd mom6
+          git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
           git submodule init src/MOM6  tools/python/025gridGeneration/MIDAS
           git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
-          git submodule update
+          git submodule update #This gets the right version of submodules
           popd
 
           pushd mom6
@@ -487,6 +485,10 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>  
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> coupler.git </codeBase>
+        <csh><![CDATA[
+        ( cd coupler && git checkout $(RELEASE) )
+        ]]>
+        </csh>
       </source>
       <compile>
         <cppDefs><![CDATA[$(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'"]]></cppDefs>
@@ -839,36 +841,25 @@ endif
 if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
   module switch gcp/2.2 gcp/2.3
   set xmldirlocal = `dirname $rtsxml`
-  set xmldirRemote = `echo $xmldirlocal | sed -r "$patternSedHome;$patternSedCTMP;$patternSedCPERM"`
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
-  gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$xmldirRemote/
+  set xmldirRemote = `echo $xmldirlocal | sed -r "$patternSedHome"`
+  if ("${platform_domain}" == "ncrc.gov") then
+    set xmldirRemote = `echo $xmldirlocal | sed -r "$patternSedHome;$patternSedCTMP;$patternSedCPERM"`
+    gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+    gcp --batch -cd -r --sync $xmldirlocal/awg_include gfdl:$xmldirRemote/
+  else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+    gcp -cd -r --sync $xmldirlocal/awg_include gfdl:$(AWG_INPUT_HOME_GFDL)/..
+    gcp -cd -r --sync $xmldirlocal/awg_include gfdl:$xmldirRemote/
+  endif
   #trick to copy MOM6 directory but avoid traversing the .datasets links
-  tar cvf mom6.tar -C $(MOM6_EXAMPLES) .
-#  gcp --batch -cd -r --sync mom6.tar gfdl:$(NB_ROOT)/
-
-cat >  prepost_gfdl << untar_at_gfdl_EOF
-   mkdir -p $(NB_ROOT)
-   cd $(NB_ROOT)
-   module load gcp
-   module load git
-   gcp gaea:$workDir/mom6.tar .
-   if( -e mom6.tar ) then
-     mkdir mom6
-     tar xvf mom6.tar -C mom6
-   else
-          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
-          pushd mom6
-          git submodule init tools/python/025gridGeneration/MIDAS
-          git submodule update
-          popd
-   endif
-   if(! -d mdt_xml) git clone -b user/nnz/ulm "http://gitlab.gfdl.noaa.gov/mdt/xml.git" mdt_xml
-   ln -s $(NB_ROOT)/mdt_xml/awg_include $xmldirRemote/
-untar_at_gfdl_EOF
-
-   msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prepost -q stage -l walltime=1:00:00 -l size=1 prepost_gfdl
-
-   module switch gcp/2.3 gcp/2.2
+  tar cvf mom6.tar --exclude='.datasets' -C $(MOM6_EXAMPLES) . > /dev/null
+  #tar cvf mom6.tar  --exclude='.datasets' --exclude='src' --exclude='INPUT'  -C $(MOM6_EXAMPLES) . > /dev/null
+  mkdir mom6
+  tar xvf mom6.tar -C ./mom6 > /dev/null
+  if ("${platform_domain}" == "ncrc.gov") then
+    gcp --batch -cd -r --sync mom6 gfdl:$(NB_ROOT)/
+  else if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+    gcp -cd -r --sync mom6 gfdl:$(NB_ROOT)/
+  endif
 endif
 
 # create dummy MOM6 parameter file for do_ocean=.false.
@@ -1089,6 +1080,16 @@ else if ( "$npes" == "1584" ) then
   set ice_layout   =   "144,3"; set ice_io_layout   =  "1,3"
   set ocn_layout   =   "32,36"; set ocn_io_layout   =  "1,4"; set ocn_mask_table = "MOM_mask_table"
   set ocean_npes = "1152"
+
+else if ("$npes" == "1878" ) then
+  set atmos_npes = "864"
+  set atmos_nthreads = "2"
+  set nxblocks = "1" ; set nyblocks = "2" ; set physics_window = "16,2"
+  set fv_layout    =   "6,24";   set fv_io_layout    =  "1,4"
+  set land_layout  =   "6,24";   set land_io_layout  =  "1,4"
+  set ice_layout   =   "144,6";  set ice_io_layout   =  "1,3"
+  set ocn_layout   =   "15,10";  set ocn_io_layout   =  "1,10"; set ocn_mask_table = "MOM_mask_table"
+  set ocean_npes = "150"
 
 else if ( "$npes" == "2752" ) then
   set atmos_npes = "432"
@@ -1990,7 +1991,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a1" 
 communityModelID="am4a1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+     >
 <!-- /MDBI -->
 
 AM4 prototype configuration "am4a1r1" from MDT Atmosphere Working Group.
@@ -2009,7 +2010,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2111,7 +2111,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a2" 
 communityModelID="am4a2"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 AM4 prototype configuration "am4a2r1" from MDT Atmosphere Working Group.
@@ -2125,7 +2125,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2154,7 +2153,7 @@ communityProject="$(ProjectID)"
 communityModel="am4b2" 
 communityModelID="am4b2"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 AM4 prototype hybrid configuration "am4b2r1" from MDT Atmosphere Working Group.
@@ -2168,7 +2167,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2246,7 +2244,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a1" 
 communityModelID="am4a1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 AM4 prototype configuration "am4a1r1" from MDT Atmosphere Working Group.
@@ -2262,7 +2260,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2354,7 +2351,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a2" 
 communityModelID="am4a2"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 AM4 prototype configuration "am4a2r1" from MDT Atmosphere Working Group.
@@ -2368,7 +2365,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2392,13 +2388,13 @@ Experiment name = $(name)
 <!--==========================================-->
 <!--= CLIMO EXPERIMENTS with do_ocean=.false.=-->
 <!--==========================================-->
- <experiment name="c96L48_am4c1r2_2000climo_needsCodeUpdates_noRTS" inherit="c96L48_am4a1r1_2000climo">
+ <experiment name="c96L48_am4c1r2_2000climo" inherit="c96L48_am4a1r1_2000climo">
     <description
 communityProject="$(ProjectID)" 
 communityModel="am4c1" 
 communityModelID="am4c1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 
 Ming Zhao Nov.7, 2014 xml
  /autofs/na2_home2/Ming.Zhao/cwg/input_cwg/CM4_cwg.xml
@@ -2520,7 +2516,7 @@ communityProject="$(ProjectID)"
 communityModel="am4b2" 
 communityModelID="am4b2"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+     >
 
 AM4 prototype hybrid configuration "am4b2r1" from MDT Atmosphere Working Group.
 
@@ -2554,7 +2550,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a1" 
 communityModelID="am4a1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+     >
 <!-- /MDBI -->
 
 Same model as c96L48_am4a1r1, but
@@ -2563,7 +2559,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2648,7 +2643,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a1" 
 communityModelID="am4a1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+     >
 <!-- /MDBI -->
 
 Same model as c192L48_am4a1r1, but
@@ -2657,7 +2652,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -2749,6 +2743,137 @@ Experiment name = $(name)
 <!--=======================-->
 <!--= CM4 EXPERIMENTS     =-->
 <!--=======================-->
+
+<experiment name="CM4_c96L48_am4c1r2_drag_min_mom_coast_rough_2000climo" inherit="CM4_c96L48_am4c1r2_2000climo">
+   <input>
+     <namelist name="monin_obukhov_nml">
+        stable_option = 2,
+        rich_crit = 1.0,
+        zeta_trans = 0.5,
+        drag_min_mom = 1.e-03
+     </namelist>
+     <namelist name="land_model_nml">
+        layout   = $land_layout,
+        io_layout = $land_io_layout,
+        tau_snow_T_adj = 604800,
+        prohibit_negative_canopy_water=.false.,
+        use_coast_rough = .true.,
+        use_coast_topo_rough = .false.
+      </namelist>
+   </input>
+</experiment>
+
+<experiment name="CM4_c96L48_am4c1r2_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
+   <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.37,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+     <namelist name="rotstayn_klein_mp_nml">
+        rk_act_only_if_ql_gt_qmin = .true.
+     </namelist>
+     <namelist name="strat_cloud_nml">
+        up_strat_opt = 2
+        var_limit_opt = 2
+        var_limit = 0.3
+        aerosol_activation_scheme = "total"
+        qthalfwidth    = 0.2
+        do_pdf_clouds = .true.
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.0,
+        Dmin = 1.0e-07,
+        n_land = 300.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 3.e-6,
+        eros_scale_t = 3.e-6,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 1.4
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 1.0
+        use_sub_seasalt = .false.
+      </namelist>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 1
+        do_rescale      = .true.
+        use_sub_seasalt = .false.
+        wrel_min=1.
+       </namelist>
+      <namelist name="uw_plume_nml">
+        rmaxfrac = 0.15
+        auto_th0 = 1.0e-3,
+        tcrit    = -25.15,
+        frac_drs = 0.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .false.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 2
+        mp_choice = 8
+        peff_l = 1.25e-5
+        peff_i = 2.5-5
+        do_pevap = .true.
+        hcevap   = 0.9
+        cfrac    = 0.15
+       </namelist>
+       <namelist name="deep_conv_nml">
+        rkm_dp1 = 2
+        rkm_dp2 = 0.1
+        norder = 1
+        cbmf_dp_frac1 = 1.
+        cbmf_dp_frac2 = 1.
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cape_th = 100.
+        tau_dp = 28800.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        auto_th0_d = 1.0e-3
+        tcrit_d    = -25.15,
+        peff_l_d = 6.e-5
+        peff_i_d = 12.e-5
+        frac_limit_d = 0.25
+        dcapedm_th = 100
+        lofactor_d = 0.75
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_forcedlifting_d = .false.
+      </namelist>
+   </input>
+
+</experiment>
 
 <experiment name="CM4_c96L48_am4b2r1_2000climo" inherit="CM4_c96L48_am4a1r1_2000climo">
    <input> 
@@ -2910,7 +3035,7 @@ communityProject="$(ProjectID)"
 communityModel="CM4_AM4a1_SIS  $(MOM6_GIT_TAG)" 
 communityModelID="CM4_AM4a1_SIS"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 Same model as c192L48_am4a1r1, but
@@ -2918,7 +3043,6 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     </description>
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
       Experiment name = $(name)
     </communityComment>
@@ -4498,9 +4622,9 @@ set restart_flag = 'r'
          mv *velocity_truncations CPU_stats MOM_parameter_doc* extra.results/
          ]]></csh>
       <!--REFINE DIAG SCRIPT -->
-      <!--refineDiag_data_stager.csh calculates global averages of basic quantities and stores them in a sqlit database file-->
-      <!--By default a refineDiag script causes the annual history files to be unpacked and saved in /ptmp/$USER-->
-      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
+      <!--refineDiag_data_stager.csh calculates global averages of basic quantities and stores them in a sqlite database file-->
+      <!--Also, the presence of a refineDiag script causes the history files for the last completed year to be unpacked /ptmp/$USER-->
+      <refineDiag script="$(NB_ROOT)/mom6/tools/analysis/MOM6_refineDiag.csh $(NB_ROOT)/mom6/tools/analysis/refineDiag_data_stager.csh"/>
 
       <component type="ocean_monthly"   start="$(ANA_CLIMO_START)" source="ocean_month">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)" source="ocean_month">
@@ -4545,15 +4669,6 @@ set restart_flag = 'r'
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK_B)"/>
       </component>      
-      <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
-          in order to update the "Monitoring" section of the DB.
-          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
-      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)">
-        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>salt_flux</variables>
-         <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-        </timeSeries>
-      </component>
 
       <component type="ocean_snap"      start="$(ANA_CLIMO_START)" source="ocean_month_snap">
         <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"/>
@@ -4575,8 +4690,6 @@ set restart_flag = 'r'
       </component>
       <component type="ocean_scalar_annual" start="$(ANA_CLIMO_START)" source="ocean_scalar_annual">
         <!--frepp: ERROR: Cannot create ocean_scalar_annual annual timeSeries unless you generate timeSeries freq='monthly' -->
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK)"   />
-        <timeSeries freq="monthly" chunkLength="$(PP_OCEAN_CHUNK_B)" />
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK)"   />
         <timeSeries freq="annual" chunkLength="$(PP_OCEAN_CHUNK_B)" />
       </component>
@@ -4654,20 +4767,11 @@ set restart_flag = 'r'
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK)"/>
         <timeAverage source="annual"  interval="$(PP_OCEAN_CHUNK_B)"/>
       </component>     
-      <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
-          in order to update the "Monitoring" section of the DB.
-          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
-      <component type="mdbi_logger"   start="$(ANA_CLIMO_START)">
-        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>salt_flux</variables>
-         <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-        </timeSeries>
-      </component>
 
     </postProcess>
   </experiment> 
 
-<experiment name="CM4i_c96L48_am4c1r2_2000climo_needsCodeUpdates_noRTS" inherit="CM4i_c96L48_am4a1r1_2000climo">
+<experiment name="CM4i_c96L48_am4c1r2_2000climo" inherit="CM4i_c96L48_am4a1r1_2000climo">
    <input>
       <namelist name="entrain_nml">
         convect_shutoff = .true.,
@@ -4962,7 +5066,7 @@ communityProject="$(ProjectID)"
 communityModel="CM4i_c96L48_am4a1r1_fullchem  $(MOM6_GIT_TAG)" 
 communityModelID="CM4i_c96L48_am4a1r1_fullchem"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 This model is for testing purposes only. It's an engineer's attempt towards building a ESM4 prototype.
@@ -4971,7 +5075,6 @@ Do not use it for science!!!
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -5077,7 +5180,7 @@ communityProject="$(ProjectID)"
 communityModel="am4a1" 
 communityModelID="am4a1"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 AM4 prototype configuration "am4a1r1" from MDT Atmosphere Working Group,
@@ -5093,7 +5196,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -5343,7 +5445,7 @@ communityProject="$(ProjectID)"
 communityModel="CM4_c96L48_am4a1r1_fullchem_COBALT  $(MOM6_GIT_TAG)" 
 communityModelID="CM4_c96L48_am4a1r1_fullchem_COBALT"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
 <!-- /MDBI -->
 
 This model is for testing purposes only. It's an engineer's attempt towards building a ESM4 prototype.
@@ -5352,7 +5454,6 @@ Do not use it for science!!!
     </description>
 
 <!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -5534,15 +5635,14 @@ set restart_flag = 'r'
     </runtime>
   </experiment>
 
-  <experiment name="faste2e" inherit="CM4_c96L48_am4a1r1_2000climo">
+  <experiment name="faste2e" inherit="CM4i_c96L48_am4a1r1_2000climo">
     <description
 communityProject="TEST" 
-communityModel="test" 
-communityModelID="test"
+communityModel="test_nnz" 
+communityModelID="test_nnz"
 communityExperimentName="$(name)" 
-communityExperimentID="$(name)" >
+    >
     </description>
-    <realization r="1" i="1" p="1"/>
     <communityComment>
 Experiment name = $(name)
     </communityComment>
@@ -5566,15 +5666,16 @@ cat > $work/time_stamp.out << TIMESTAMP_EOF
    $currentSegp1 1   1   0   0   0  Jan
 TIMESTAMP_EOF
 
-
-cat >  prep_history_gfdl << prep_history_gfdl_EOF
-   mkdir -p $outputDirRemoteHistory/history
-   cd $outputDirRemoteHistory/history
-   ln -s /archive/Niki.Zadeh/testing_20141017/CM4_c96L48_am4a1r1_2000climo/gfdl.ncrc2-intel-prod-openmp/history/${currentSeg}.nc .
-prep_history_gfdl_EOF
-
-   msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prep_history -q stage -l walltime=0:00:05 -l size=1 prep_history_gfdl_EOF
-
+#This won't do it
+#cat >  prep_history_gfdl << prep_history_gfdl_EOF
+#   mkdir -p $outputDirRemoteHistory/history
+#   cd $outputDirRemoteHistory/history
+##   ln -s /archive/Niki.Zadeh/testing_20141017/CM4_c96L48_am4a1r1_2000climo/gfdl.ncrc2-intel-prod-openmp/history/${currentSeg}.nc .
+#   ln -s /archive/Niki.Zadeh/ulm_prerelease_plus_LowSens_Drag_mom6_2014.11.17/CM4i_c96L48_am4a1r1_2000climo/gfdl.ncrc2-intel-prod-openmp/history/${currentSeg}.nc .
+#prep_history_gfdl_EOF
+#
+#   msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prep_history -q stage -l walltime=0:00:05 -l size=1 prep_history_gfdl
+#
 
 
 alias runCommand 'touch dummy_history_${currentSeg}.nc;touch some_dummy_text.out;mkdir RESTART;touch RESTART/dummy_restart.res.nc;sleep 300'
