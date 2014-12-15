@@ -22,7 +22,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2001/XInclude">
-   <property name="RELEASE"      value="ulm_prerelease"/> <!-- CVS tag for shared source code -->
+   <property name="RELEASE"      value="ulm"/> <!-- CVS tag for shared source code -->
    <property name="MOM6_DATE"    value="2014.11.17"/>     <!-- git tag date for MOM6 source code -->
    <property name="FRE_STEM"     value="$(RELEASE)_mom6_$(MOM6_DATE)"/>
    <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/> <!-- git tag for MOM6 source code -->
@@ -52,7 +52,7 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
 
 
    <!--Users need not change the following properties -->
-   <property name="reference_tag"  value="ulm_prerelease"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
+   <property name="reference_tag"  value="ulm"/> <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
    <property name="PROG_MAIN"   value="coupler/coupler_main.o"/>
    <property name="LIBS_ROOT"   value="MOM6_SIS_libs_compile"/>
    <property name="FMS_LIB_DIR" value="./$(LIBS_ROOT)/$(platform)-$(target)/exec"/>
@@ -162,9 +162,9 @@ frerun  -x OM4.xml -p ncrc2.intel -t prod OM4_SIS2_baseline -r basic
            module load jpk-analysis/0.0.4
            module load $(FRE_VERSION)
            module load git
-           #Some tricks to use the refineDiag and analysis scripts from a checkout of MOM6 at gfdl 
            setenv FREVERSION $(FRE_VERSION)           
            setenv NBROOT $(NB_ROOT)
+           /home/Niki.Zadeh/nnz_tools/bin/verify -m $(MOM6_GIT_TAG) -x user/nnz/ulm 
          ]]></csh>
 <!--The following are not used, but needed by fre -->
      <property name="SGI_FLAGS" value=""/>
@@ -555,27 +555,12 @@ LAYOUT_EOF
 # Copy MOM6 input files needed for postprocessing  to GFDL (waiting for FRE to do this for us)
 if ( $?flagOutputXferOn && $?flagOutputPostProcessOn ) then
   #trick to copy MOM6 directory but avoid traversing the .datasets links
-  tar cvf mom6.tar -C $(MOM6_EXAMPLES) .
-cat >  prepost_gfdl << untar_at_gfdl_EOF
-   mkdir -p $(NB_ROOT)
-   cd $(NB_ROOT)
-   module load gcp
-   gcp gaea:$workDir/mom6.tar .
-   if( -e mom6.tar ) then
-     mkdir mom6
-     tar xvf mom6.tar -C mom6
-   else
-     git clone --recursive -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
-   endif
-untar_at_gfdl_EOF
-
-   msub -m n -j oe -r y -S /bin/tcsh -W umask=022 -l partition=gfdl -N ${FRE_JOBID}_prepost -q stage -l walltime=1:00:00 -l size=1 prepost_gfdl
-#If gcp preserved permissions we could do the following instead of the above msub
-#  mkdir mom6
-#  tar xvf mom6.tar -C ./mom6
-#  \rm mom6/.datasets
-#  gcp --batch -cd -r --sync mom6 gfdl:$(NB_ROOT)/
-
+  tar cvf mom6.tar --exclude='.datasets' -C $(MOM6_EXAMPLES) . > /dev/null
+  #tar cvf mom6.tar  --exclude='.datasets' --exclude='src' --exclude='INPUT'  -C $(MOM6_EXAMPLES) . > /dev/null
+  mkdir mom6
+  tar xvf mom6.tar -C ./mom6 > /dev/null
+  module switch gcp/2.2 gcp/2.3
+  gcp --batch -cd -r --sync mom6 gfdl:$(NB_ROOT)/
 endif
 
 
