@@ -2149,15 +2149,15 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
-        <run days="8"   npes="432"  runTimePerJob="02:30:00"/>
+        <run days="8"   npes="432" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4"  npes="432"  runTimePerJob="02:30:00"/>
-        <run days="8"    npes="864"  runTimePerJob="02:30:00"/>
+        <run days="4 4"  npes="432" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
+        <run days="8"    npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
       </regression>
 
       <regression name="restarts">
-        <run days="4 4" npes="432"  runTimePerJob="02:30:00"/>
+        <run days="4 4" npes="432" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
       </regression>
       
       <regression name="timings">
@@ -2285,15 +2285,15 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
-        <run days="8" npes="864" runTimePerJob="01:00:00"/>
+        <run days="8" npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4" npes="864" runTimePerJob="01:00:00"/>
-        <run days="8" npes="1152" runTimePerJob="01:00:00"/>
+        <run days="4 4" npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
+        <run days="8" npes="1152" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
 
       <regression name="restarts">
-        <run days="4 4" npes="864" runTimePerJob="01:00:00"/>
+        <run days="4 4" npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
       <regression name="timing">
         <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
@@ -2385,10 +2385,10 @@ Experiment name = $(name)
     
     <runtime>
       <regression name="basic">
-        <run days="8"   npes="870"  runTimePerJob="02:30:00"/>
+        <run days="8"   npes="870" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4"  npes="870"  runTimePerJob="02:30:00"/>
+        <run days="4 4"  npes="870" overrideParams="xgrid_nml:make_exchange_reproduce=.true."  runTimePerJob="02:30:00"/>
       </regression>
       <regression name="timing">
         <run days="8"   npes="1740"  runTimePerJob="02:30:00"/>
@@ -2577,15 +2577,15 @@ Experiment name = $(name)
         <segment simTime="12" units="months" runTime="5:20:00"/>
       </production>
       <regression name="basic">
-        <run days="8"   npes="864" runTimePerJob="01:00:00"/>
+        <run days="8"   npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
       <regression name="rts">
-        <run days="4 4"   npes="864" runTimePerJob="01:00:00"/>
-        <run days="8"   npes="1152" runTimePerJob="01:00:00"/>
+        <run days="4 4"   npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
+        <run days="8"   npes="1152" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
       
       <regression name="restarts">
-        <run days="4 4" npes="864" runTimePerJob="01:00:00"/>
+        <run days="4 4" npes="864" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:00:00"/>
       </regression>
       <regression name="timing">
         <run months="1"   npes="864"  runTimePerJob="02:30:00"/> 
@@ -2730,16 +2730,16 @@ communityExperimentName="$(name)">
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1584" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="1584" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="1584" runTimePerJob="01:20:00"/><!---->
-        <run days="10" npes="3168" runTimePerJob="00:20:00"/><!---->
+        <run days="5 5" npes="1584" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="3168" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="00:20:00"/><!---->
      </regression>
 
       <regression name="restarts">
-        <run days="5 5" npes="1584" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="1584" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
 
@@ -2878,16 +2878,16 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1728" runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
+        <run days="10" npes="1728"  overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="1728" runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
-	<run days="10" npes="3456" runTimePerJob="00:30:00"/>
+        <run days="5 5" npes="1728" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!--npes= 1728  main_loop= 1788.911409  ATM= 1633.894547  OCN= 1701.778858  SYPD= 1.32322-->
+	<run days="10" npes="3456" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="00:30:00"/>
       </regression>
 
       <regression name="restarts">
-        <run days="5 5" npes="1728" runTimePerJob="01:20:00"/>
+        <run days="5 5" npes="1728" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <regression name="bigrts">
@@ -3390,17 +3390,17 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="05:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <regression name="rts"> 
-        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
-        <run days="10"  npes="924" runTimePerJob="01:20:00"/><!---->
-        <run days="10"  npes="1878" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
+        <run days="10"  npes="924" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
+        <run days="10"  npes="1878" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="restarts">
-        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="timing">
@@ -4107,16 +4107,16 @@ OVERRIDE_EOF
         <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
-        <run days="10"  npes="924" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
+        <run days="10"  npes="924" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <regression name="restarts">
-        <run days="5 5" npes="900" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="900" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m10d_900pe/restart/00010111.tar"/>
@@ -4337,10 +4337,10 @@ set restart_flag = 'r'
         <segment simTime="12" units="months" runTime="03:00:00"/>
       </production>
       <regression name="basic">
-        <run days="10" npes="1878" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="1878" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="1878" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="1878" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/archive/1x0m10d_1878pe/restart/00010111.tar"/>
@@ -5070,11 +5070,11 @@ set restart_flag = 'r'
 
     <runtime>
       <regression name="basic">
-        <run days="10" npes="2752" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="2752" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="2752" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="2752" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
      </regression>
     </runtime>
 
@@ -5265,11 +5265,11 @@ set restart_flag = 'r'
 
     <runtime>
       <regression name="basic">
-        <run days="10" npes="3456" runTimePerJob="01:20:00"/><!---->
+        <run days="10" npes="3456" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
       </regression>
 
       <regression name="rts"> <!--fits on t1-->
-        <run days="5 5" npes="3456" runTimePerJob="01:20:00"/><!---->
+        <run days="5 5" npes="3456" overrideParams="xgrid_nml:make_exchange_reproduce=.true." runTimePerJob="01:20:00"/><!---->
      </regression>
 
       <regression name="timing">
