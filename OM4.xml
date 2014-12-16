@@ -837,16 +837,6 @@ touch $work/INPUT/SIS_override
         <timeAverage source="annual"  interval="$(CHUNK_LENGTH_B)"/>
       </component>
 
-      <!--The following mdbi_logger component is a trial to make the db ingestor run when the yearly data arrives
-          in order to update the "Monitoring" section of the DB.
-          The intention is to do nothing else besides that update. We do not really want an annual timeseries/timeaverage.-->
-      <component type="mdbi_logger"   start="$(PP_START_YEAR)">
-        <timeSeries freq="annual"  chunkLength="1yr" source="ocean_annual">
-         <variables>salt_flux</variables>
-         <analysis switch="on" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
-        </timeSeries>
-      </component>
-
      </postProcess>
 
 </experiment>
