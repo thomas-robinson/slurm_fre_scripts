@@ -10,8 +10,8 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-8
 # .. module load git
-# .. mkdir -p $home/awg/ulm_prerelease
-# .. cd $home/awg/ulm_prerelease
+# .. mkdir -p $home/awg/ulm
+# .. cd $home/awg/ulm
 # .. git clone -b awg_v20141124 http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_v20141124
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
@@ -34,7 +34,7 @@
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="ulm_prerelease"/>                <!-- CVS tag for source code -->
+  <property name="RELEASE" value="ulm"/>                <!-- CVS tag for source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="MOM6_GIT_TAG" value="dev/master/2014.11.17"/>  <!-- git tag for MOM6 source code -->
   <property name="MOM6_EXAMPLES"  value="$root/cm4p3_v20141124/src/mom6"/>
