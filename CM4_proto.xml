@@ -112,12 +112,12 @@ be controlled by changing properties below.
   <property name="EXP_CLIMO_END"   value="0030"/>
   <property name="EXP_CLIMO_LEN"   value="30"/>
   <property name="ANA_CLIMO_START" value="0001"/>
-  <property name="ANA_CLIMO_END"   value="0010"/>
-  <property name="ANA_CLIMO_LEN"   value="10yr"/>
+  <property name="ANA_CLIMO_END"   value="0030"/>
+  <property name="ANA_CLIMO_LEN"   value="30yr"/>
   <property name="PP_CLIMO_CHUNK"  value="5yr"/>
-  <property name="PP_CLIMO_CHUNK_B" value="20yr"/>
+  <property name="PP_CLIMO_CHUNK_B" value="30yr"/>
   <property name="PP_OCEAN_CHUNK"   value="5yr"/> 
-  <property name="PP_OCEAN_CHUNK_B" value="20yr"/> 
+  <property name="PP_OCEAN_CHUNK_B" value="30yr"/> 
 
 
 <!-- Reference release tag for existing files in the archives for answer comparison. Used in "REFERENCE" property. -->
@@ -3125,6 +3125,9 @@ OVERRIDE_EOF
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="3429" runTime="12:00:00">
         <segment simTime="12" units="months" runTime="12:00:00"/>
       </production>
+      <regression name="basic">
+        <run days="10" npes="3429" runTimePerJob="02:20:00"/>
+      </regression>
     </runtime>
 
  </experiment>
