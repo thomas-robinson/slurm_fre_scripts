@@ -1136,6 +1136,38 @@ Experiment name = $(name)
 
   </experiment>
 
+  <experiment name="c96L48_am4a3_sw_upd05" inherit="c96L48_am4a3">
+    <description>
+
+Configuration derived from "c96L48_am4a3", but with the following updates:
+- SW water vapor continuum from David is enabled
+- slight retuning of the radiation balance (beta_rad = 0.5)
+
+This is the atmosphere in the coupled experiment
+"CM4_c96L48_am4a3_sw05_2000"
+
+    </description>
+    <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.5,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="esfsw_driver_nml">
+        do_sw_continuum = .true.
+      </namelist>
+      <namelist name="esfsw_parameters_nml">
+        sw_resolution = 'med',
+        sw_diff_streams = 1
+      </namelist>
+    </input>
+  </experiment>
+
   <experiment name="c192L48_am4a3" inherit="cm4p3_v20141222">
 
 <!-- MDBI -->
@@ -1229,6 +1261,38 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='c192_amip_postprocess']/postProcess/node())"/>
     </postProcess>
 
+  </experiment>
+
+  <experiment name="c192L48_am4a3_sw_upd04" inherit="c192L48_am4a3">
+    <description>
+
+Configuration derived from "c192L48_am4a3", but with the following updates:
+- SW water vapor continuum from David is enabled
+- slight retuning of the radiation balance (beta_rad = 0.35)
+
+This is the atmosphere in the coupled experiment
+"CM4_c192L48_am4a3_sw04_2000"
+
+    </description>
+    <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.35,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="esfsw_driver_nml">
+        do_sw_continuum = .true.
+      </namelist>
+      <namelist name="esfsw_parameters_nml">
+        sw_resolution = 'med',
+        sw_diff_streams = 1
+      </namelist>
+    </input>
   </experiment>
 
   <experiment name="c96L48_am4b3" inherit="cm4p3_v20141222">
@@ -1909,6 +1973,35 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
     </input>
   </experiment>
 
+  <experiment name="c96L48_am4a3_sw_upd05_2000climo" inherit="c96L48_am4a3_2000climo">
+    <description>
+
+2000climo configuration of c96L48_am4a3_sw_upd05
+
+This is the atmosphere in the coupled experiment
+"CM4_c96L48_am4a3_sw05_2000"
+
+    </description>
+    <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.5,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="esfsw_driver_nml">
+        do_sw_continuum = .true.
+      </namelist>
+      <namelist name="esfsw_parameters_nml">
+        sw_resolution = 'med',
+        sw_diff_streams = 1
+      </namelist>
+    </input>
+  </experiment>
 
   <experiment name="c192L48_am4a3_2000climo" inherit="cm4p3_v20141222">
 
@@ -2014,6 +2107,36 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
     </description>
     <input>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p3_2000climo_p2K.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c192L48_am4a3_sw_upd04_2000climo" inherit="c192L48_am4a3_2000climo">
+    <description>
+
+2000climo configuration of c192L48_am4a3_sw_upd04
+
+This is the atmosphere in the coupled experiment
+"CM4_c192L48_am4a3_sw04_2000"
+
+    </description>
+    <input>
+      <namelist name="entrain_nml">
+        convect_shutoff = .true.,
+        apply_entrain = .true.,
+        parcel_buoy   = 0.25,
+        parcel_option = 2,
+        beta_rad      = 0.35,
+        Ashear        = 25.0, 
+        radperturb    = 0.10, 
+        critjump      = 0.10,
+      </namelist>
+      <namelist name="esfsw_driver_nml">
+        do_sw_continuum = .true.
+      </namelist>
+      <namelist name="esfsw_parameters_nml">
+        sw_resolution = 'med',
+        sw_diff_streams = 1
+      </namelist>
     </input>
   </experiment>
 
