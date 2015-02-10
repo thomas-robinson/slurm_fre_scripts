@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20141222 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20141222b revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm
 # .. cd $home/awg/ulm
-# .. git clone -b awg_v20141222 http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_v20141222
+# .. git clone -b awg_v20141222b http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_v20141222
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
