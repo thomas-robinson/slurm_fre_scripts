@@ -3193,6 +3193,9 @@ OVERRIDE_EOF
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="3584" runTime="16:00:00">
         <segment simTime="12" units="months" runTime="05:00:00"/>
       </production>
+      <regression name="basic">
+        <run days="10" npes="3584" runTimePerJob="02:00:00"/>
+      </regression>
    </runtime>
 
   </experiment>
