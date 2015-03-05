@@ -468,7 +468,6 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <!--<dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/newland/initcond_with_newveg.remapped_to_c96_OM4_025.v20150120.tar</dataSource>-->
-      </dataFile>
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C96L48_LM3_OM4_025_grid_southshifted_19810101.remapped.v20150120.tar</dataSource>
       </dataFile>
     </input>
