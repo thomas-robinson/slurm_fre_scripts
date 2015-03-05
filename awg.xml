@@ -269,7 +269,14 @@ Experiment to build executable.
 * Code updates from Jhon Dunne for new surface fluxes options (drag_min_jpd_20141030)
 * Code update for icebergs to output less warnings adjustable_berg_warn_linits_jpk_20141003
 
-* 
+* WARNING : NEED ADDITIONAL CODE MODIFICATIONS FROM mING zHAO THAT HAVE NOT BEEN
+  CHECKED IN YET. To get them
+
+cd $HOME/awg/ulm/cm4p3_v20150301/src
+cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/flux_exchange.F90 coupler/
+cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmos_model.F90 atmos_coupled/
+cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmosphere.F90 atmos_cubed_sphere/driver/coupled/
+
     </description>
 
     <component name="fms" paths="shared">
@@ -477,7 +484,7 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <!--<dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/ic/c96L32_initcond.nc.tar</dataSource>-->
-        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/awg_C96L32_LM3_OM4_025_grid_southshifted_19810101.remapped.v20150224.tar</dataSource>
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C96L32_LM3_OM4_025_grid_southshifted_19810101.remapped.v20150224.tar</dataSource>
       </dataFile>
     </input>
   </experiment>
