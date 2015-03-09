@@ -96,6 +96,12 @@
         do_legacy_strat_cloud = .false.,
 /
 
+
+&rotstayn_klein_mp_nml
+        rk_act_only_if_ql_gt_qmin = .true.
+/
+
+
  &strat_cloud_nml
         use_online_aerosol = .true.,
         U00 = 0.80,
