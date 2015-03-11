@@ -339,6 +339,7 @@
 /
 
  &soil_nml
+      allow_neg_wl  = .true.
       init_w        = 500.
       albedo_to_use = 'brdf-maps'
       uptake_to_use = 'darcy2d-linearized'
