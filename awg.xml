@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150301 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150313 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,23 +12,23 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm
 # .. cd $home/awg/ulm
-# .. git clone -b awg_v20150301 http://gitlab.gfdl.noaa.gov/mdt/xml.git mdt_xml_v20150301
+# .. git clone -b awg_v20150313 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150313
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-9
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p3_v20150301
+# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p4_v20150313
 
 # To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a4
+# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4a4
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg.xml -p ncrc2.intel -t openmp c192L48_am4a4
+# .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4a4
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t ope
+# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4a4
 
 -->
 
@@ -43,8 +43,8 @@
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm/xml_v20150301/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm/xml_v20150301/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm/xml_v20150313/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm/xml_v20150313/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -259,23 +259,20 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p3_v20150301">
+  <experiment name="cm4p4_v20150313">
     <description>
 
 Experiment to build executable.
 * ulm code base
-* Chris Golaz' total activation bug fix (ulm_total_act_fix_cjg)
-* Ming Zhao's changes for low sensitivity configuration. Changes answers for all! (lowsen20141106_miz)
-* Code updates from Jhon Dunne for new surface fluxes options (drag_min_jpd_20141030)
+* Code updates from John Dunne for new surface fluxes options (drag_min_jpd_20141030)
+* Code changes from Ming Zhao for low sensitivity configuration. Changes answers for all! (lowsen20141106_miz)
+* Chris Golaz total activation bug fix (ulm_total_act_fix_cjg)
+* Chris Golaz bug fix to enable do_gust_cv and convect_shutoff options. May change answer.
+* David Paynter radiation bug fix for debug mode
 * Code update for icebergs to output less warnings adjustable_berg_warn_linits_jpk_20141003
-
-* WARNING : NEED ADDITIONAL CODE MODIFICATIONS FROM mING zHAO THAT HAVE NOT BEEN
-  CHECKED IN YET. To get them
-
-cd $HOME/awg/ulm/cm4p3_v20150301/src
-cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/flux_exchange.F90 coupler/
-cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmos_model.F90 atmos_coupled/
-cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmosphere.F90 atmos_cubed_sphere/driver/coupled/
+* Ming Zhao code changes for am4f3 (am4f3_20150225_miz and git tags user/cjg/am4f3_20150225_miz). Changes answers.
+* Code update from Huan Guo to merge moist_processes.F90 changes (am4f3_convect_fix_20150303_h1g)
+* Huan Guo code changes to scale aerosol wet deposition using namelist parameter (wetDep_scale_20150311_h1g)
 
     </description>
 
@@ -312,7 +309,7 @@ cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmosphere.F90 atmos_
            # David Paynter fix to avoid the radiation crash in debug mode. This will change answers.
            cvs update -r fix_debug_crash_Paynter_nnz  ./atmos_param/sea_esf_rad/esfsw_driver.F90
 
-           #Ming Zhao code changes for am4f3 
+           # Ming Zhao code changes for am4f3 
            cvs update -r am4f3_20150225_miz atmos_param/shallow_cu/conv_plumes_k.F90 
            cvs update -r am4f3_20150225_miz atmos_param/shallow_cu/conv_utilities_k.F90 
            cvs update -r am4f3_20150225_miz atmos_param/shallow_cu/conv_closures.F90  
@@ -326,6 +323,8 @@ cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmosphere.F90 atmos_
            # combining Chris Golaz and Ming Zhao code changes for "atmos_param/moist_processes/moist_processes.F90"  
            cvs update -r am4f3_convect_fix_20150303_h1g  atmos_param/moist_processes/moist_processes.F90 
 
+            # Huan Guo code changes to scale aerosol wet deposition using namelist parameter
+           cvs update -r wetDep_scale_20150311_h1g atmos_shared/tracer_driver/atmos_tracer_utilities.F90
         </csh>
       </source>
       <compile>
@@ -333,12 +332,18 @@ cp /ncrc/home2/Ming.Zhao/awg/ulm/input_awg_ulm/awg_updates/atmosphere.F90 atmos_
       </compile>
     </component>
 
-    <component name="atmos_dyn" requires="fms atmos_phys" paths="atmos_coupled atmos_cubed_sphere">
-      <description domainName="CubedSphere" communityName="CubedSphere" communityVersion="$(RELEASE)" communityGrid=""/>
-      <source>
-        <codeBase version="$(RELEASE)">
-          atmos_coupled cubed_sphere_coupled
-        </codeBase>
+    <component name="atmos_dyn" paths="atmos_drivers/coupled
+                                       atmos_cubed_sphere/driver/coupled
+                                       atmos_cubed_sphere/model
+                                       atmos_cubed_sphere/model_nh_null
+                                       atmos_cubed_sphere/tools" requires="fms atmos_phys">
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="user/cjg/am4f3_20150225_miz">atmos_cubed_sphere.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_cubed_sphere && git checkout user/cjg/am4f3_20150225_miz )
+          git clone --recursive -b user/cjg/am4f3_20150225_miz git@gitlab.gfdl.noaa.gov:fms/atmos_drivers.git
+         ]]>
+        </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
@@ -436,16 +441,12 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
     </component>
 
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ocean_shared">
-      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>  
+      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(RELEASE)"> coupler.git </codeBase>
-        <csh><![CDATA[
-        ( cd coupler && git checkout $(RELEASE) )
-        ]]>
-        </csh>
+        <codeBase version="user/cjg/am4f3_20150225_miz"> coupler.git </codeBase>
       </source>
       <compile>
-        <cppDefs><![CDATA[$(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'"]]></cppDefs>
+        <cppDefs>$(F2003_FLAGS)</cppDefs>
       </compile>
     </component>
 
@@ -1149,7 +1150,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4a4" inherit="cm4p3_v20150301">
+  <experiment name="c96L32_am4a4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1247,7 +1248,7 @@ Experiment name = $(name)
 
 
 
-  <experiment name="c192L32_am4a4" inherit="cm4p3_v20150301">
+  <experiment name="c192L32_am4a4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1345,7 +1346,7 @@ Experiment name = $(name)
 
 
 
-  <experiment name="c96L48_am4a4" inherit="cm4p3_v20150301">
+  <experiment name="c96L48_am4a4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1443,7 +1444,7 @@ Experiment name = $(name)
   </experiment>
 
 
-  <experiment name="c192L48_am4a4" inherit="cm4p3_v20150301">
+  <experiment name="c192L48_am4a4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1546,7 +1547,7 @@ Experiment name = $(name)
 
 
 
-  <experiment name="c96L48_am4b4" inherit="cm4p3_v20150301">
+  <experiment name="c96L48_am4b4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1642,7 +1643,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4b4" inherit="cm4p3_v20150301">
+  <experiment name="c192L48_am4b4" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1739,7 +1740,7 @@ Experiment name = $(name)
 
 
 
-  <experiment name="c96L48_am4f3" inherit="cm4p3_v20150301">
+  <experiment name="c96L48_am4f3" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1835,7 +1836,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L48_am4f3" inherit="cm4p3_v20150301">
+  <experiment name="c192L48_am4f3" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -1944,7 +1945,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4a4_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c96L32_am4a4_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -2066,7 +2067,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4a4_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c192L32_am4a4_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -2187,7 +2188,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c96L48_am4a4_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c96L48_am4a4_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -2298,7 +2299,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L48_am4a4_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c192L48_am4a4_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -2409,7 +2410,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c96L48_am4f3_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c96L48_am4f3_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
@@ -2539,7 +2540,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L48_am4f3_2000climo" inherit="cm4p3_v20150301">
+  <experiment name="c192L48_am4f3_2000climo" inherit="cm4p4_v20150313">
 
 <!-- MDBI -->
     <description
