@@ -212,7 +212,7 @@
 /
 
  &wetdep_nml
-        scale_aerosol_wetdep = 1.0
+        scale_aerosol_wetdep = 0.75
 /
 
 
