@@ -212,23 +212,15 @@
 "dynamics",  "simpleSO4", "SO4", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "simpleH2O2","H2O2","atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "simpleDMS", "DMS", "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "simpleMSA", "MSA", "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "SOA",    "SOA",    "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "dust1",  "dust1",  "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "dust2",  "dust2",  "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "dust3",  "dust3",  "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "dust4",  "dust4",  "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "dust5",  "dust5",  "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "ssalt1", "ssalt1", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "ssalt2", "ssalt2", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "ssalt3", "ssalt3", "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "ssalt4", "ssalt4", "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "ssalt5", "ssalt5", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "omphil", "omphil", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "omphob", "omphob", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "bcphil", "bcphil", "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "bcphob", "bcphob", "atmos_tracer", "all", .true.,  "none", 2
-"dynamics",  "radon",  "radon",  "atmos_tracer", "all", .true.,  "none", 2
 
 # ############
 # atmos_scalar
