@@ -513,7 +513,7 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
       </dataFile>
       <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p3</dataSource>
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/anthro_so2.1859_2010.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.simple.so2.1x1.1859_2020.nc</dataSource>
