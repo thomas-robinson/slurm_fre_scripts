@@ -524,6 +524,9 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
       </dataFile>
+      <dataFile label="input" target="INPUT/AM4_201503" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/am4_optical_table_20150325.dat</dataSource>
+      </dataFile>
 
       <diagTable>
 $name
