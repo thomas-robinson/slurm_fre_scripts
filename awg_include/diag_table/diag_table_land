@@ -194,3 +194,12 @@
 # land daily variables used in post-processing "refinement"
 "soil",  "soil_liq",   "soil_liq",     "land_daily",  "all", .true., "-1 -1 -1 -1 0 0.1", 2
 "soil",  "soil_ice",   "soil_ice",     "land_daily",  "all", .true., "-1 -1 -1 -1 0 0.1", 2
+# land monthly instant output
+"land_month_inst",       1,  "months", 1, "days", "time"
+#"land",    "area",       "area",       "land_month_inst",  "all", .false., "none", 2
+"land",    "LWS",        "LWS",        "land_month_inst",  "all", .false., "none", 2
+"land",    "LWSr",       "LWSr",       "land_month_inst",  "all", .false., "none", 2
+"land",    "FWS",        "FWS",        "land_month_inst",  "all", .false., "none", 2
+"land",    "FWSr",       "FWSr",       "land_month_inst",  "all", .false., "none", 2
+"land",    "HS",         "HS",         "land_month_inst",  "all", .false., "none", 2
+"land",    "HSr",        "HSr",        "land_month_inst",  "all", .false., "none", 2
