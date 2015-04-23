@@ -96,9 +96,11 @@
 "moist",     "IWP_all_clouds",                 "IWP_all_clouds",   "atmos_month",     "all", .true.,  "none", 2
 "moist",     "tot_liq_amt",                    "tot_liq_amt",      "atmos_month",     "all", .true.,  "none", 2
 "moist",     "tot_ice_amt",                    "tot_ice_amt",      "atmos_month",     "all", .true.,  "none", 2
+"moist",     "mc_full",                        "mc_full",          "atmos_month",     "all", .true.,  "none", 2
 "moist",     "prc_deep_donner",                "prc_deep_donner",  "atmos_month",     "all", .true.,  "none", 2
 "moist",     "prc_mca_donner",                 "prc_mca_donner",   "atmos_month",     "all", .true.,  "none", 2
 "moist",     "uw_precip",                      "uw_precip",        "atmos_month",     "all", .true.,  "none", 2
+"uw_conv",   "cbmf_uwc",                       "cbmf_uwc",         "atmos_month",     "all", .true.,  "none", 2
 "uw_conv",   "prec_uwd",                       "prec_uwd",         "atmos_month",     "all", .true.,  "none", 2
 
 # temperature tendencies
@@ -151,6 +153,11 @@
 "cloudrad",  "reff_modis2",                    "reff_modis2",      "atmos_month",     "all", .true.,  "none", 2
 "strat",     "droplets",                       "droplets",         "atmos_month",     "all", .true.,  "none", 2
 "strat",     "aliq",                           "aliq",             "atmos_month",     "all", .true.,  "none", 2
+
+# PBL height diagnosded from Lock scheme
+"vert_turb", "z_pbl",                          "z_pbl",            "atmos_month",     "all", .true.,  "none", 2
+# PBL height diagnosded from critical bulk Ri
+"vert_turb", "z_Ri_025",                       "z_Ri_025",         "atmos_month",     "all", .true.,  "none", 2
 
 # extra variables that may be useful with TKE scheme
 "dynamics",  "tke",                            "tke",              "atmos_month",     "all", .true.,  "none", 2
