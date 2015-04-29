@@ -8,7 +8,7 @@
 <!-- QUICK START GUIDE:
 
 # To checkout this xml (you should have done this already)
-# .. module load fre/bronx-9
+# .. module load fre/bronx-10
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
@@ -21,7 +21,7 @@
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
-# .. module load fre/bronx-9
+# .. module load fre/bronx-10
 # .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150522
 
 # To run regression test (with staging):
@@ -41,7 +41,7 @@
   <property name="MOM6_DATE" value="2015.05.19"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
-  <property name="FRE_VERSION" value="fre/bronx-9"/>             <!-- -->
+  <property name="FRE_VERSION" value="fre/bronx-10"/>             <!-- -->
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="off"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
@@ -320,22 +320,26 @@ Experiment to build executable.
 
 <!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
         <csh><![CDATA[
-cat >Makefile.cpp <<EOF
-CPPDEFS =
+sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
+CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO $(F2003_FLAGS)
 FRETARGET = $(target)
+
 ifneq (\$(findstring hdf5,\${FRETARGET}),)
 else
   CPPDEFS += -Duse_LARGEFILE
 endif
+
+vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
+
+land/%.f90: %.F90
+<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
+
 EOF
-echo vpath %.F90 `find $cwd/land_lad2 -type d` >> Makefile.cpp
-echo cpp_land/%.f90: %.F90 >> Makefile.cpp
-/bin/echo -e '\tcpp ${CPPDEFS} -C -v -I shared/include -o $@ $<' >> Makefile.cpp
-mkdir -p cpp_land
-foreach foo ( `find land_lad2 -type f -name \*.F90` )
-  make -f Makefile.cpp cpp_land/$foo:t:r.f90
+
+foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
+  make -f land/Makefile-cpp land/$foo:t:r.f90
 end
-find cpp_land -type f -name \*.f90 > pathnames_land_lad2
+find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
           ]]>
         </csh>
       </compile>
