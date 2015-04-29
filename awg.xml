@@ -1809,14 +1809,22 @@ as in lm3p1 (Milly et al., 2014)
        tau_smooth_ncm = 22.0
        rav_lit_bwood = 300.
       </namelist>
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+
+      <!-- Modified input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p5_faero']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='L32_data']/input/node())"/>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">/lustre/f1/unswept/Sergey.Malyshev/awg/IC/awg_C96L32_LM3_OM4_025_grid_lm3p2_19810101.remapped.v20150322.tar</dataSource>
+      </dataFile>
+      <diagTable>
+$name
+$baseDate
+
+      </diagTable>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_atmos_faero</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_land</dataSource>
       </dataFile>
     </input>
   </experiment>
