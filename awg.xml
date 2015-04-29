@@ -491,6 +491,22 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
     </input>
   </experiment>
 
+  <experiment name="field_table_am4p5">
+    <input>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
+  <experiment name="field_table_am4p5_faero">
+    <input>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5_faero</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
   <experiment name="common_data">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -513,9 +529,6 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
-      </dataFile>
-      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/anthro_so2.1859_2010.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.simple.so2.1x1.1859_2020.nc</dataSource>
@@ -566,9 +579,6 @@ $baseDate
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
-      </dataFile>
-      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/anthro_so2.1859_2010.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/emissions.simple.so2.1x1.1859_2020.nc</dataSource>
@@ -1362,6 +1372,7 @@ Experiment name = $(name)
       </namelist>
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p5']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='L32_data']/input/node())"/>
@@ -1563,9 +1574,7 @@ Experiment name = $(name)
       </namelist>
 
       <!-- Modified input datasets -->
-      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
-       <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5_faero</dataSource>
-      </dataFile>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p5_faero']/input/node())"/>
       <diagTable>
 $name
 $baseDate
@@ -1802,6 +1811,7 @@ as in lm3p1 (Milly et al., 2014)
       </namelist>
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p5_faero']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='L32_data']/input/node())"/>
