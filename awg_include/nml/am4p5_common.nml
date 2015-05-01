@@ -63,7 +63,7 @@
       file_name  = 'diag_integral.out',
       time_units = 'days',
       output_interval = 1.0
-      fields_per_print_line = 5
+      fields_per_print_line = 6
 /
 
  &diag_manager_nml
