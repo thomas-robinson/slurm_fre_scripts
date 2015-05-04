@@ -969,6 +969,7 @@ touch MOM_input
       <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)"/>
       </component>
 
       <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar">
@@ -1065,6 +1066,7 @@ touch MOM_input
       <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)"/>
       </component>
 
       <component type="atmos_scalar" start="$(ANA_CLIMO_START)" source="atmos_scalar">
@@ -1161,6 +1163,7 @@ touch MOM_input
       <component type="atmos_diurnal" start="$(ANA_AMIP_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)"/>
       </component>
 
       <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar">
@@ -1257,6 +1260,7 @@ touch MOM_input
       <component type="atmos_diurnal" start="$(ANA_CLIMO_START)" source="atmos_diurnal" sourceGrid="atmos-cubedsphere" xyInterp="360,576">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)"/>
       </component>
 
       <component type="atmos_scalar" start="$(ANA_CLIMO_START)" source="atmos_scalar">
