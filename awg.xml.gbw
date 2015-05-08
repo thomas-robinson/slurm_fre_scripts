@@ -521,6 +521,9 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/common/sea_esf_dec2014.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)"> /lustre/f1/unswept/Bruce.Wyman/archive/mdt/awg/input/common/new_sea_esf_aug2013.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/lm3/lm3_data_20130815.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
