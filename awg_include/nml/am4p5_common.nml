@@ -97,7 +97,7 @@
 /
 
  &esfsw_parameters_nml
-      sw_resolution = 'med',
+      sw_code_version = 'esf2015'
       sw_diff_streams = 1
 /
 
