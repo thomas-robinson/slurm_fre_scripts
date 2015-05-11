@@ -97,8 +97,9 @@
 /
 
  &esfsw_parameters_nml
-      sw_code_version = 'esf2015'
+      sw_code_version = 'esf2015' ! replaces deprecated sw_resolution = 'med'
       sw_diff_streams = 1
+      sw_NIRVISgas_bands = 9 ! ulm's default value =9, ulm_patch=11
 /
 
  &fms_io_nml
