@@ -43,8 +43,8 @@
   <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm/xml_v20150416/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm/xml_v20150416/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="./awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="./awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
