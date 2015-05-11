@@ -8,20 +8,20 @@ module load fre/bronx-9
 # Checkout xml
 mkdir -p $home/awg/ulm
 cd $home/awg/ulm
-git clone -b awg_v20150313 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150313
+git clone -b  awg_v20150511 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
 
 # Set your group in the xml
-cd xml_v20150313
+cd xml_v20150511
 #  edit awg.xml and replace YOURGROUPLETTER with your actual group
 
 # Checkout out code and compile
-cd $home/awg/ulm/xml_v20150313
-fremake -x awg.xml -p ncrc2.intel -t openmp cm4p4_v20150313
+cd $home/awg/ulm/xml_v20150511
+fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150511
 #  follow on-screen instructions to submit compilation script
 
 # Submit regression test
-frerun -S -x awg.xml -r basic -p ncrc2.intel -t openmp c96L32_am4a4
+frerun -S -x awg.xml -r basic -p ncrc2.intel -t openmp c96L32_am4g5
 
 # Submit production experiment
-frerun -S -x awg.xml -p ncrc2.intel -t openmp c96L32_am4a4
+frerun -S -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5
 

@@ -355,6 +355,9 @@
         omna_input_name='omemisnat'
       omss_source = 'ODowd'
         omss_coef = 0.05
+      soa_source = 'add_soa'
+        gas_conc_name='C4H10',soa_filename ='gas_conc_3D_am3p9.nc',
+        soa_time_dependency_type='constant'
 /
 
  &ice_spec_nml
@@ -459,6 +462,8 @@
           biobur_emission_name(2)='so4bb',
           biobur_filename='anthro_so2.1859_2010.nc',
           biobur_time_dependency_type='fixed_year',biobur_dataset_entry=2000,1,1,0,0,
+        cloud_chem_solver="f1p"
+        pH_cloud=4.5
 /
 
  &vegn_nml
@@ -468,5 +473,12 @@
       snow_rad_to_use = 'paint-leaves'
       co2_to_use_for_photosynthesis ='prescribed'
       co2_for_photosynthesis = 368.11e-6
+      do_cohort_dynamics   = .TRUE.,              
+      do_patch_disturbance = .TRUE.,              
+      do_phenology         = .TRUE.,              
+      do_biogeography      = .TRUE.,              
+      do_seed_transport    = .TRUE.,
+      tau_smooth_ncm = 22.0
+      rav_lit_bwood = 300.
 /
 
