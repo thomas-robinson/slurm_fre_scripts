@@ -40,7 +40,7 @@
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>             <!-- -->
   <property name="ANALYSIS_SWITCH" value="on"/>
-  <property name="MDBIswitch" value="on"/>                       <!-- on/off switch for MDBI database -->
+  <property name="MDBIswitch" value="off"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
   <property name="AWG_INPUT_HOME_GAEA" value="./awg_include"/>
