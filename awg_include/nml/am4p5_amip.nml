@@ -385,7 +385,6 @@
       renormalize_sw_fluxes=.true.,
       zenith_spec = 'diurnally_varying',
       using_restart_file = .false.
-      !use_cloud_tracers_in_radiation = .false.
 /
 
  &radiative_gases_nml

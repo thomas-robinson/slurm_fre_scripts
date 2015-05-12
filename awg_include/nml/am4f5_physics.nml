@@ -16,6 +16,7 @@
  &cloud_spec_nml
         cloud_type_form = 'stratuw'
 	do_stochastic_clouds = .true.
+	use_cloud_tracers_in_radiation = .false. !from radiation in common.nml
 /
 
  &deep_conv_nml
