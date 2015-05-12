@@ -212,7 +212,7 @@ configuration.
 <!--         <src>$HOME/$(stem)/$(name)/src</src> -->
 <!--         <scripts>$HOME/$(stem)/xml_v20150416/scripts</scripts> -->
 <!--         <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout> -->
-          <root>/lustre/f1/unswept/$USER/awg_v20150416-merge</root>
+          <root>/lustre/f1/unswept/$USER/awg_v20150416-merge_testingtag</root>
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
