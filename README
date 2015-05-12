@@ -9,7 +9,7 @@ module load fre/bronx-9
 mkdir -p $home/awg/ulm
 cd $home/awg/ulm
 git clone  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
-cd $home/awg/ulm
+cd  xml_v20150511
 git checkout user/h1g/am4g5_awgxml_20150511
 
 
