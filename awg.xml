@@ -12,7 +12,9 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm
 # .. cd $home/awg/ulm
-# .. git clone -b awg_v20150511 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
+# .. git clone  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
+# .. cd $home/awg/ulm
+# .. git checkout user/h1g/am4g5_awgxml_20150511
 
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
@@ -165,7 +167,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_m</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
         <src>$HOME/$(stem)/$(name)/src</src>
         <scripts>$HOME/$(stem)/xml_v20150511/scripts</scripts>
@@ -1354,4 +1356,3 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
   </experiment>
 
 </experimentSuite>
-

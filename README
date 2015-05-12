@@ -8,7 +8,11 @@ module load fre/bronx-9
 # Checkout xml
 mkdir -p $home/awg/ulm
 cd $home/awg/ulm
-git clone -b  awg_v20150511 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
+git clone  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
+cd $home/awg/ulm
+git checkout user/h1g/am4g5_awgxml_20150511
+
+
 
 # Set your group in the xml
 cd xml_v20150511
