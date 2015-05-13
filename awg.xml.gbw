@@ -10,19 +10,19 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-9
 # .. module load git
-# .. mkdir -p $home/awg/ulm
-# .. cd $home/awg/ulm
-# .. git clone -b awg_v20150416 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150416
+# .. mkdir -p $home/awg/testing
+# .. cd $home/awg/testing
+# .. git clone -b user/gbw/awg_v20150416-merge_bronx9_testingtag http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150416-merge_bronx9_testingtag
+# .. cd xml_v20150416-merge_bronx9_testingtag
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
-# .. module load fre/bronx-9
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150416
+# .. fremake -x awg.xml -p intel -t prod,openmp cm4p5_v20150416
 
 # To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4f5
+# .. frerun -S -r basic -x awg.xml -p intel -t prod,openmp c96L32_am4f5
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
 # .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4f5
@@ -217,7 +217,6 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-    <!--  <property name="REFERENCE"           value="/lustre/f1/unswept/Garrett.Wright/referenceExperiments/awg/cm4p5_v20150416/$(name)/$(platform)-$(target)"/> -->
       <property name="REFERENCE"           value="/lustre/f1/unswept/Garrett.Wright/referenceExperiments/awg.cjg.20150508/cm4p5_v20150416/$(name)/$(platform)-$(target)"/>
 
       <csh><![CDATA[
@@ -337,7 +336,7 @@ Experiment to build executable.
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
       <source>
         <codeBase version="$(RELEASE)"> ice_sis ice_param </codeBase>
-        <csh>cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh>
+<!--         <csh>cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh> -->
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
@@ -351,8 +350,8 @@ Experiment to build executable.
 	<csh>
 <!--           #==For JPD Drag Tests== -->
 <!--           cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90 -->
-<!--           # Protection from negative soil water divergence situations -->
-<!--           cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90 -->
+          # Protection from negative soil water divergence situations
+          cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90
         </csh>
       </source>
       <compile>
