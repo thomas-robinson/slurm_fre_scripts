@@ -6,7 +6,7 @@ module load fre/bronx-9
 module load git
 mkdir -p $home/awg/testing
 cd $home/awg/testing
-git clone -b user/gbw/awg_v20150416-merge_bronx9_testingtag http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150416-merge_bronx9_testingtag
+git clone -b p5-devMergeCandidate-0  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150416-merge_bronx9_testingtag
 cd xml_v20150416-merge_bronx9_testingtag
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
