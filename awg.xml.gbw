@@ -350,8 +350,8 @@ Experiment to build executable.
 	<csh>
 <!--           #==For JPD Drag Tests== -->
 <!--           cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90 -->
-          # Protection from negative soil water divergence situations
-          cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90
+<!--           # Protection from negative soil water divergence situations -->
+<!--           cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90 -->
         </csh>
       </source>
       <compile>
