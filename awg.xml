@@ -348,10 +348,11 @@ Experiment to build executable.
       <source>
         <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
 	<csh>
-<!--           #==For JPD Drag Tests== -->
-<!--           cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90 -->
-<!--           # Protection from negative soil water divergence situations -->
-<!--           cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90 -->
+           # Protection from negative soil water divergence situations, 
+	   ## merged with testing (Ulm_Patch)  
+           cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90
+<!--           ## from Ulm base  -->
+<!--           #cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90 -->	   
         </csh>
       </source>
       <compile>
