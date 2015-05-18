@@ -1,16 +1,22 @@
  &aerosol_nml
     family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA"
-    in_family1 = F,T,F,F,F,F,F,F,F,F,F,
-    in_family2 = F,F,T,F,F,F,F,F,F,F,F,
-    in_family3 = F,F,F,F,F,F,F,T,T,F,F,
-    in_family4 = T,F,F,F,F,F,F,F,F,T,T,
-    in_family5 = F,F,F,F,T,T,T,F,F,F,F,
-    in_family6 = F,F,F,T,F,F,F,F,F,F,F,
-    in_family7 = T,T,T,T,T,T,T,T,T,T,T,
-    in_family8 = T,T,F,T,T,T,F,T,T,T,T,
-    in_family9 = F,T,T,F,F,F,F,F,F,F,F,
-    in_family10= T,F,F,F,F,F,F,F,F,T,T,
+    in_family1 = T,F,F,F,F,F,F,F,F,F,
+    in_family2 = F,T,F,F,F,F,F,F,F,F,
+    in_family3 = F,F,F,F,F,F,T,T,F,F,
+    in_family4 = F,F,F,F,F,F,F,F,T,T,
+    in_family5 = F,F,F,T,T,T,F,F,F,F,
+    in_family6 = F,F,T,F,F,F,F,F,F,F,
+    in_family7 = T,T,T,T,T,T,T,T,T,T,
+    in_family8 = T,F,T,T,T,F,T,T,T,T,
+    in_family9 = T,T,F,F,F,F,F,F,F,F,
+    in_family10= F,F,F,F,F,F,F,F,T,T,
     aerosol_data_source = "predicted"
+/
+
+ &cloud_generator_nml
+      do_inhomogeneous_clouds = .true.
+      defaultOverlap = 4
+      overlapLengthScale = 4.
 /
 
  &cloud_spec_nml
@@ -20,10 +26,10 @@
 /
 
  &deep_conv_nml
-        auto_th0_d = 0.7e-3
+        auto_th0_d = 0.2e-3
         tcrit_d    = -40.0,
         peff_l_d   = 5.0e-5
-        peff_i_d   = 11.5e-5
+        peff_i_d   = 10.e-5
         rkm_dp1 = 1.5
         rkm_dp2 = 0.001
         norder  = 1
@@ -37,6 +43,7 @@
         tau_dp_fact = 3.
         mixing_assumption_d = 4
         do_ppen_d  = .true.
+        rpen_d     = 5.0
         do_pevap_d = .true.
         cfrac_d    = 0.15
         hcevap_d   = 0.9
@@ -139,7 +146,7 @@
         use_online_aerosol = .true.,
         U00 = 0.80,
         U00_profile = .true.,
-        rthresh = 10.5,
+        rthresh = 8.0,
         Dmin = 1.0e-07,
         n_land = 150.e6,
         n_ocean = 50.e6,
@@ -147,18 +154,19 @@
         mc_thresh = 0.001,
         eros_scale = 1.e-6,
         eros_choice = .true.,
-        eros_scale_c = 3.e-6,
-        eros_scale_t = 3.e-6,
+        eros_scale_c = 3.e-5,
+        eros_scale_t = 5.e-5,
         super_choice = .true.,
         tracer_advec = .true.
         vfact = 1.0
         cfact = 1.0
         do_liq_num = .true.
         use_kk_auto = .false.
-        var_limit = 0.7
+        var_limit = 0.3
         num_mass_ratio1 = 1.0
         num_mass_ratio2 = 0.
         use_sub_seasalt = .false.
+        aerosol_activation_scheme = "total"
 /
 
  &strat_clouds_W_nml
@@ -166,6 +174,7 @@
 /
 
  &uw_closure_nml
+        do_old_cbmfmax = .false.,
         rkfre    = 0.2
         wcrit_min= 0.2
 /
@@ -188,6 +197,7 @@
         do_rescale      = .true.
         use_sub_seasalt = .false.
         use_new_let     = .true.
+        do_subcloud_flx = .true.
         plev_cin        = 60000.
         src_choice      = 1
         wrel_min        = 1.
@@ -208,13 +218,14 @@
         cgust0          = 2.
         cgust_max       = 4.
         sigma0          = 0.5
+        tracer_check_type = 1
 /
 
  &uw_plume_nml
         auto_th0 = 0.2e-3,
         tcrit    = -40.0,
         peff_l   = 5.0e-5
-        peff_i   = 11.5e-5
+        peff_i   = 10.e-5
         rmaxfrac = 0.15
         frac_drs = 0.0
         wmin     = 0.5
@@ -232,7 +243,7 @@
 /
 
  &wetdep_nml
-        scale_aerosol_wetdep = 0.75
+        scale_aerosol_wetdep = 1.
 /
 
 

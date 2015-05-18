@@ -1,25 +1,31 @@
 # AWG quick-start. For more information
 # http://cobweb.gfdl.noaa.gov/~cjg/awg
 
-# To checkout this xml (you should have done this already)
-module load fre/bronx-9
+## TODO, edit
+
+# Load modules
 module load git
-mkdir -p $home/awg/testing
-cd $home/awg/testing
-git clone -b p5-devMergeCandidate-0  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150416-merge_bronx9_testingtag
-cd xml_v20150416-merge_bronx9_testingtag
+module load fre/bronx-9
 
-# Change YOURGROUPLETTER to your group, such as f, w, o...
-      <project>gfdl_YOURGROUPLETTER</project>
+# Checkout xml
+mkdir -p $home/awg/ulm
+cd $home/awg/ulm
+git clone  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
+cd  xml_v20150511
+git checkout user/h1g/am4g5_awgxml_20150511
 
-# To check out source code and compile:
-fremake -x awg.xml -p intel -t prod,openmp cm4p5_v20150416
+# Set your group in the xml
+cd xml_v20150511
+#  edit awg.xml and replace YOURGROUPLETTER with your actual group
 
-# To run regression test (with staging):
-frerun -S -r basic -x awg.xml -p intel -t prod,openmp c96L32_am4f5
+# Checkout out code and compile
+cd $home/awg/ulm/xml_v20150511
+fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150511
+#  follow on-screen instructions to submit compilation script
 
-# To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4f5
+# Submit regression test
+frerun -S -x awg.xml -r basic -p ncrc2.intel -t openmp c96L32_am4g5
 
-# To run fredb after an experiment is finished to manually add it to the database:
-fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4f5
+# Submit production experiment
+frerun -S -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5
+
