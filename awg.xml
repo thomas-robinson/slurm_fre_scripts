@@ -267,7 +267,8 @@ Experiment to build executable.
           <codeBase version="$(RELEASE)">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout p5-devMergeCandidate-0 )
-            ( cd atmos_param && git checkout p5-devMergeCandidate-0 )
+            #( cd atmos_param && git checkout p5-devMergeCandidate-0 )
+            ( cd atmos_param && git checkout user/gbw/awg_v20150511-merge )
            ]]>
           </csh>
         </source>
@@ -310,15 +311,11 @@ Experiment to build executable.
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
 <!--         <codeBase version="$(RELEASE)"> land_lad2 </codeBase> -->
-        <codeBase version="ulm"> land_lad2 </codeBase>
+        <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
 	<csh>
 <!--            # Protection from negative soil water divergence situations,  -->
 <!-- 	   ## merged with testing (Ulm_Patch)   -->
-<!--            cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90 -->
-          ## from Ulm base
-          #==For JPD Drag Tests==
-          cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90
-          cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90
+            cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90
         </csh>
       </source>
       <compile>
@@ -480,6 +477,9 @@ find cpp_land -type f -name \*.f90 > pathnames_land_lad2
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/common/sea_esf_dec2014.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)"> /lustre/f1/unswept/Bruce.Wyman/archive/mdt/awg/input/common/new_sea_esf_aug2013.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">/lustre/f1/unswept/Sergey.Malyshev/awg/input/lm3/lm3_data_20150322.tar</dataSource>
@@ -1321,6 +1321,9 @@ Experiment name = $(name)
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restarts">
+        <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
         <run months="1" npes="432"  runTimePerJob="02:00:00"/>
