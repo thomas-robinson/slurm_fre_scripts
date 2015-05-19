@@ -382,7 +382,6 @@
 
  &radiation_driver_nml
       rad_time_step= 10800,
-      solar_dataset_entry = 2000,1,1,0,0,
       rad_package = 'sea_esf',
       do_clear_sky_pass=.true.,
       renormalize_sw_fluxes=.true.,
@@ -392,6 +391,7 @@
       !mv to commons,OK do_coupled_stratozone=.false.
       !mv to physics,OK use_cloud_tracers_in_radiation = .false.
 
+      !mv to commons,notOK shortwave_driver_nml solar_dataset_entry = 2000,1,1,0,0,
       !mv to commons,notOK shortwave_driver_nml time_varying_solar_constant = .false.,
 /
 
@@ -461,7 +461,7 @@
  &shortwave_driver_nml
       do_cmip_diagnostics = .true.,
       swform = 'esfsw99'
-      solar_dataset_entry = $baseDate
+      solar_dataset_entry = 2000,1,1,0,0,
       time_varying_solar_constant = .false.,
 /
 
