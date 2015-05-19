@@ -309,13 +309,16 @@ Experiment to build executable.
     <component name="land_lad2" requires="fms" paths="land_lad2">
       <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
       <source>
-        <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
+<!--         <codeBase version="$(RELEASE)"> land_lad2 </codeBase> -->
+        <codeBase version="ulm"> land_lad2 </codeBase>
 	<csh>
-           # Protection from negative soil water divergence situations, 
-	   ## merged with testing (Ulm_Patch)  
-           cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90
-<!--           ## from Ulm base  -->
-<!--           #cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90 -->	   
+<!--            # Protection from negative soil water divergence situations,  -->
+<!-- 	   ## merged with testing (Ulm_Patch)   -->
+<!--            cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90 -->
+          ## from Ulm base
+          #==For JPD Drag Tests==
+          cvs up -r merged_drag_updates_jpk_20141104_nnz land_lad2/land_model.F90
+          cvs up -r ulm_neg_water_div_20150321_slm_pcm land_lad2/soil/soil.F90
         </csh>
       </source>
       <compile>
