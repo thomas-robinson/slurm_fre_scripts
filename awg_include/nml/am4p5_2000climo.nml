@@ -465,7 +465,6 @@
       time_varying_solar_constant = .false.,
 /
 
-
  &simple_sulfate_nml
         gas_conc_filename='gas_conc_3D_am3p9.nc'
         gas_conc_time_dependency_type='constant'

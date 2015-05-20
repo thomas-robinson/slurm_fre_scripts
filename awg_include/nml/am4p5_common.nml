@@ -91,7 +91,8 @@
 /
 
  &esfsw_parameters_nml
-      sw_code_version = 'esf2015' ! replaces deprecated sw_resolution = 'med'
+      sw_code_version = 'esf2015' ! replaces deprecated 
+      sw_resolution = 'med'
       sw_diff_streams = 1
       sw_NIRVISgas_bands = 9 ! ulm's default value =9, ulm_patch=11
 /
@@ -307,14 +308,6 @@
 
  &secondary_organics_nml
         gas_conc_filename ='gas_conc_3D_am3p9.nc'
-/
-
- &shortwave_driver_nml
-      do_cmip_diagnostics = .true.,
-      !deprecated calculate_volcanic_sw_heating = .false.,
-      swform = 'esfsw99'
-      solar_dataset_entry = $baseDate
-      time_varying_solar_constant = .true.,
 /
 
  &snow_data_nml
