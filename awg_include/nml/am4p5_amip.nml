@@ -457,7 +457,7 @@
  &shortwave_driver_nml
       do_cmip_diagnostics = .true.,
       swform = 'esfsw99'
-      solar_dataset_entry = $basedate
+      solar_dataset_entry = $baseDate
       time_varying_solar_constant = .true,
 /
 
