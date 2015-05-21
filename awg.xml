@@ -38,7 +38,7 @@
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="testing"/>                <!-- CVS tag for source code -->
+  <property name="RELEASE" value="ulm_201505"/>                <!-- CVS tag for source code -->
   <property name="MOM6_DATE" value="2014.11.17"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
