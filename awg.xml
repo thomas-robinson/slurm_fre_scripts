@@ -178,7 +178,7 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
-      <property name="REFERENCE"           value="/lustre/f1/unswept/Garrett.Wright/referenceExperiments/awg.cjg.20150508/cm4p5_v20150416/$(name)/$(platform)-$(target)"/>
+      <property name="REFERENCE"           value="/lustre/f1/unswept/Garrett.Wright/referenceExperiments/awg/cm4p5_v20150511/$(name)/$(platform)-$(target)"/>
 
       <csh><![CDATA[
         source $MODULESHOME/init/csh
@@ -1334,7 +1334,7 @@ Experiment name = $(name)
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
       </regression>
 
-      <reference restart="/lustre/f1/unswept/Garrett.Wright/referenceExperiments/awgArchive/c96L32_am4g5_2000climo/gfdl.ncrc2-intel-prod-openmp/1x0m8d_432pe/restart/00010109.tar"/>
+      <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/00010109.tar"/>
  
     </runtime>
 
