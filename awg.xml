@@ -10,12 +10,11 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-9
 # .. module load git
-# #TODO, edit
 # .. mkdir -p $home/awg/ulm
 # .. cd $home/awg/ulm
-# .. git clone  http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511
-# .. cd xml_v20150511
-# .. git checkout user/h1g/am4g5_awgxml_20150511
+# .. git clone -b g5-merge http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150511-merge
+# .. cd xml_v20150511-merge
+
 
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
