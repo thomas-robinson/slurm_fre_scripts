@@ -10,9 +10,9 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-9
 # .. module load git
-# .. mkdir -p $home/awg/ulm
-# .. cd $home/awg/ulm
-# .. git clone -b g5-merge http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150522
+# .. mkdir -p $home/awg/ulm_201505
+# .. cd $home/awg/ulm_201505
+# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150522
 # .. cd xml_v20150522
 
 
@@ -46,8 +46,8 @@
   <property name="MDBIswitch" value="off"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm/xml_v20150522/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm/xml_v20150522/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_201505/xml_v20150522/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_201505/xml_v20150522/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
