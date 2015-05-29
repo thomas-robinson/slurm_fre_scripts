@@ -15,8 +15,6 @@
 # .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150522
 # .. cd xml_v20150522
 
-
-
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
@@ -131,7 +129,7 @@ Changing the number of PEs can be accomplished by simply
 modifying 'npes' and segment 'runTime' in the xml <production> block:
 
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="3:00:00"/>
+        <segment simTime="12" units="months" runTime="1:30:00"/>
       </production>
 
 Choosing a particular PE number is a balancing act. The higher npes, 
@@ -139,18 +137,33 @@ the faster the model throughput, but also the lower the model efficiency
 (i.e. the overall simulation will cost more in terms of core hours).
 
 Available options for c96L32:
+"""""""""""""""""""""""""""""
+
+  +========+======================+======================+
+  |        |  Suggested run time for 12 month segment    |
+  |  npes  |    am4g5                                    |
+  +========+=============================================+
+  |   432  |    05:00:00                                 |
+  |   864  |    03:00:00                                 |
+  |  1152  |    02:30:00                                 |
+  |**1728**|    01:30:00                                 |
+  |  2304  |    01:15:00                                 |
+  |  3456  |    01:00:00                                 |
+  +========+======================+======================+ 
+
+Available options for c192L32:
 """"""""""""""""""""""""""""""
 
   +========+======================+======================+
-  |           Suggested run time for 12 month segment    |
-  |  npes       am4g5                                    |
+  |        |  Suggested run time for 12 month segment    |
+  |  npes  |    am4g5                                    |
   +========+=============================================+
-  |   432  |    09:00:00                                 |
-  |   864  |    05:20:00                                 |
-  |  1152  |    04:00:00                                 |
-  |**1728**|    01:30:00                                 |
-  |  2304  |    02:30:00                                 |
-  |  3456  |    02:15:00                                 |
+  |   864  |    14:00:00                                 |
+  |  1152  |    11:00:00                                 |
+  |  2304  |    06:00:00                                 |
+  |  3456  |    04:00:00                                 |
+  |**4608**|    03:30:00                                 |
+  |  6912  |    03:00:00                                 |
   +========+======================+======================+ 
 
 **Note:** default settings are highlighted in **bold**. Suggested 
@@ -1215,7 +1228,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="2:00:00"/>
+        <segment simTime="12" units="months" runTime="1:30:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -1319,7 +1332,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="4:00:00"/>
+        <segment simTime="12" units="months" runTime="3:30:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1418,7 +1431,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="2:00:00"/>
+        <segment simTime="12" units="months" runTime="1:30:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -1545,7 +1558,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="4:00:00"/>
+        <segment simTime="12" units="months" runTime="3:30:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
