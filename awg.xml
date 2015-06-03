@@ -291,8 +291,8 @@ Experiment to build executable.
                                        atmos_cubed_sphere/driver/coupled
                                        atmos_cubed_sphere/model
                                        atmos_cubed_sphere/model_nh_null
-                                       atmos_cubed_sphere/tools
-				       atmos_param" requires="fms atmos_phys">
+                                       atmos_cubed_sphere/tools"
+                                requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
