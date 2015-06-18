@@ -410,10 +410,6 @@
       topo_rough_file = 'INPUT/mg_drag.res.nc',
 /
 
- &tropchem_driver_nml
-        do_tropchem = .false.
-/
-
  &vegn_data_nml
        vegn_to_use = 'uniform'
        K1=10,

@@ -463,32 +463,43 @@
 
 
  &simple_sulfate_nml
-        gas_conc_filename='gas_conc_3D_am3p9.nc'
-        gas_conc_time_dependency_type='constant'
-        cont_volc_source='do_cont_volc'
-        expl_volc_source='do_expl_volc'
           aerocom_emission_filename='so2_0.25_volcanoes.nc'
-        aircraft_source='do_aircraft',
-          aircraft_filename='emis_fuel_aircraft.1859_2010.nc',
-          aircraft_emission_name(1)='fuel'
-          so2_aircraft_EI=0.001
-          aircraft_time_dependency_type='time_varying',aircraft_dataset_entry=$baseDate
-        anthro_source='do_anthro',
-          anthro_emission_name(1)='so2ff',
-          anthro_emission_name(2)='so4ff',
-          anthro_filename='anthro_so2.1859_2010.nc',
-          anthro_time_dependency_type='time_varying',anthro_dataset_entry=$baseDate
-        biobur_source='do_biobur',
-          biobur_emission_name(1)='so2bb',
-          biobur_emission_name(2)='so4bb',
-          biobur_filename='anthro_so2.1859_2010.nc',
-          biobur_time_dependency_type='time_varying',biobur_dataset_entry=$baseDate
-        cloud_chem_solver="f1p"
-        pH_cloud=4.5
 /
 
  &tropchem_driver_nml
-        do_tropchem = .false.
+        relaxed_dt = 864000.,
+        ub_pres = 1.,
+        relaxed_dt_lbc = 86400.,
+        lb_pres = 800.e2,
+        file_sulfate = 'sulfate.nc',
+        file_conc = 'tracerIC.19800101.v2.nc',
+        file_emis_1 = 'emissions.',
+        file_emis_2 = '.1x1.1859_2020.nc',
+        file_emis3d_1 = 'emissions3D.',
+        file_emis3d_2 = '.1x1.1859_2020.nc',
+        file_ub = 'ub_vals.mozart.nc',
+        file_dry = 'depvel.nc',
+        inv_list = '',
+        file_aircraft = 'emissions.aircraft.1x1.1859_2020.nc',
+        lght_no_prd_factor = 0.04,
+        strat_chem_age_factor = 1.25,
+        strat_chem_dclydt_factor = 1.,
+        do_tropchem = .true.,
+        use_tdep_jvals = .true.,
+        file_jval_lut = 'jvals.v6fix.twilight.solarmax',
+        file_jval_lut_min = 'jvals.v6fix.twilight.solarmin',
+        o3_column_top = 0.002,
+        repartition_water_tracers = .true.,
+        allow_negative_cosz = .true.,
+        allow_psc_settling_type1 = .true.,
+        force_cly_conservation = .true.,
+        set_min_h2o_strat = .true.,
+        ch4_filename = 'ch4_gblannualdata',
+        ch4_scale_factor = 1.e-9,
+        do_fastjx_photo = .true.
+        verbose = 1,
+        retain_cm3_bugs =.false.,
+        check_convergence = .true.
 /
 
  &vegn_nml
