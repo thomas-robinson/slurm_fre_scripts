@@ -373,7 +373,7 @@
       ozone_dataset_entry = $baseDate
       data_name = "ozone",
       filename = "o3.climatology.nc"
-      do_coupled_stratozone=.false.
+      do_coupled_stratozone=.true.
 /
 
  &radiation_driver_diag_nml
