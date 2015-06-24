@@ -88,20 +88,20 @@ properties below.
 -->
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
-<!--
   <property name="EXP_AMIP_START" value="1980"/>
   <property name="EXP_AMIP_END"   value="2000"/>
   <property name="EXP_AMIP_LEN"   value="21"/>
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2000"/>
   <property name="ANA_AMIP_LEN"   value="20yr"/>
--->
+<!--
   <property name="EXP_AMIP_START" value="1980"/>
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="35"/>
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2014"/>
   <property name="ANA_AMIP_LEN"   value="34yr"/>
+-->
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
   <property name="PP_AMIP_CHUNK" value="5yr"/>
@@ -190,7 +190,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_m</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
 <!--     <src>$HOME/$(stem)/$(name)/src</src>  -->
          <scripts>$HOME/$(stem)/xml_v20150522/scripts</scripts> 
