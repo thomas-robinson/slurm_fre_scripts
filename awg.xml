@@ -275,7 +275,7 @@ Experiment to build executable.
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> shared.git </codeBase>
         <csh><![CDATA[
-          ( cd shared && git checkout $(RELEASE) )
+          ( cd shared && git checkout ulm_201505_interpolator )
           ]]>
         </csh>
       </source>
@@ -289,7 +289,7 @@ Experiment to build executable.
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
           <codeBase version="$(RELEASE)">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout p5-devMergeCandidate-0 )
+            ( cd atmos_shared && git checkout user/f1p/mergechem )
             ( cd atmos_param && git checkout p5-devMergeCandidate-1 )
            ]]>
           </csh>
