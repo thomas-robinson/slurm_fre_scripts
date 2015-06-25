@@ -12,15 +12,15 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150522
-# .. cd xml_v20150522
+# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150624
+# .. cd xml_v20150624
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150522
+# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150624
 
 # To run regression test (with staging):
 # .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5
@@ -44,8 +44,8 @@
   <property name="MDBIswitch" value="off"/>                       <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_201505/xml_v20150522/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_201505/xml_v20150522/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_201505/xml_v20150624/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_201505/xml_v20150624/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -193,7 +193,7 @@ configuration.
       <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src> 
-         <scripts>$HOME/$(stem)/xml_v20150522/scripts</scripts> 
+         <scripts>$HOME/$(stem)/xml_v20150624/scripts</scripts> 
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout> 
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
@@ -250,23 +250,10 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p5_v20150522">
+  <experiment name="cm4p5_v20150624">
     <description>
 
-Experiment to build executable.
-* ulm code base
-* Code updates from John Dunne for new surface fluxes options (drag_min_jpd_20141030)
-* Code changes from Ming Zhao for low sensitivity configuration. Changes answers for all! (lowsen20141106_miz)
-* Chris Golaz total activation bug fix (ulm_total_act_fix_cjg)
-* Chris Golaz bug fix to enable do_gust_cv and convect_shutoff options. May change answer.
-* David Paynter radiation bug fix for debug mode
-* Code update for icebergs to output less warnings adjustable_berg_warn_linits_jpk_20141003
-* Ming Zhao code changes for am4f3 (am4f3_20150225_miz and git tags user/cjg/am4f3_20150225_miz). Changes answers.
-* Code update from Huan Guo to merge moist_processes.F90 changes (am4f3_convect_fix_20150303_h1g)
-* Huan Guo code changes to scale aerosol wet deposition using namelist parameter (wetDep_scale_20150311_h1g)
-* Changes from Paul Ginoux to enable fast aerosols.
-* Changes from Ming Zhao to decrease climate sensitivity
-* Changes from John Wilson for cg drag and topo drag
+Experiment to build executable. See git log for source code provenance.
 
     </description>
 
@@ -1231,7 +1218,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5" inherit="cm4p5_v20150522">
+  <experiment name="c96L32_am4g5" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1333,7 +1320,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5" inherit="cm4p5_v20150522">
+  <experiment name="c96L48_am4g5" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1435,7 +1422,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5_fullaero" inherit="cm4p5_v20150522">
+  <experiment name="c96L32_am4g5_fullaero" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1537,7 +1524,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullaero" inherit="cm4p5_v20150522">
+  <experiment name="c96L48_am4g5_fullaero" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1639,7 +1626,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullchem" inherit="cm4p5_v20150522">
+  <experiment name="c96L48_am4g5_fullchem" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1743,7 +1730,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5" inherit="cm4p5_v20150522">
+  <experiment name="c192L32_am4g5" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1850,7 +1837,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4g5_2000climo" inherit="cm4p5_v20150522">
+  <experiment name="c96L32_am4g5_2000climo" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1978,7 +1965,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4g5_2000climo" inherit="cm4p5_v20150522">
+  <experiment name="c192L32_am4g5_2000climo" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
