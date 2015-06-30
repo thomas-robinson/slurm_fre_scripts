@@ -262,7 +262,7 @@ Experiment to build executable. See git log for source code provenance.
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> shared.git </codeBase>
         <csh><![CDATA[
-          ( cd shared && git checkout ulm_201505_interpolator )
+          ( cd shared && git checkout user/h1g/openmp_fix_h1g )
           ]]>
         </csh>
       </source>
@@ -276,8 +276,8 @@ Experiment to build executable. See git log for source code provenance.
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
           <codeBase version="$(RELEASE)">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout user/f1p/mergechem )
-            ( cd atmos_param && git checkout p5-devMergeCandidate-1 )
+            ( cd atmos_shared && git checkout user/h1g/openmp_fix_h1g  )
+            ( cd atmos_param && git checkout  user/h1g/clubb_BL_openmpfix_merge_h1g )
            ]]>
           </csh>
         </source>
@@ -406,7 +406,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)"> coupler.git </codeBase>
         <csh><![CDATA[
-        ( cd coupler && git checkout p5-devMergeCandidate-0 )
+        ( cd coupler && git checkout user/h1g/flux_exchange_fix_h1g )
         ]]>
         </csh>
       </source>
@@ -1218,7 +1218,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5r1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1320,7 +1320,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5r1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1395,7 +1395,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="2:00:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -1422,7 +1422,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5_fullaero" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5_fullaeror1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1497,7 +1497,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="2:30:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -1524,7 +1524,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullaero" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5_fullaeror1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1599,7 +1599,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -1626,7 +1626,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullchem" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5_fullchemr1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1701,7 +1701,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="4:00:00"/>
+        <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
@@ -1730,7 +1730,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5" inherit="cm4p5_v20150624">
+  <experiment name="c192L32_am4g5r1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1793,6 +1793,7 @@ Experiment name = $(name)
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
       </namelist>
+
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_faero']/input/node())"/>
@@ -1837,7 +1838,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4g5_2000climo" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5_2000climor1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -1893,6 +1894,7 @@ Experiment name = $(name)
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
       </namelist>
+
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_faero']/input/node())"/>
@@ -1932,7 +1934,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5_1860climo" inherit="c96L32_am4g5_2000climo">
+  <experiment name="c96L32_am4g5_1860climor1" inherit="c96L32_am4g5_2000climor1">
     <description>
 Same model as c96L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
@@ -1942,7 +1944,7 @@ configuration with present-day climatological SSTs, but pre-industrial GHGs and 
     </input>
   </experiment>
 
-  <experiment name="c96L32_am4g5_2000aero" inherit="c96L32_am4g5_2000climo">
+  <experiment name="c96L32_am4g5_2000aeror1" inherit="c96L32_am4g5_2000climor1">
     <description>
 Same model as c96L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
@@ -1952,7 +1954,7 @@ configuration with present-day climatological SSTs, pre-industrial GHGs and pres
     </input>
   </experiment>
 
-  <experiment name="c96L32_am4g5_2000climo_p2K" inherit="c96L32_am4g5_2000climo">
+  <experiment name="c96L32_am4g5_2000climo_p2Kr1" inherit="c96L32_am4g5_2000climor1">
     <description>
 Same model as c96L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
@@ -1965,7 +1967,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4g5_2000climo" inherit="cm4p5_v20150624">
+  <experiment name="c192L32_am4g5_2000climor1" inherit="cm4p5_v20150624">
 
 <!-- MDBI -->
     <description
@@ -2021,6 +2023,7 @@ Experiment name = $(name)
         atmos_npes = $atmos_npes
         atmos_nthreads = $atmos_nthreads
       </namelist>
+
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_faero']/input/node())"/>
@@ -2057,7 +2060,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5_1860climo" inherit="c192L32_am4g5_2000climo">
+  <experiment name="c192L32_am4g5_1860climor1" inherit="c192L32_am4g5_2000climor1">
     <description>
 Same model as c192L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
@@ -2067,7 +2070,7 @@ configuration with present-day climatological SSTs, but pre-industrial GHGs and 
     </input>
   </experiment>
 
-  <experiment name="c192L32_am4g5_2000aero" inherit="c192L32_am4g5_2000climo">
+  <experiment name="c192L32_am4g5_2000aeror1" inherit="c192L32_am4g5_2000climor1">
     <description>
 Same model as c192L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
@@ -2077,7 +2080,7 @@ configuration with present-day climatological SSTs, pre-industrial GHGs and pres
     </input>
   </experiment>
 
-  <experiment name="c192L32_am4g5_2000climo_p2K" inherit="c192L32_am4g5_2000climo">
+  <experiment name="c192L32_am4g5_2000climo_p2Kr1" inherit="c192L32_am4g5_2000climor1">
     <description>
 Same model as c192L32_am4g5_2000climo, but
 configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
