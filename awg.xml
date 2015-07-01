@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150511 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150630 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,40 +12,40 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150624
-# .. cd xml_v20150624
+# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150630
+# .. cd xml_v20150630
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150624
+# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150630
 
 # To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5
+# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5
+# .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g5
+# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g5r1
 
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="ulm_201505"/>                <!-- CVS tag for source code -->
+  <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.05.19"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
-  <property name="FRE_VERSION" value="fre/bronx-10"/>             <!-- -->
+  <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
-  <property name="MDBIswitch" value="off"/>                       <!-- on/off switch for MDBI database -->
-  <property name="ProjectID" value="AWG"/>                       <!-- database top level -->
+  <property name="MDBIswitch" value="off"/>                        <!-- on/off switch for MDBI database -->
+  <property name="ProjectID" value="AWG"/>                         <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/awg/ulm_201505/xml_v20150624/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/awg/ulm_201505/xml_v20150624/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_v20150630/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_v20150630/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -94,14 +94,6 @@ properties below.
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2000"/>
   <property name="ANA_AMIP_LEN"   value="20yr"/>
-<!--
-  <property name="EXP_AMIP_START" value="1980"/>
-  <property name="EXP_AMIP_END"   value="2014"/>
-  <property name="EXP_AMIP_LEN"   value="35"/>
-  <property name="ANA_AMIP_START" value="1981"/>
-  <property name="ANA_AMIP_END"   value="2014"/>
-  <property name="ANA_AMIP_LEN"   value="34yr"/>
--->
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
   <property name="PP_AMIP_CHUNK" value="5yr"/>
@@ -149,7 +141,7 @@ Available options for c96L32:
 
   +========+======================+======================+
   |        |  Suggested run time for 12 month segment    |
-  |  npes  |    am4g5                                    |
+  |  npes  |    am4g5r1                                  |
   +========+=============================================+
   |   432  |    05:00:00                                 |
   |   864  |    03:00:00                                 |
@@ -166,7 +158,7 @@ Available options for c192L32:
 
   +========+======================+======================+
   |        |  Suggested run time for 12 month segment    |
-  |  npes  |    am4g5                                    |
+  |  npes  |    am4g5r1                                  |
   +========+=============================================+
   |   864  |    14:00:00                                 |
   |  1152  |    11:00:00                                 |
@@ -193,7 +185,7 @@ configuration.
       <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src> 
-         <scripts>$HOME/$(stem)/xml_v20150624/scripts</scripts> 
+         <scripts>$HOME/$(stem)/$(platform)-$(target)/xml_v20150630/scripts</scripts> 
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout> 
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
@@ -250,7 +242,7 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p5_v20150624">
+  <experiment name="cm4p5_v20150630">
     <description>
 
 Experiment to build executable. See git log for source code provenance.
@@ -1218,7 +1210,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5r1" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5r1" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1229,8 +1221,9 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group.
-Derived from "am4f4", but with code modifications from Paul Ginoux, Ming Zhao, and John Wilson.
+AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group.
+Derived from "am4g5", but with flu_exchange bug fixes and revised settings
+for dynamics time stepping.
 
 - c96 horizontal grid with approximately 100km resolution and 32 vertical levels.
 - Convection based on "double-plume" from Ming Zhao.
@@ -1320,7 +1313,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5r1" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1331,7 +1324,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Derived from AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group,
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
 but with 48 levels.
 
 - c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
@@ -1422,7 +1415,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5_fullaeror1" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5r1_fullaero" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1433,7 +1426,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Derived from AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group,
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
 but with "full aerosols" as in "am4f4".
 
 - c96 horizontal grid with approximately 100km resolution and 32 vertical levels.
@@ -1524,7 +1517,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullaeror1" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5r1_fullaero" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1535,7 +1528,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Derived from AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group,
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
 but with "full aerosols" as in "am4f4" and 48 levels.
 
 - c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
@@ -1626,7 +1619,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5_fullchemr1" inherit="cm4p5_v20150624">
+  <experiment name="c96L48_am4g5r1_fullchem" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1637,7 +1630,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Derived from AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group,
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
 but with "full chemistry" (as in AM3) and 48 levels.
 
 - c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
@@ -1730,7 +1723,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5r1" inherit="cm4p5_v20150624">
+  <experiment name="c192L32_am4g5r1" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1741,8 +1734,9 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-AM4 prototype configuration "am4g5" from MDT Atmosphere Working Group.
-Derived from "am4f4", but with code modifications from Paul Ginoux, Ming Zhao, and John Wilson.
+AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group.
+Derived from "am4g5", but with flu_exchange bug fixes and revised settings
+for dynamics time stepping.
 
 - c192 horizontal grid with approximately 50km resolution and 32 vertical levels.
 - Convection based on "double-plume" from Ming Zhao.
@@ -1838,7 +1832,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4g5_2000climor1" inherit="cm4p5_v20150624">
+  <experiment name="c96L32_am4g5r1_2000climo" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1849,7 +1843,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Same model as c96L32_am4g5, but
+Same model as c96L32_am4g5r1, but
 configuration with present-day climatological SSTs, present-day GHGs and aerosols.
 
     </description>
@@ -1934,9 +1928,9 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5_1860climor1" inherit="c96L32_am4g5_2000climor1">
+  <experiment name="c96L32_am4g5r1_1860climo" inherit="c96L32_am4g5r1_2000climo">
     <description>
-Same model as c96L32_am4g5_2000climo, but
+Same model as c96L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
     </description>
     <input>
@@ -1944,9 +1938,9 @@ configuration with present-day climatological SSTs, but pre-industrial GHGs and 
     </input>
   </experiment>
 
-  <experiment name="c96L32_am4g5_2000aeror1" inherit="c96L32_am4g5_2000climor1">
+  <experiment name="c96L32_am4g5r1_2000aero" inherit="c96L32_am4g5r1_2000climo">
     <description>
-Same model as c96L32_am4g5_2000climo, but
+Same model as c96L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
     </description>
     <input>
@@ -1954,9 +1948,9 @@ configuration with present-day climatological SSTs, pre-industrial GHGs and pres
     </input>
   </experiment>
 
-  <experiment name="c96L32_am4g5_2000climo_p2Kr1" inherit="c96L32_am4g5_2000climor1">
+  <experiment name="c96L32_am4g5r1_2000climo_p2K" inherit="c96L32_am4g5r1_2000climo">
     <description>
-Same model as c96L32_am4g5_2000climo, but
+Same model as c96L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
     </description>
     <input>
@@ -1967,7 +1961,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4g5_2000climor1" inherit="cm4p5_v20150624">
+  <experiment name="c192L32_am4g5r1_2000climo" inherit="cm4p5_v20150630">
 
 <!-- MDBI -->
     <description
@@ -1978,7 +1972,7 @@ communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
 
-Same model as c192L32_am4g5, but
+Same model as c192L32_am4g5r1, but
 configuration with present-day climatological SSTs, present-day GHGs and aerosols.
 
     </description>
@@ -2060,9 +2054,9 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5_1860climor1" inherit="c192L32_am4g5_2000climor1">
+  <experiment name="c192L32_am4g5r1_1860climo" inherit="c192L32_am4g5r1_2000climo">
     <description>
-Same model as c192L32_am4g5_2000climo, but
+Same model as c192L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
     </description>
     <input>
@@ -2070,9 +2064,9 @@ configuration with present-day climatological SSTs, but pre-industrial GHGs and 
     </input>
   </experiment>
 
-  <experiment name="c192L32_am4g5_2000aeror1" inherit="c192L32_am4g5_2000climor1">
+  <experiment name="c192L32_am4g5r1_2000aero" inherit="c192L32_am4g5r1_2000climo">
     <description>
-Same model as c192L32_am4g5_2000climo, but
+Same model as c192L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
     </description>
     <input>
@@ -2080,9 +2074,9 @@ configuration with present-day climatological SSTs, pre-industrial GHGs and pres
     </input>
   </experiment>
 
-  <experiment name="c192L32_am4g5_2000climo_p2Kr1" inherit="c192L32_am4g5_2000climor1">
+  <experiment name="c192L32_am4g5r1_2000climo_p2K" inherit="c192L32_am4g5r1_2000climo">
     <description>
-Same model as c192L32_am4g5_2000climo, but
+Same model as c192L32_am4g5r1_2000climo, but
 configuration with present-day climatological SSTs + 2K, present-day GHGs and aerosols.
     </description>
     <input>
