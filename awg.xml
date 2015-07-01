@@ -185,7 +185,7 @@ configuration.
       <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src> 
-         <scripts>$HOME/$(stem)/$(platform)-$(target)/xml_v20150630/scripts</scripts> 
+         <scripts>$HOME/$(stem)/xml_v20150630/scripts/$(platform)-$(target)</scripts> 
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout> 
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
