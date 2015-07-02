@@ -33,13 +33,30 @@
 
 -->
 
-<!-- DESCRIPTION OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
-     Currently only fremake is supported.
+<!-- LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
+     Notes: Only fremake and frerun are currently supported.
+            FRE commands listed should NOT include -s option to 
+            automatically sumbit jobs.
 
 jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702
 jenny> fremake -x awg.xml -p ncrc2.intel -t debug cm4p5_v20150702
 
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t debug c96L32_am4g5r1
+
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_fullaero
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullaero
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullchem
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000climo
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_1860climo
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000aero
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000climo_p2K
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000climo
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_1860climo
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000aero
+jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000climo_p2K
 
 -->
 
