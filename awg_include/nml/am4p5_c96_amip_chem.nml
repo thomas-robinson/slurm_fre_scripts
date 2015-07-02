@@ -355,9 +355,6 @@
         omna_input_name='omemisnat'
       omss_source = 'ODowd'
         omss_coef = 0.05
-      soa_source = 'add_soa'
-        gas_conc_name='C4H10',soa_filename ='gas_conc_3D_am3p9.nc',
-        soa_time_dependency_type='constant'
 /
 
  &ice_spec_nml
