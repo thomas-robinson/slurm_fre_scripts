@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150630 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20150702 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,15 +12,15 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150630
-# .. cd xml_v20150630
+# .. git clone -b awg http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150702
+# .. cd xml_v20150702
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150630
+# .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702
 
 # To run regression test (with staging):
 # .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
@@ -38,14 +38,16 @@
   <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.05.19"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
+  <property name="AWG_GIT_TAG" value="awg_v20150702"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="v20150702"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="off"/>                        <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                         <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_v20150630/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_v20150630/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -185,7 +187,7 @@ configuration.
       <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src> 
-         <scripts>$HOME/$(stem)/xml_v20150630/scripts/$(platform)-$(target)</scripts> 
+         <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts> 
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout> 
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
@@ -242,7 +244,7 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p5_v20150630">
+  <experiment name="cm4p5_$(AWG_VERSION)">
     <description>
 
 Experiment to build executable. See git log for source code provenance.
@@ -252,9 +254,9 @@ Experiment to build executable. See git log for source code provenance.
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(RELEASE)"> shared.git </codeBase>
+        <codeBase version="$(AWG_GIT_TAG)"> shared.git </codeBase>
         <csh><![CDATA[
-          ( cd shared && git checkout user/h1g/openmp_fix_h1g )
+          ( cd shared && git checkout $(AWG_GIT_TAG) )
           ]]>
         </csh>
       </source>
@@ -266,10 +268,10 @@ Experiment to build executable. See git log for source code provenance.
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="$(RELEASE)">atmos_shared.git atmos_param.git</codeBase>
+          <codeBase version="$(AWG_GIT_TAG)">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout user/h1g/openmp_fix_h1g  )
-            ( cd atmos_param && git checkout  user/h1g/clubb_BL_openmpfix_merge_h1g )
+            ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
+            ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
            ]]>
           </csh>
         </source>
@@ -285,10 +287,10 @@ Experiment to build executable. See git log for source code provenance.
                                        atmos_cubed_sphere/tools"
                                 requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(RELEASE)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <codeBase version="$(AWG_GIT_TAG)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
-          ( cd atmos_drivers && git checkout p5-devMergeCandidate-0 )
-          ( cd atmos_cubed_sphere && git checkout p5-devMergeCandidate-0 )
+          ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
          ]]>
         </csh>
       </source>
@@ -396,9 +398,9 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ocean_shared">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(RELEASE)"> coupler.git </codeBase>
+        <codeBase version="$(AWG_GIT_TAG)"> coupler.git </codeBase>
         <csh><![CDATA[
-        ( cd coupler && git checkout user/h1g/flux_exchange_fix_h1g )
+        ( cd coupler && git checkout $(AWG_GIT_TAG) )
         ]]>
         </csh>
       </source>
@@ -1210,7 +1212,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5r1" inherit="cm4p5_v20150630">
+  <experiment name="c96L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1313,7 +1315,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1" inherit="cm4p5_v20150630">
+  <experiment name="c96L48_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1415,7 +1417,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5r1_fullaero" inherit="cm4p5_v20150630">
+  <experiment name="c96L32_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1517,7 +1519,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1_fullaero" inherit="cm4p5_v20150630">
+  <experiment name="c96L48_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1619,7 +1621,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1_fullchem" inherit="cm4p5_v20150630">
+  <experiment name="c96L48_am4g5r1_fullchem" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1723,7 +1725,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5r1" inherit="cm4p5_v20150630">
+  <experiment name="c192L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1832,7 +1834,7 @@ Experiment name = $(name)
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4g5r1_2000climo" inherit="cm4p5_v20150630">
+  <experiment name="c96L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -1961,7 +1963,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4g5r1_2000climo" inherit="cm4p5_v20150630">
+  <experiment name="c192L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
