@@ -33,6 +33,14 @@
 
 -->
 
+<!-- DESCRIPTION OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
+     Currently only fremake is supported.
+
+jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702
+jenny> fremake -x awg.xml -p ncrc2.intel -t debug cm4p5_v20150702
+
+-->
+
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
   <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
