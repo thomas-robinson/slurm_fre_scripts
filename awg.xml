@@ -99,8 +99,8 @@ properties below.
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="35"/>
   <property name="ANA_AMIP_START" value="1981"/>
-  <property name="ANA_AMIP_END"   value="2014"/>
-  <property name="ANA_AMIP_LEN"   value="34yr"/>
+  <property name="ANA_AMIP_END"   value="2010"/>
+  <property name="ANA_AMIP_LEN"   value="30yr"/>
 -->
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
