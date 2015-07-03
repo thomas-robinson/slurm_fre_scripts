@@ -41,7 +41,7 @@
 jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702
 jenny> fremake -x awg.xml -p ncrc2.intel -t debug cm4p5_v20150702
 
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t debug c96L32_am4g5r1
+jenny> frerun -r debug -x awg.xml -p ncrc2.intel -t debug c96L32_am4g5r1
 
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1
@@ -1317,6 +1317,9 @@ Experiment name = $(name)
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
         <segment simTime="12" units="months" runTime="1:30:00"/>
       </production>
+      <regression name="debug">
+        <run days="2"   npes="432"  runTimePerJob="02:00:00"/>
+      </regression>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
