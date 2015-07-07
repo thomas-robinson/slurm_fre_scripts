@@ -123,14 +123,7 @@ properties below.
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2000"/>
   <property name="ANA_AMIP_LEN"   value="20yr"/>
-<!--
-  <property name="EXP_AMIP_START" value="1980"/>
-  <property name="EXP_AMIP_END"   value="2014"/>
-  <property name="EXP_AMIP_LEN"   value="35"/>
-  <property name="ANA_AMIP_START" value="1981"/>
-  <property name="ANA_AMIP_END"   value="2010"/>
-  <property name="ANA_AMIP_LEN"   value="30yr"/>
--->
+
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
   <property name="PP_AMIP_CHUNK" value="5yr"/>
@@ -166,7 +159,7 @@ Changing the number of PEs can be accomplished by simply
 modifying 'npes' and segment 'runTime' in the xml <production> block:
 
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="1:20:00"/>
       </production>
 
 Choosing a particular PE number is a balancing act. The higher npes, 
@@ -183,7 +176,7 @@ Available options for c96L32:
   |   432  |    05:00:00                                 |
   |   864  |    03:00:00                                 |
   |  1152  |    02:30:00                                 |
-  |**1728**|    01:30:00                                 |
+  |**1728**|    01:20:00                                 |
   |  2304  |    01:15:00                                 |
   |  3456  |    01:00:00                                 |
   |  4608  |    01:00:00                                 |
@@ -201,7 +194,7 @@ Available options for c192L32:
   |  1152  |    11:00:00                                 |
   |  2304  |    06:00:00                                 |
   |  3456  |    04:00:00                                 |
-  |**4608**|    03:30:00                                 |
+  |**4608**|    03:00:00                                 |
   |  6912  |    03:00:00                                 |
   +========+======================+======================+ 
 
@@ -1323,7 +1316,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="1:20:00"/>
       </production>
       <regression name="debug">
         <run days="2"   npes="432"  runTimePerJob="02:00:00"/>
@@ -1840,7 +1833,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="3:30:00"/>
+        <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
@@ -1941,7 +1934,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="1728" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="1:30:00"/>
+        <segment simTime="12" units="months" runTime="1:20:00"/>
       </production>
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
@@ -2070,7 +2063,7 @@ Experiment name = $(name)
 
     <runtime>
       <production simTime="$(EXP_CLIMO_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="3:30:00"/>
+        <segment simTime="12" units="months" runTime="3:00:00"/>
       </production>
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
