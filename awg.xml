@@ -704,6 +704,14 @@ else if ( "$npes" == "2304" ) then
   set land_layout  =   "12,16";  set land_io_layout  =  "1,4"
   set ocean_layout =   "144,8";  set ocean_io_layout =  "1,4"
   set ice_layout   =   "144,8";  set ice_io_layout   =  "1,4"
+else if ( "$npes" == "3456" ) then
+  set atmos_npes = "1728"
+  set atmos_nthreads = "2"
+  set nxblocks = "1" ; set nyblocks = "2"
+  set fv_layout    =   "12,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "12,24";  set land_io_layout  =  "1,4"
+  set ocean_layout =   "144,12"; set ocean_io_layout =  "1,4"
+  set ice_layout   =   "144,12"; set ice_io_layout   =  "1,4"
 else if ( "$npes" == "4608" ) then
   set atmos_npes = "2304"
   set atmos_nthreads = "2"
@@ -1334,6 +1342,8 @@ Experiment name = $(name)
         <run months="1" npes="1728" runTimePerJob="00:45:00"/>
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="00:30:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/19800109.tar"/>
@@ -1436,6 +1446,8 @@ Experiment name = $(name)
         <run months="1" npes="1728" runTimePerJob="00:45:00"/>
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="00:30:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/19800109.tar"/>
@@ -1538,6 +1550,8 @@ Experiment name = $(name)
         <run months="1" npes="1728" runTimePerJob="00:45:00"/>
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="00:30:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/19800109.tar"/>
@@ -1640,6 +1654,8 @@ Experiment name = $(name)
         <run months="1" npes="1728" runTimePerJob="00:45:00"/>
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="00:30:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/19800109.tar"/>
@@ -1949,6 +1965,8 @@ Experiment name = $(name)
         <run months="1" npes="1728" runTimePerJob="00:45:00"/>
         <run months="1" npes="2304" runTimePerJob="00:30:00"/>
         <run months="1" npes="3456" runTimePerJob="00:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="00:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="00:30:00"/>
       </regression>
 
       <reference restart="$(REFERENCE)/1x0m8d_432pe/restart/00010109.tar"/>
