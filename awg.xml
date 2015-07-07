@@ -123,6 +123,14 @@ properties below.
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2000"/>
   <property name="ANA_AMIP_LEN"   value="20yr"/>
+<!--
+  <property name="EXP_AMIP_START" value="1980"/>
+  <property name="EXP_AMIP_END"   value="2014"/>
+  <property name="EXP_AMIP_LEN"   value="35"/>
+  <property name="ANA_AMIP_START" value="1981"/>
+  <property name="ANA_AMIP_END"   value="2010"/>
+  <property name="ANA_AMIP_LEN"   value="30yr"/>
+-->
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
   <property name="PP_AMIP_CHUNK" value="5yr"/>
@@ -1495,7 +1503,7 @@ Experiment name = $(name)
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_common.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4g5_physics.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4g5_c96L32.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_amip.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_amip_fullaero.nml"/>
       <namelist name="coupler_nml">
         months = $months,
         days   = $days,
@@ -1597,7 +1605,7 @@ Experiment name = $(name)
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_common.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4g5_physics.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4g5_c96L48.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_amip.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_amip_fullaero.nml"/>
       <namelist name="coupler_nml">
         months = $months,
         days   = $days,
