@@ -282,7 +282,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)"> shared.git </codeBase>
+        <codeBase version="dev/awg"> shared.git </codeBase>
         <csh><![CDATA[
           ( cd shared && git checkout $(AWG_GIT_TAG) )
           ]]>
@@ -296,7 +296,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="$(AWG_GIT_TAG)">atmos_shared.git atmos_param.git</codeBase>
+          <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
             ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
@@ -315,7 +315,7 @@ Experiment to build executable. See git log for source code provenance.
                                        atmos_cubed_sphere/tools"
                                 requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
           ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
@@ -426,7 +426,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ocean_shared">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)"> coupler.git </codeBase>
+        <codeBase version="dev/awg"> coupler.git </codeBase>
         <csh><![CDATA[
         ( cd coupler && git checkout $(AWG_GIT_TAG) )
         ]]>
