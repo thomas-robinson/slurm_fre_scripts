@@ -43,12 +43,12 @@ jenny> fremake -x awg.xml -p ncrc2.intel -t debug cm4p5_v20150702
 
 jenny> frerun -r debug -x awg.xml -p ncrc2.intel -t debug c96L32_am4g5r1
 
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
+jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_fullaero
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullaero
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullchem
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1
+jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000climo
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_1860climo
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000aero
@@ -282,7 +282,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)"> shared.git </codeBase>
+        <codeBase version="dev/awg"> shared.git </codeBase>
         <csh><![CDATA[
           ( cd shared && git checkout $(AWG_GIT_TAG) )
           ]]>
@@ -296,7 +296,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="$(AWG_GIT_TAG)">atmos_shared.git atmos_param.git</codeBase>
+          <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
             ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
@@ -315,7 +315,7 @@ Experiment to build executable. See git log for source code provenance.
                                        atmos_cubed_sphere/tools"
                                 requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
           ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
@@ -426,7 +426,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ocean_shared">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)"> coupler.git </codeBase>
+        <codeBase version="dev/awg"> coupler.git </codeBase>
         <csh><![CDATA[
         ( cd coupler && git checkout $(AWG_GIT_TAG) )
         ]]>
@@ -1332,8 +1332,16 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
         <run months="1" npes="432"  runTimePerJob="02:00:00"/>
@@ -1434,7 +1442,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
@@ -1536,7 +1544,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
@@ -1638,7 +1646,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
@@ -1740,7 +1748,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
       </regression>
       <regression name="timing">
@@ -1844,8 +1852,14 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
         <run months="1"   npes="864"  runTimePerJob="02:30:00"/>
@@ -1943,7 +1957,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8"   npes="432"  runTimePerJob="00:30:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="864"  runTimePerJob="00:30:00"/>
       </regression>
       <regression name="timing">
@@ -2072,7 +2086,7 @@ Experiment name = $(name)
       <regression name="basic">
         <run days="8" npes="864" runTimePerJob="01:00:00"/>
       </regression>
-      <regression name="restarts">
+      <regression name="restart">
         <run days="4 4" npes="1152" runTimePerJob="01:00:00"/>
       </regression>
       <regression name="timing">
