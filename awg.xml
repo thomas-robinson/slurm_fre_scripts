@@ -40,6 +40,7 @@
 
 jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702_dev
 
+jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_dev
 jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_tke03h0
 
 -->
@@ -1232,7 +1233,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)_dev">
+  <experiment name="c96L32_am4g5r1_dev" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
