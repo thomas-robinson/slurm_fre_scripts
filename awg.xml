@@ -38,25 +38,9 @@
             FRE commands listed should NOT include -s option to
             automatically sumbit jobs.
 
-jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702
-jenny> fremake -x awg.xml -p ncrc2.intel -t debug cm4p5_v20150702
+jenny> fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150702_dev
 
-jenny> frerun -r debug -x awg.xml -p ncrc2.intel -t debug c96L32_am4g5r1
-
-jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_fullaero
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullaero
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L48_am4g5r1_fullchem
-jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000climo
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_1860climo
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000aero
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_2000climo_p2K
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000climo
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_1860climo
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000aero
-jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c192L32_am4g5r1_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r1_tke03h0
 
 -->
 
@@ -212,7 +196,7 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_m</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -272,7 +256,7 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p5_$(AWG_VERSION)">
+  <experiment name="cm4p5_$(AWG_VERSION)_dev">
     <description>
 
 Experiment to build executable. See git log for source code provenance.
@@ -282,7 +266,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> shared.git </codeBase>
+        <codeBase version="$(AWG_GIT_TAG)"> shared.git </codeBase>
         <csh><![CDATA[
           ( cd shared && git checkout $(AWG_GIT_TAG) )
           ]]>
@@ -296,10 +280,10 @@ Experiment to build executable. See git log for source code provenance.
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
+          <codeBase version="$(AWG_GIT_TAG)">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
+            ( cd atmos_param  && git checkout user/cjg/awg_v20150702_updates )
            ]]>
           </csh>
         </source>
@@ -315,7 +299,7 @@ Experiment to build executable. See git log for source code provenance.
                                        atmos_cubed_sphere/tools"
                                 requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <codeBase version="$(AWG_GIT_TAG)">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
           ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
@@ -426,7 +410,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ocean_shared">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> coupler.git </codeBase>
+        <codeBase version="$(AWG_GIT_TAG)"> coupler.git </codeBase>
         <csh><![CDATA[
         ( cd coupler && git checkout $(AWG_GIT_TAG) )
         ]]>
@@ -1248,7 +1232,7 @@ touch MOM_input
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
 
-  <experiment name="c96L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1362,7 +1346,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L48_am4g5r1" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1464,7 +1448,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L32_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1566,7 +1550,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L48_am4g5r1_fullaero" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1668,7 +1652,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g5r1_fullchem" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L48_am4g5r1_fullchem" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1770,7 +1754,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c192L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c192L32_am4g5r1" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -1879,11 +1863,249 @@ Experiment name = $(name)
   </experiment>
 
 
+<!--======================-->
+<!--= CUSTOM EXPERIMENTS =-->
+<!--======================-->
+
+  <experiment name="c96L32_am4g5r1_tke01h0" inherit="c96L32_am4g5r1_dev">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -40.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.05
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+      <namelist name="strat_cloud_nml">
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.0,
+        Dmin = 1.0e-07,
+        n_land = 150.e6,
+        n_ocean = 50.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 3.e-5,
+        eros_scale_t = 5.e-5,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 1.0
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        var_limit = 0.3
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 0.
+        use_sub_seasalt = .false.
+        aerosol_activation_scheme = "total"
+        up_strat_opt = 2
+        var_limit_opt = 2
+        do_pdf_clouds = .true.
+        qthalfwidth    = 0.1
+      </namelist>
+      <namelist name="tke_turb_nml">
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .true.,
+        do_shallow_conv  = .false.
+      </namelist>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5_faero</dataSource>
+      </dataFile>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_tke</dataSource>
+      </dataFile>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:30:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="432" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8" npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8" npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8" npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8" npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8" npes="4608" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="crash">
+ <!--   <run days="143" npes="1728" runTimePerJob="01:00:00"/>   -->
+        <run days="1"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke02h0" inherit="c96L32_am4g5r1_tke01h0">
+    <input>
+      <namelist name="uw_plume_nml">
+        auto_th0 = 0.2e-3,
+        tcrit    = -40.0,
+        peff_l   = 5.0e-5
+        peff_i   = 10.e-5
+        rmaxfrac = 0.15
+        frac_drs = 0.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .false.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        do_tten_max = .true.
+        mixing_assumption = 2
+        mp_choice = 2
+        do_pevap = .true.
+        cfrac    = 0.15
+        hcevap   = 0.9
+        pblfac   = 0.25
+      </namelist>
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+ <!--   <dataSource platform="$(platform)">/lustre/f1/Chris.Golaz/awg/ulm_201505/c96L32_am4g5r1_tke02h0/ncrc2.intel-prod-openmp/restart/19920101.tar</dataSource>   -->
+        <dataSource platform="$(platform)">/lustre/f1/Chris.Golaz/awg/ulm_201505/c96L32_am4g5r1_tke02h0/ncrc2.intel-prod-openmp/1x0m339d_1728pe/restart/19921205.tar</dataSource>
+      </dataFile>
+    </input>
+    <runtime>
+      <regression name="crash">
+ <!--   <run days="339" npes="1728" runTimePerJob="01:30:00"/>   -->
+        <run days="1"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03h0" inherit="c96L32_am4g5r1_tke01h0">
+    <input>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh1         = 15.0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 2
+        do_rescale      = .true.
+        do_rescale_t    = .true.
+        use_sub_seasalt = .false.
+        use_new_let     = .true.
+        do_subcloud_flx = .true.
+        plev_cin        = 60000.
+        src_choice      = 1
+        wrel_min        = 1.
+        duration        = 10800
+        do_stime        = .false.
+        do_dtime        = .false.
+        stime0          = 0.8
+        dtime0          = 0.1
+        do_prog_tke     = .false.
+        tau_tke         = 7200
+        bfact           = 0.05
+        pblrat0         = 2.0
+        do_prog_gust    = .true.
+        tau_gust        = 10800
+        gfact           = 1.0
+        do_gust_qt      = .false.
+        gqt_choice      = 0
+        cgust0          = 2.
+        cgust_max       = 4.
+        sigma0          = 0.5
+        tracer_check_type = 1
+      </namelist>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="3456" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="432" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8" npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8" npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8" npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8" npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8" npes="4608" runTimePerJob="00:30:00"/>
+      </regression>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke01h1" inherit="c96L32_am4g5r1_tke01h0">
+    <input>
+      <namelist name="tke_turb_nml">
+        pbl_depth_option = 1,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+
 <!--=====================-->
 <!--= CLIMO EXPERIMENTS =-->
 <!--=====================-->
 
-  <experiment name="c96L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
@@ -2012,7 +2234,7 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
 
 
 
-  <experiment name="c192L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)">
+  <experiment name="c192L32_am4g5r1_2000climo" inherit="cm4p5_$(AWG_VERSION)_dev">
 
 <!-- MDBI -->
     <description
