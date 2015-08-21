@@ -16,7 +16,7 @@
 # .. cd xml_v20150702
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_m</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
@@ -52,14 +52,14 @@ jenny> frerun -r basic,restart,scaling -x awg.xml -p ncrc2.intel -t openmp c96L3
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="AWG_GIT_TAG" value="awg_v20150702"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="v20150702"/>                 <!-- AWG source code version -->
-  <property name="FRE_STEM" value="awg/$(RELEASE)"/>
+  <property name="FRE_STEM" value="awg/ulm_201505"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="off"/>                        <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                         <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_v20150702_dev/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_v20150702_dev/awg_include"/>
 
 <!--
 GFDL FAIR USE POLICY
@@ -102,12 +102,20 @@ properties below.
 -->
 
   <!-- make sure to change current_date in coupler_nml accordingly -->
+<!--
   <property name="EXP_AMIP_START" value="1980"/>
   <property name="EXP_AMIP_END"   value="2000"/>
   <property name="EXP_AMIP_LEN"   value="21"/>
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2000"/>
   <property name="ANA_AMIP_LEN"   value="20yr"/>
+-->
+  <property name="EXP_AMIP_START" value="1980"/>
+  <property name="EXP_AMIP_END"   value="1986"/>
+  <property name="EXP_AMIP_LEN"   value="6"/>
+  <property name="ANA_AMIP_START" value="1981"/>
+  <property name="ANA_AMIP_END"   value="1985"/>
+  <property name="ANA_AMIP_LEN"   value="5yr"/>
 
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
@@ -200,7 +208,7 @@ configuration.
       <project>gfdl_m</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
-         <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
+         <scripts>$HOME/$(stem)/xml_v20150702_dev/scripts/$(platform)-$(target)</scripts>
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g -traceback"/>
@@ -1998,7 +2006,7 @@ Experiment name = $(name)
         rmaxfrac = 0.15
         frac_drs = 0.0
         wmin     = 0.5
-        deltaqc0 = 0.5e-3 
+        deltaqc0 = 0.5e-3
         do_pdfpcp= .false.
         do_pmadjt= .true.
         do_emmax = .true.
@@ -2088,6 +2096,957 @@ Experiment name = $(name)
       </regression>
     </runtime>
   </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03" inherit="c96L32_am4g5r1_tke03h0">
+    <input>
+      <diagTable order="append">
+"flux",      "t_surf",                        "t_surf_min",      "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_surf",                        "t_surf_max",      "atmos_daily",     "all",  max,    "none", 2
+"flux",      "t_ca",                          "t_ca_min",        "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_ca",                          "t_ca_max",        "atmos_daily",     "all",  max,    "none", 2
+
+"flux",      "t_surf",      "t_surf",      "atmos_diurnal", "all", "diurnal24", "none", 2
+"flux",      "t_ca",        "t_ca",        "atmos_diurnal", "all", "diurnal24", "none", 2
+      </diagTable>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:20:00"/>
+      </production>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03_akl5" inherit="c96L32_am4g5r1_tke03">
+    <input>
+      <namelist name="tke_turb_nml">
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 5.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03_noSBL" inherit="c96L32_am4g5r1_tke03h0">
+    <input>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .false.,
+        do_shallow_conv  = .false.
+      </namelist>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="1728" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:20:00"/>
+      </production>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03_xqavdiff" inherit="c96L32_am4g5r1_tke03h0">
+    <input>
+      <fieldTable>
+# specific humidity for moist runs
+ "TRACER", "atmos_mod", "sphum" 
+           "longname", "specific humidity"
+           "units", "kg/kg" 
+	   "profile_type", "fixed", "surface_value=3.e-6" /
+# prognotic cloud scheme tracers
+  "TRACER", "atmos_mod", "liq_wat"
+            "longname", "cloud liquid specific humidity"
+            "units", "kg/kg" /
+  "TRACER", "atmos_mod", "ice_wat"
+            "longname", "cloud ice water specific humidity"
+            "units", "kg/kg" /
+  "TRACER", "atmos_mod", "cld_amt"
+            "longname", "cloud fraction"
+            "diff_vert", "none"
+            "units", "none" /
+  "TRACER", "atmos_mod", "liq_drp"
+            "longname", "cloud droplet"
+            "units", "none" /
+# required by LM3
+  "TRACER", "land_mod", "sphum"
+           "longname",     "specific humidity"
+            "units",        "kg/kg" /
+  "TRACER", "land_mod",     "co2"
+           "longname",     "carbon dioxide"
+           "units",        "kg/kg" /
+#                            
+ "TRACER", "atmos_mod", "dust1"
+           "longname", "dust1 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.0e-7, rb=1.25e-6, dustref=0.75e-6, dustden=2500.0"
+           "emission", "prescribed", "source_fraction=0.11"
+           "convection", "all"
+           "dry_deposition","wind_driven", "surfr=100.0"
+           "wet_deposition","aerosol_below","frac_incloud=0.15, frac_incloud_uw=0.25, frac_incloud_donner=0.25, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=dust_mode1_of_2, name_in_clim_mod=small_dust"
+/
+ "TRACER", "atmos_mod", "dust2"
+           "longname", "dust2 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.25e-6, rb=5.0e-6, dustref=2.15e-6, dustden=2650.0"
+           "emission", "prescribed", "source_fraction=0.89"
+           "convection", "all"
+           "dry_deposition","wind_driven", "surfr=100.0" 
+           "wet_deposition","aerosol_below","frac_incloud=0.15, frac_incloud_uw=0.25, frac_incloud_donner=0.25, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=dust_mode2_of_2, name_in_clim_mod=large_dust"
+/
+#
+ "TRACER", "atmos_mod", "simpleDMS"
+           "longname", "DMS tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.11e-2, sea=0.09e-2"
+           "wet_deposition","henry_below","henry=4.74e-6, dependence=3100" /
+ "TRACER", "atmos_mod", "simpleSO2"
+           "longname", "SO2 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.25e-2, sea=0.6e-2"
+           "wet_deposition","henry_below_noice_so2","henry=1.49e-2,dependence=5080." /
+#
+ "TRACER", "atmos_mod", "simpleSO4"
+           "longname", "SO4 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.11e-2, sea=0.09e-2"
+           "wet_deposition","aerosol_below","frac_incloud=0.3, frac_incloud_uw=0.4, frac_incloud_donner=0.4, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=so4, name_in_clim_mod=sulfate, scale_factor=4.56" /
+ "TRACER", "atmos_mod", "simpleH2O2"
+           "longname", "H2O2 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.1e-2, sea=0.1e-2"
+           "wet_deposition","henry_below","henry=7.35e-1,dependence=6620." /
+#
+ "TRACER", "atmos_mod", "ssalt1"
+           "longname", "ssalt 1 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=0.01e-6, rb=0.1e-6, ssaltref=0.08e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt1, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "ssalt2"
+           "longname", "ssalt 2 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=0.1e-6, rb=1.25e-6, ssaltref=0.75e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt2, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "ssalt3"
+           "longname", "ssalt 3 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.25e-6, rb=1.0e-5, ssaltref=6.3e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt3, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "bcphob"
+           "longname", "bcphob tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0., alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=bcphobic, name_in_clim_mod=black_carbon"/
+#
+ "TRACER", "atmos_mod", "bcphil"
+           "longname", "bcphil tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.3, frac_incloud_donner=0.3, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=bcphilic, name_in_clim_mod=black_carbon"/
+#
+ "TRACER", "atmos_mod", "omphob"
+           "longname", "omphob tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0., alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=omphobic, name_in_clim_mod=organic_carbon"/
+#
+ "TRACER", "atmos_mod", "omphil"
+           "longname", "omphil tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.3, frac_incloud_donner=0.3, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=omphilic, name_in_clim_mod=organic_carbon"/
+#
+"TRACER", "atmos_mod","oh"
+          "longname","OH"
+          "units","VMR"
+          "tracer_type","diagnostic"
+          "profile_type","fixed","surface_value=5.e-14"/
+"tracer","atmos_mod","tke"
+"longname","tke"
+"units","m2/s2"
+"tracer_type","diagnostic"
+"adjust_mass","false"
+"adjust_positive_def","false"
+/
+      </fieldTable>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="3456" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="432" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8" npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8" npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8" npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8" npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8" npes="4608" runTimePerJob="00:30:00"/>
+      </regression>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03_xqaqlqivdiff" inherit="c96L32_am4g5r1_tke03h0">
+    <input>
+      <fieldTable>
+# specific humidity for moist runs
+ "TRACER", "atmos_mod", "sphum" 
+           "longname", "specific humidity"
+           "units", "kg/kg" 
+	   "profile_type", "fixed", "surface_value=3.e-6" /
+# prognotic cloud scheme tracers
+  "TRACER", "atmos_mod", "liq_wat"
+            "longname", "cloud liquid specific humidity"
+            "diff_vert", "none"
+            "units", "kg/kg" /
+  "TRACER", "atmos_mod", "ice_wat"
+            "longname", "cloud ice water specific humidity"
+            "diff_vert", "none"
+            "units", "kg/kg" /
+  "TRACER", "atmos_mod", "cld_amt"
+            "longname", "cloud fraction"
+            "diff_vert", "none"
+            "units", "none" /
+  "TRACER", "atmos_mod", "liq_drp"
+            "longname", "cloud droplet"
+            "diff_vert", "none"
+            "units", "none" /
+# required by LM3
+  "TRACER", "land_mod", "sphum"
+           "longname",     "specific humidity"
+            "units",        "kg/kg" /
+  "TRACER", "land_mod",     "co2"
+           "longname",     "carbon dioxide"
+           "units",        "kg/kg" /
+#                            
+ "TRACER", "atmos_mod", "dust1"
+           "longname", "dust1 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.0e-7, rb=1.25e-6, dustref=0.75e-6, dustden=2500.0"
+           "emission", "prescribed", "source_fraction=0.11"
+           "convection", "all"
+           "dry_deposition","wind_driven", "surfr=100.0"
+           "wet_deposition","aerosol_below","frac_incloud=0.15, frac_incloud_uw=0.25, frac_incloud_donner=0.25, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=dust_mode1_of_2, name_in_clim_mod=small_dust"
+/
+ "TRACER", "atmos_mod", "dust2"
+           "longname", "dust2 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.25e-6, rb=5.0e-6, dustref=2.15e-6, dustden=2650.0"
+           "emission", "prescribed", "source_fraction=0.89"
+           "convection", "all"
+           "dry_deposition","wind_driven", "surfr=100.0" 
+           "wet_deposition","aerosol_below","frac_incloud=0.15, frac_incloud_uw=0.25, frac_incloud_donner=0.25, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=dust_mode2_of_2, name_in_clim_mod=large_dust"
+/
+#
+ "TRACER", "atmos_mod", "simpleDMS"
+           "longname", "DMS tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.11e-2, sea=0.09e-2"
+           "wet_deposition","henry_below","henry=4.74e-6, dependence=3100" /
+ "TRACER", "atmos_mod", "simpleSO2"
+           "longname", "SO2 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.25e-2, sea=0.6e-2"
+           "wet_deposition","henry_below_noice_so2","henry=1.49e-2,dependence=5080." /
+#
+ "TRACER", "atmos_mod", "simpleSO4"
+           "longname", "SO4 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.11e-2, sea=0.09e-2"
+           "wet_deposition","aerosol_below","frac_incloud=0.3, frac_incloud_uw=0.4, frac_incloud_donner=0.4, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=so4, name_in_clim_mod=sulfate, scale_factor=4.56" /
+ "TRACER", "atmos_mod", "simpleH2O2"
+           "longname", "H2O2 tracer"
+           "units", "VMR"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","fixed","land=0.1e-2, sea=0.1e-2"
+           "wet_deposition","henry_below","henry=7.35e-1,dependence=6620." /
+#
+ "TRACER", "atmos_mod", "ssalt1"
+           "longname", "ssalt 1 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=0.01e-6, rb=0.1e-6, ssaltref=0.08e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt1, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "ssalt2"
+           "longname", "ssalt 2 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=0.1e-6, rb=1.25e-6, ssaltref=0.75e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt2, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "ssalt3"
+           "longname", "ssalt 3 tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "parameters", "all", "ra=1.25e-6, rb=1.0e-5, ssaltref=6.3e-6, ssaltden=2200.0"
+           "scheme", "Martensson",
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=0.1"
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.4, frac_incloud_donner=0.4, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=seasalt3, name_in_clim_mod=sea_salt"/
+#
+ "TRACER", "atmos_mod", "bcphob"
+           "longname", "bcphob tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0., alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=bcphobic, name_in_clim_mod=black_carbon"/
+#
+ "TRACER", "atmos_mod", "bcphil"
+           "longname", "bcphil tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.3, frac_incloud_donner=0.3, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=bcphilic, name_in_clim_mod=black_carbon"/
+#
+ "TRACER", "atmos_mod", "omphob"
+           "longname", "omphob tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0., alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=omphobic, name_in_clim_mod=organic_carbon"/
+#
+ "TRACER", "atmos_mod", "omphil"
+           "longname", "omphil tracer"
+           "units", "mmr"
+           "profile_type","fixed","surface_value=1.e-32"
+           "convection", "all"
+           "dry_deposition","wind_driven","surfr=100."
+           "wet_deposition","aerosol_below","frac_incloud=0.2, frac_incloud_uw=0.3, frac_incloud_donner=0.3, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
+           "radiative_param", "online", "name_in_rad_mod=omphilic, name_in_clim_mod=organic_carbon"/
+#
+"TRACER", "atmos_mod","oh"
+          "longname","OH"
+          "units","VMR"
+          "tracer_type","diagnostic"
+          "profile_type","fixed","surface_value=5.e-14"/
+"tracer","atmos_mod","tke"
+"longname","tke"
+"units","m2/s2"
+"tracer_type","diagnostic"
+"adjust_mass","false"
+"adjust_positive_def","false"
+/
+      </fieldTable>
+    </input>
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="3456" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="1:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8" npes="432" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8" npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8" npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8" npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8" npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8" npes="4608" runTimePerJob="00:30:00"/>
+      </regression>
+    </runtime>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new" inherit="c96L32_am4g5r1_tke03">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new2" inherit="c96L32_am4g5r1_tke03">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new3" inherit="c96L32_am4g5r1_tke03">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new3_noSBL" inherit="c96L32_am4g5r1_tke03new3">
+    <input>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .false.,
+        do_shallow_conv  = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new4_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.0_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 0,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.1_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.2_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.2b_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.1,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.2c_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.2c_noSBL_dp" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -38.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 2.
+        rkm_dp2 = 0.1
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.25
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new5.2d_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 1,
+        tkemin  = 0.0,
+        tkecrit = 0.2,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new6.2c_noSBL" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke" inherit="c96L32_am4g5r1_tke03new3_noSBL">
+    <input>
+      <namelist name="strat_cloud_nml">
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.0,
+        Dmin = 1.0e-07,
+        n_land = 150.e6,
+        n_ocean = 50.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 3.e-5,
+        eros_scale_t = 5.e-5,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 1.0
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        var_limit = 0.3
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 0.
+        use_sub_seasalt = .false.
+        aerosol_activation_scheme = "total"
+      </namelist>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_fraclimitd_025" inherit="c96L32_am4g5_tke">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -40.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.25
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_dooldcbmf" inherit="c96L32_am4g5_tke">
+    <input>
+      <namelist name="uw_closure_nml">
+        do_old_cbmfmax = .true.,
+        rkfre    = 0.2
+        wcrit_min= 0.2
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_tcrit_38" inherit="c96L32_am4g5_tke">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -38.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.05
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+      <namelist name="uw_plume_nml">
+        auto_th0 = 0.2e-3,
+        tcrit    = -38.0,
+        peff_l   = 5.0e-5
+        peff_i   = 10.e-5
+        rmaxfrac = 0.15
+        frac_drs = 0.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .false.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 2
+        mp_choice = 2
+        do_pevap = .true.
+        cfrac    = 0.15
+        hcevap   = 0.9
+        pblfac   = 0.25
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_rkmdp_2_01" inherit="c96L32_am4g5_tke">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -40.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 2.
+        rkm_dp2 = 0.1
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.05
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_buoync_0" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 0,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_buoync_1" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_buoync_1_alpha_009" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+        alpha_land = 0.09,
+        alpha_sea  = 0.09,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_buoync_1_alpha_0095" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 1,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+        alpha_land = 0.095,
+        alpha_sea  = 0.095,
+      </namelist>
+    </input>
+  </experiment>
+
+
+  <experiment name="c96L32_am4g5_tke_buoync_3" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 3,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_alpha_005" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+        alpha_land = 0.05,
+        alpha_sea  = 0.05,
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tke_alpha_015" inherit="c96L32_am4g5r1_tke03new6.2c_noSBL_Tiedtke">
+    <input>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 2,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+        alpha_land = 0.15,
+        alpha_sea  = 0.15,
+      </namelist>
+    </input>
+  </experiment>
+
 
   <experiment name="c96L32_am4g5r1_tke01h1" inherit="c96L32_am4g5r1_tke01h0">
     <input>
@@ -2358,5 +3317,287 @@ configuration with present-day climatological SSTs + 2K, present-day GHGs and ae
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_2000climo_p2K.nml"/>
     </input>
   </experiment>
+
+
+
+
+
+  <experiment name="c96L32_am4g5_tkepbl" inherit="c96L32_am4g5r1_dev">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -40.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.05
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 3,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh1         = 15.0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 2
+        do_rescale      = .true.
+        do_rescale_t    = .true.
+        use_sub_seasalt = .false.
+        use_new_let     = .true.
+        do_subcloud_flx = .true.
+        plev_cin        = 60000.
+        src_choice      = 1
+        wrel_min        = 1.
+        duration        = 10800
+        do_stime        = .false.
+        do_dtime        = .false.
+        stime0          = 0.8
+        dtime0          = 0.1
+        do_prog_tke     = .false.
+        tau_tke         = 7200
+        bfact           = 0.05
+        pblrat0         = 2.0
+        do_prog_gust    = .true.
+        tau_gust        = 10800
+        gfact           = 1.0
+        do_gust_qt      = .false.
+        gqt_choice      = 0
+        cgust0          = 2.
+        cgust_max       = 4.
+        sigma0          = 0.5
+        tracer_check_type = 1
+      </namelist>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .false.,
+        do_shallow_conv  = .false.
+      </namelist>
+      <diagTable order="append">
+"flux",      "t_surf",                        "t_surf_min",      "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_surf",                        "t_surf_max",      "atmos_daily",     "all",  max,    "none", 2
+"flux",      "t_ca",                          "t_ca_min",        "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_ca",                          "t_ca_max",        "atmos_daily",     "all",  max,    "none", 2
+
+"flux",      "t_surf",      "t_surf",      "atmos_diurnal", "all", "diurnal24", "none", 2
+"flux",      "t_ca",        "t_ca",        "atmos_diurnal", "all", "diurnal24", "none", 2
+      </diagTable>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5_faero</dataSource>
+      </dataFile>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_tke</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tkepbl_2000climo" inherit="c96L32_am4g5r1_2000climo">
+    <input>
+      <namelist name="deep_conv_nml">
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -40.0,
+        peff_l_d   = 5.0e-5
+        peff_i_d   = 10.e-5
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
+        norder  = 1
+        crh_th_ocean = 0.5
+        crh_th_land  = 0.5
+        cin_th = 5.
+        cape_th = 10.
+        cwfn_th = 10.
+        frac_rkm_pert = 0.
+        tau_dp = 28800.
+        tau_dp_fact = 3.
+        mixing_assumption_d = 4
+        do_ppen_d  = .true.
+        rpen_d     = 5.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.9
+        pblfac_d   = 0.25
+        ffldep_d   = 0.
+        frac_limit_d = 0.05
+        dcapedm_th = 100
+        dcwfndm_th = 100
+        lofactor_d = 0.5
+        do_lod_rkm   = .false.
+        do_lod_cfrac = .false.
+        do_lod_tcrit = .false.
+        do_stochastic_rkm =.false.
+        do_cgust_dp  = .true.
+        cgust_choice = 3
+        cin_fact  = 1.
+        do_forcedlifting_d = .false.
+        wcrit_min_gust = 0.2
+        do_forced_conv = .false.
+      </namelist>
+      <namelist name="tke_turb_nml">
+        tke_option = 1,
+        buoync_option = 3,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+      </namelist>
+      <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        iclosure        = 0,
+        rkm_sh1         = 15.0,
+        rkm_sh          = 3.0,
+        cldhgt_max      = 50.e3,
+        do_uwcmt        = .false.,
+        apply_tendency  = .true.,
+        wmin_ratio      = 0.05,
+        do_lands        = .false.
+        landfact_m      = 0.5
+        lochoice        = 0
+        lofactor0       = 0.75
+        do_deep         = .true.,
+        idpchoice       = 2
+        do_rescale      = .true.
+        do_rescale_t    = .true.
+        use_sub_seasalt = .false.
+        use_new_let     = .true.
+        do_subcloud_flx = .true.
+        plev_cin        = 60000.
+        src_choice      = 1
+        wrel_min        = 1.
+        duration        = 10800
+        do_stime        = .false.
+        do_dtime        = .false.
+        stime0          = 0.8
+        dtime0          = 0.1
+        do_prog_tke     = .false.
+        tau_tke         = 7200
+        bfact           = 0.05
+        pblrat0         = 2.0
+        do_prog_gust    = .true.
+        tau_gust        = 10800
+        gfact           = 1.0
+        do_gust_qt      = .false.
+        gqt_choice      = 0
+        cgust0          = 2.
+        cgust_max       = 4.
+        sigma0          = 0.5
+        tracer_check_type = 1
+      </namelist>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .false.,
+        do_shallow_conv  = .false.
+      </namelist>
+      <diagTable order="append">
+"flux",      "t_surf",                        "t_surf_min",      "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_surf",                        "t_surf_max",      "atmos_daily",     "all",  max,    "none", 2
+"flux",      "t_ca",                          "t_ca_min",        "atmos_daily",     "all",  min,    "none", 2
+"flux",      "t_ca",                          "t_ca_max",        "atmos_daily",     "all",  max,    "none", 2
+
+"flux",      "t_surf",      "t_surf",      "atmos_diurnal", "all", "diurnal24", "none", 2
+"flux",      "t_ca",        "t_ca",        "atmos_diurnal", "all", "diurnal24", "none", 2
+      </diagTable>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p5_faero</dataSource>
+      </dataFile>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_tke</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tkepbl_1860climo" inherit="c96L32_am4g5_tkepbl_2000climo">
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_1860climo.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tkepbl_2000aero" inherit="c96L32_am4g5_tkepbl_2000climo">
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_2000aero.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tkepbl_2000climo_p2K" inherit="c96L32_am4g5_tkepbl_2000climo">
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p5_2000climo_p2K.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g5_tkepbl_sbl_2000climo" inherit="c96L32_am4g5_tkepbl_2000climo">
+    <input>
+      <namelist name="vert_turb_driver_nml">
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .true.,
+        do_shallow_conv  = .false.
+      </namelist>
+    </input>
+  </experiment>
+
+
 
 </experimentSuite>
