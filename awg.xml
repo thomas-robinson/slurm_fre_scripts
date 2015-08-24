@@ -81,8 +81,7 @@ jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5_tkepbl_2
   <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.05.19"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-<!--  <property name="AWG_GIT_TAG" value="awg_v20150702"/>  -->           <!-- git tag for AWG source code -->
-  <property name="AWG_GIT_TAG" value="dev/awg"/>                   <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="awg_v20150821"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="v20150821"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
