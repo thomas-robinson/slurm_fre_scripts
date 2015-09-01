@@ -81,39 +81,43 @@ jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5_tkepbl_1
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5_tkepbl_2000aero
 jenny> frerun -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5_tkepbl_2000climo_p2K
 
-ref> c96L32_am4g5r1/ncrc2.intel-debug/0m2d  cf874083a862127cb312dc7a1c8d36d5a9b1ef01
+! Reference results for automated tests. Jenny will verify the sha1 checksum of of the
+! diag-integral.out ascii file against the checksums listed below. The checksum
+! can be computed with the 'taverage' AWG utility.
 
-ref> c96L32_am4g5r1/ncrc2.intel-prod-openmp/0m8d          2a3f3e30bf9fc679d278a588aad1814500880edd
-ref> c96L48_am4g5r1/ncrc2.intel-prod-openmp/0m8d          1428c6585657075c2e061f83472e7f8ca8484243
-ref> c96L32_am4g5r1_fullaero/ncrc2.intel-prod-openmp/0m8d a410a9f96ccfdc2a3741981ade2db94a5446467f
-ref> c96L48_am4g5r1_fullaero/ncrc2.intel-prod-openmp/0m8d 7c3af494e98506de22e93146e0fb11eae636e513
-ref> c96L48_am4g5r1_fullchem/ncrc2.intel-prod-openmp/0m8d fc50cbd4baa17ccbabf8412b73031e716124385b
+ref> c96L32_am4g5r1/ncrc2.intel-debug/0m2d                          cf874083a862127cb312dc7a1c8d36d5a9b1ef01
 
-ref> c96L32_am4g5r1_2000climo/ncrc2.intel-prod-openmp/0m8d     b614e2248eb3aa261a95610e4bbcf02a9ee4b474
-ref> c96L32_am4g5r1_1860climo/ncrc2.intel-prod-openmp/0m8d     4c990eaef84ee04d9a84bfe1270312fc961c483a
-ref> c96L32_am4g5r1_2000aero/ncrc2.intel-prod-openmp/0m8d      0d37dddf4e2292eac8b2307eda6ba78d593c554a
-ref> c96L32_am4g5r1_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d d5d2f886e1ffa10ccf89e9fe00a4a307d246ca6a
+ref> c96L32_am4g5r1/ncrc2.intel-prod-openmp/0m8d                    2a3f3e30bf9fc679d278a588aad1814500880edd
+ref> c96L48_am4g5r1/ncrc2.intel-prod-openmp/0m8d                    1428c6585657075c2e061f83472e7f8ca8484243
+ref> c96L32_am4g5r1_fullaero/ncrc2.intel-prod-openmp/0m8d           a410a9f96ccfdc2a3741981ade2db94a5446467f
+ref> c96L48_am4g5r1_fullaero/ncrc2.intel-prod-openmp/0m8d           7c3af494e98506de22e93146e0fb11eae636e513
+ref> c96L48_am4g5r1_fullchem/ncrc2.intel-prod-openmp/0m8d           fc50cbd4baa17ccbabf8412b73031e716124385b
 
-ref> c192L32_am4g5r1/ncrc2.intel-prod-openmp/0m8d               0a6e9b6334d50e1b5fdc360adf4fc997e3b8b23e
-ref> c192L32_am4g5r1_2000climo/ncrc2.intel-prod-openmp/0m8d     ea7adb906be1180639b4490980995157c2c8af3a
-ref> c192L32_am4g5r1_1860climo/ncrc2.intel-prod-openmp/0m8d     ce4aec837817a5ce0fe744f5f767c40299fb4511
-ref> c192L32_am4g5r1_2000aero/ncrc2.intel-prod-openmp/0m8d      a2eab99fd321e092d4e68892505314a15ad5f03f
-ref> c192L32_am4g5r1_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d 71e66d1066875965363de87b5ced2459b3024db3
+ref> c96L32_am4g5r1_2000climo/ncrc2.intel-prod-openmp/0m8d          b614e2248eb3aa261a95610e4bbcf02a9ee4b474
+ref> c96L32_am4g5r1_1860climo/ncrc2.intel-prod-openmp/0m8d          4c990eaef84ee04d9a84bfe1270312fc961c483a
+ref> c96L32_am4g5r1_2000aero/ncrc2.intel-prod-openmp/0m8d           0d37dddf4e2292eac8b2307eda6ba78d593c554a
+ref> c96L32_am4g5r1_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d      d5d2f886e1ffa10ccf89e9fe00a4a307d246ca6a
 
-ref> c96L32_am4g5r2/ncrc2.intel-prod-openmp/0m8d               81b303da7b0b8273f384048270358bda25eb37f3
-ref> c96L32_am4g5r2_2000climo/ncrc2.intel-prod-openmp/0m8d     c23eee927a9b1da73c41977b917574a0c501fb43
-ref> c96L32_am4g5r2_1860climo/ncrc2.intel-prod-openmp/0m8d     06b25e0567b891ca7e968236d8e071c6c70fb3dd
-ref> c96L32_am4g5r2_2000aero/ncrc2.intel-prod-openmp/0m8d      b865fccb9e72dbd9f0c29db753723448058c675a
-ref> c96L32_am4g5r2_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d fd453ce6617ee5522e65893df2c973901be29d69
+ref> c192L32_am4g5r1/ncrc2.intel-prod-openmp/0m8d                   0a6e9b6334d50e1b5fdc360adf4fc997e3b8b23e
+ref> c192L32_am4g5r1_2000climo/ncrc2.intel-prod-openmp/0m8d         ea7adb906be1180639b4490980995157c2c8af3a
+ref> c192L32_am4g5r1_1860climo/ncrc2.intel-prod-openmp/0m8d         ce4aec837817a5ce0fe744f5f767c40299fb4511
+ref> c192L32_am4g5r1_2000aero/ncrc2.intel-prod-openmp/0m8d          a2eab99fd321e092d4e68892505314a15ad5f03f
+ref> c192L32_am4g5r1_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d     71e66d1066875965363de87b5ced2459b3024db3
 
-ref> c192L32_am4g5r2/ncrc2.intel-prod-openmp/0m8d           ee92286829d1e2e4ed632faacc85195ba668449d
-ref> c192L32_am4g5r2_2000climo/ncrc2.intel-prod-openmp/0m8d f1a3763d79028025141234ab79d45d3a4fedce7a
+ref> c96L32_am4g5r2/ncrc2.intel-prod-openmp/0m8d                    81b303da7b0b8273f384048270358bda25eb37f3
+ref> c96L32_am4g5r2_2000climo/ncrc2.intel-prod-openmp/0m8d          c23eee927a9b1da73c41977b917574a0c501fb43
+ref> c96L32_am4g5r2_1860climo/ncrc2.intel-prod-openmp/0m8d          06b25e0567b891ca7e968236d8e071c6c70fb3dd
+ref> c96L32_am4g5r2_2000aero/ncrc2.intel-prod-openmp/0m8d           b865fccb9e72dbd9f0c29db753723448058c675a
+ref> c96L32_am4g5r2_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d      fd453ce6617ee5522e65893df2c973901be29d69
 
-ref> c96L32_am4g5r4/ncrc2.intel-prod-openmp/0m8d            b275686944e0cc4cbddcf5860c3b4120fd89531a
-ref> c96L32_am4g5r4_2000climo/ncrc2.intel-prod-openmp/0m8d  unknown
+ref> c192L32_am4g5r2/ncrc2.intel-prod-openmp/0m8d                   ee92286829d1e2e4ed632faacc85195ba668449d
+ref> c192L32_am4g5r2_2000climo/ncrc2.intel-prod-openmp/0m8d         f1a3763d79028025141234ab79d45d3a4fedce7a
 
-ref> c96L32_am4g5r5/ncrc2.intel-prod-openmp/0m8d            47bf738deb611ae370848b7b9bbd7c9b0cead97a
-ref> c96L32_am4g5r5_2000climo/ncrc2.intel-prod-openmp/0m8d  1ba0082ad289d2fe0ba40f7f55f7cfea6de317b4
+ref> c96L32_am4g5r4/ncrc2.intel-prod-openmp/0m8d                    b275686944e0cc4cbddcf5860c3b4120fd89531a
+ref> c96L32_am4g5r4_2000climo/ncrc2.intel-prod-openmp/0m8d          321e67a3d460755e8cd4df6525ce1e1b19201508
+
+ref> c96L32_am4g5r5/ncrc2.intel-prod-openmp/0m8d                    47bf738deb611ae370848b7b9bbd7c9b0cead97a
+ref> c96L32_am4g5r5_2000climo/ncrc2.intel-prod-openmp/0m8d          1ba0082ad289d2fe0ba40f7f55f7cfea6de317b4
 
 ref> c96L32_am4g5_tkepbl/ncrc2.intel-prod-openmp/0m8d               36ca0dcfdc2ad7c2b1c503089ce62f72fb181da3
 ref> c96L32_am4g5_tkepbl_2000climo/ncrc2.intel-prod-openmp/0m8d     b974648c60a862d836bece1e2d3badacd288ac52
