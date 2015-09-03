@@ -107,6 +107,8 @@
 
 &rotstayn_klein_mp_nml
         rk_act_only_if_ql_gt_qmin = .true.
+        include_homogeneous_for_wetdep = .false.
+        include_adjustment_for_wetdep = .true.
 /
 
 
@@ -137,7 +139,7 @@
         tau_gust        = 10800
         cgust0          = 2.
         cgust_max       = 4.
-        tracer_check_type = 1
+        tracer_check_type = 2
 /
 
  &uw_plume_nml
