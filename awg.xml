@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg_v20150901 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150901
+# .. git clone -b awg_v20150901a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20150901
 # .. cd xml_v20150901
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
@@ -22,14 +22,14 @@
 # .. module load fre/bronx-10
 # .. fremake -x awg.xml -p ncrc2.intel -t openmp cm4p5_v20150901
 
-# To run regression test (with staging):
-# .. frerun -S -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r2
+# To run regression test:
+# .. frerun -s -r basic -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r5
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r2
+# .. frerun -x awg.xml -p ncrc2.intel -t openmp c96L32_am4g5r5
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g5r2
+# .. fredb-pp -x awg.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g5r5
 
 -->
 
@@ -132,9 +132,7 @@ ref> c96L32_am4g5_tkepbl_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d c77d1def41a8
   <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.05.19"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-<!--
-  <property name="AWG_GIT_TAG" value="awg_v20150901"/> -->         <!-- git tag for AWG source code -->
-  <property name="AWG_GIT_TAG" value="dev/awg"/>                   <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="awg_v20150901"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="v20150901"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
