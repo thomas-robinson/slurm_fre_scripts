@@ -11,7 +11,7 @@
 /
 
  &deep_conv_nml
-        auto_th0_d = 0.2e-3
+        auto_th0_d = 0.35e-3
         tcrit_d    = -38.0,
         peff_l_d   = 5.0e-5
         peff_i_d   = 10.e-5
@@ -107,6 +107,8 @@
 
 &rotstayn_klein_mp_nml
         rk_act_only_if_ql_gt_qmin = .true.
+        include_homogeneous_for_wetdep = .false.
+        include_adjustment_for_wetdep = .true.
 /
 
 
@@ -137,11 +139,11 @@
         tau_gust        = 10800
         cgust0          = 2.
         cgust_max       = 4.
-        tracer_check_type = 1
+        tracer_check_type = 2
 /
 
  &uw_plume_nml
-        auto_th0 = 0.2e-3,
+        auto_th0 = 0.35e-3,
         tcrit    = -38.0,
         peff_l   = 5.0e-5
         peff_i   = 10.e-5
@@ -160,6 +162,18 @@
         hcevap   = 0.9
         pblfac   = 0.25
 /
+
+ &vert_turb_driver_nml
+      use_tau          = .false.,
+      gust_scheme      = 'beljaars',
+      do_mellor_yamada = .false.,
+      do_entrain       = .true.,
+      do_edt           = .false.,
+      do_diffusivity   = .false.,
+      do_stable_bl     = .true.,
+      do_shallow_conv  = .false.
+/
+
 
  &wetdep_nml
         scale_aerosol_wetdep = 1.

@@ -12,11 +12,11 @@
 
  &deep_conv_nml
         auto_th0_d = 0.2e-3
-        tcrit_d    = -38.0,
+        tcrit_d    = -40.0,
         peff_l_d   = 5.0e-5
         peff_i_d   = 10.e-5
-        rkm_dp1 = 2.
-        rkm_dp2 = 0.1
+        rkm_dp1 = 1.5
+        rkm_dp2 = 0.001
         cwfn_th = 10.
         tau_dp = 28800.
         mixing_assumption_d = 4
@@ -26,7 +26,7 @@
         cfrac_d    = 0.15
         hcevap_d   = 0.9
         pblfac_d   = 0.25
-        frac_limit_d = 0.25
+        frac_limit_d = 0.15
         dcwfndm_th = 100
         lofactor_d = 0.5
         do_cgust_dp  = .true.
@@ -113,18 +113,29 @@
 
 
  &strat_clouds_W_nml
-
 /
 
- &uw_closure_nml
-        do_old_cbmfmax = .true.,
+&tke_turb_nml
+        tke_option = 1,
+        buoync_option = 5,
+        pbl_depth_option = 0,
+        tkemin  = 0.0,
+        tkecrit = 0.3,
+        akmin_land = 0.,
+        akmin_sea  = 0.,
+        alpha_land = 0.095
+        alpha_sea  = 0.095
+/
+
+&uw_closure_nml
+        do_old_cbmfmax = .false.,
         rkfre    = 0.2
         wcrit_min= 0.2
 /
 
  &uw_conv_nml
         use_online_aerosol = .true.,
-        rkm_sh          = 3.0,
+        rkm_sh          = 5.0,
         do_deep         = .true.,
         idpchoice       = 2
         do_rescale      = .true.
@@ -136,6 +147,10 @@
         src_choice      = 1
         wrel_min        = 1.
         do_prog_gust    = .true.
+        duration        = 10800
+        do_prog_tke     = .false.
+        use_turb_tke    = .true.
+        use_lcl_only    = .true.
         tau_gust        = 10800
         cgust0          = 2.
         cgust_max       = 4.
@@ -144,7 +159,7 @@
 
  &uw_plume_nml
         auto_th0 = 0.2e-3,
-        tcrit    = -38.0,
+        tcrit    = -40.0,
         peff_l   = 5.0e-5
         peff_i   = 10.e-5
         rmaxfrac = 0.15
@@ -163,7 +178,20 @@
         pblfac   = 0.25
 /
 
- &wetdep_nml
+ &vert_turb_driver_nml
+        use_tau          = .false.,
+        gust_scheme      = 'beljaars',
+        do_mellor_yamada = .false.,
+        do_tke_turb      = .true.,
+        do_entrain       = .false.,
+        do_edt           = .false.,
+        do_diffusivity   = .false.,
+        do_stable_bl     = .false.,
+        do_shallow_conv  = .false.
+/
+
+
+&wetdep_nml
         scale_aerosol_wetdep = 1.
 /
 
