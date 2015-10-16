@@ -68,6 +68,7 @@
         do_cg_drag = .true.
         do_topo_drag = .false.,
         do_conserve_energy = .true.,
+        kstart= 0
 /
 
  &strat_cloud_nml
@@ -86,7 +87,7 @@
         eros_scale_t = 5.e-5,
         super_choice = .true.,
         tracer_advec = .true.
-        vfact = 1.0
+        vfact = 0.9
         cfact = 1.0
         do_liq_num = .true.
         use_kk_auto = .false.
