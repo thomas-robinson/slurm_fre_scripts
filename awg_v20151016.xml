@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151016 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151106 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,24 +12,24 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg_v20151016 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151016
-# .. cd xml_v20151016
+# .. git clone -b awg_v20151106 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151106
+# .. cd xml_v20151106
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg_v20151016.xml -p ncrc2.intel -t openmp cm4p7_v20151016
+# .. fremake -x awg_v20151106.xml -p ncrc2.intel -t openmp cm4p7_v20151106
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -s -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20151016.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
+# .. fredb-pp -x awg_v20151106.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
 
 -->
 
@@ -38,21 +38,21 @@
             FRE commands listed should NOT include -s option to
             automatically sumbit jobs.
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
+jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4g7
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
-jenny> frerun -r basic -x awg_v20151016.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
 
 
 
@@ -84,8 +84,8 @@ ref> c96L32_am4h7_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d   e463b29e64f9ac031
   <property name="RELEASE" value="ulm_201505"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="awg_v20151016"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20151016"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="awg_v20151106"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="v20151106"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -332,14 +332,14 @@ Experiment to build executable. See git log for source code provenance.
 
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
-        <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
-          <csh><![CDATA[
-            ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
-           ]]>
-          </csh>
-        </source>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
       </compile>
@@ -366,9 +366,13 @@ Experiment to build executable. See git log for source code provenance.
 
     <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
-      <source>
-        <codeBase version="$(RELEASE)"> ice_sis ice_param </codeBase>
-<!--         <csh>cvs up -r adjustable_berg_warn_linits_jpk_20141003 ice_sis/ice_bergs.F90 #needed for CM4i_c96L48_am4a1r1_1pct-co2-2X</csh> -->
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
+        <csh><![CDATA[
+          ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
+          ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
       </source>
       <compile>
         <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
