@@ -61,8 +61,8 @@ jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h
 ! can be computed with the 'taverage' AWG utility.
 
 ref> c96L32_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        0d9340ea1612ce1abd9e66f2ad1caca7ac66c132    
-ref> c96L48_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        f847027cfb5b0953992049d2846088390ddff600 
-ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        10ec65b4247c4a911176e83726085bd75651d03a 
+ref> c96L48_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        ae9a975b5bfe518a8b634a0edc64e5e9985d2380
+ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        51addcac25ea8b55f9a3d909b94e1b96bc10f21d
 
 
 ref> c96L32_am4g7/ncrc2.intel-prod-openmp/0m8d                  
@@ -247,9 +247,9 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_m</project>
       <directory stem="$(FRE_STEM)">
-         <src>$HOME/$(stem)/$(name)/src</src>
+<!--     <src>$HOME/$(stem)/$(name)/src</src> -->
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
       </directory>
@@ -422,6 +422,348 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
 
     <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
+        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
+        <csh>
+          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          pushd mom6
+          git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
+          git submodule init src/MOM6  tools/python/MIDAS
+          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
+          git submodule update #This gets the right version of submodules
+          popd
+
+          pushd mom6
+          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
+          else
+            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
+          endif
+          popd
+
+          test -e mom6/.datasets
+          if ($status != 0) then
+            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
+          endif
+        </csh>
+      </source>
+      <compile>
+        <cppDefs><![CDATA[ $(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
+        <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
+      </compile>
+    </component>
+
+    <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
+      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> coupler.git </codeBase>
+        <csh><![CDATA[
+        ( cd coupler && git checkout $(AWG_GIT_TAG) )
+        ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS)</cppDefs>
+      </compile>
+    </component>
+
+  </experiment>
+
+  <experiment name="cm4p7_$(AWG_VERSION)_chemv1">
+    <description>
+Experiment to build executable. See git log for source code provenance.
+This version includes chemistry updates from Jingqiu Mao.
+    </description>
+
+    <component name="fms" paths="shared">
+     <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
+     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/fms/libfms.a" 
+              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/fms"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> shared.git </codeBase>
+        <csh><![CDATA[
+          ( cd shared && git checkout $(AWG_GIT_TAG) )
+          ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
+      </compile>
+    </component>
+
+    <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
+      <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_shared && git checkout user/lwh/chem_v20151106 )
+          ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB -DAM3_CHEM</cppDefs>
+      </compile>
+    </component>
+
+    <component name="atmos_dyn" paths="atmos_drivers/coupled
+                                       atmos_cubed_sphere/driver/coupled
+                                       atmos_cubed_sphere/model
+                                       atmos_cubed_sphere/model_nh_null
+                                       atmos_cubed_sphere/tools"
+                                requires="fms atmos_phys">
+     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn/libatmos_dyn.a" 
+              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
+      </compile>
+    </component>
+
+    <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
+      <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis/libice_sis.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
+        <csh><![CDATA[
+          ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
+          ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
+      </compile>
+    </component>
+
+    <component name="land_lad2" requires="fms" paths="land_lad2">
+      <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2/libland_lad2.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2"/>
+      <source>
+<!--         <codeBase version="$(RELEASE)"> land_lad2 </codeBase> -->
+        <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
+	<csh>
+<!--            # Protection from negative soil water divergence situations,  -->
+<!-- 	   ## merged with testing (Ulm_Patch)   -->
+            cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS)</cppDefs>
+
+<!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
+        <csh><![CDATA[
+sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
+CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO $(F2003_FLAGS)
+FRETARGET = $(target)
+
+ifneq (\$(findstring hdf5,\${FRETARGET}),)
+else
+  CPPDEFS += -Duse_LARGEFILE
+endif
+
+vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
+
+land/%.f90: %.F90
+<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
+
+EOF
+
+foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
+  make -f land/Makefile-cpp land/$foo:t:r.f90
+end
+find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
+          ]]>
+        </csh>
+      </compile>
+    </component>
+
+    <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
+      <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6/libmom6.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
+        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
+        <csh>
+          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          pushd mom6
+          git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
+          git submodule init src/MOM6  tools/python/MIDAS
+          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
+          git submodule update #This gets the right version of submodules
+          popd
+
+          pushd mom6
+          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
+          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
+            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
+          else
+            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
+          endif
+          popd
+
+          test -e mom6/.datasets
+          if ($status != 0) then
+            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
+          endif
+        </csh>
+      </source>
+      <compile>
+        <cppDefs><![CDATA[ $(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
+        <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
+      </compile>
+    </component>
+
+    <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
+      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> coupler.git </codeBase>
+        <csh><![CDATA[
+        ( cd coupler && git checkout $(AWG_GIT_TAG) )
+        ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS)</cppDefs>
+      </compile>
+    </component>
+
+  </experiment>
+
+  <experiment name="cm4p7_$(AWG_VERSION)_chemv2">
+    <description>
+Experiment to build executable. See git log for source code provenance.
+This version includes chemistry updates from Jingqiu Mao.
+    </description>
+
+    <component name="fms" paths="shared">
+     <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
+     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/fms/libfms.a" 
+              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/fms"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> shared.git </codeBase>
+        <csh><![CDATA[
+          ( cd shared && git checkout $(AWG_GIT_TAG) )
+          ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
+      </compile>
+    </component>
+
+    <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
+      <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_shared && git checkout user/lwh/chem_v20151106 )
+          ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
+      </compile>
+    </component>
+
+    <component name="atmos_dyn" paths="atmos_drivers/coupled
+                                       atmos_cubed_sphere/driver/coupled
+                                       atmos_cubed_sphere/model
+                                       atmos_cubed_sphere/model_nh_null
+                                       atmos_cubed_sphere/tools"
+                                requires="fms atmos_phys">
+     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn/libatmos_dyn.a" 
+              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <csh><![CDATA[
+          ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
+      </compile>
+    </component>
+
+    <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
+      <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis/libice_sis.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis"/>
+      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
+        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
+        <csh><![CDATA[
+          ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
+          ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
+      </compile>
+    </component>
+
+    <component name="land_lad2" requires="fms" paths="land_lad2">
+      <description domainName="LM3" communityName="land_lad2" communityVersion="$(RELEASE)" communityGrid=""/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2/libland_lad2.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2"/>
+      <source>
+<!--         <codeBase version="$(RELEASE)"> land_lad2 </codeBase> -->
+        <codeBase version="$(RELEASE)"> land_lad2 </codeBase>
+	<csh>
+<!--            # Protection from negative soil water divergence situations,  -->
+<!-- 	   ## merged with testing (Ulm_Patch)   -->
+            cvs up -r ulm_merge_pjp land_lad2/soil/soil.F90
+        </csh>
+      </source>
+      <compile>
+        <cppDefs>$(F2003_FLAGS)</cppDefs>
+
+<!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
+        <csh><![CDATA[
+sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
+CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO $(F2003_FLAGS)
+FRETARGET = $(target)
+
+ifneq (\$(findstring hdf5,\${FRETARGET}),)
+else
+  CPPDEFS += -Duse_LARGEFILE
+endif
+
+vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
+
+land/%.f90: %.F90
+<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
+
+EOF
+
+foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
+  make -f land/Makefile-cpp land/$foo:t:r.f90
+end
+find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
+          ]]>
+        </csh>
+      </compile>
+    </component>
+
+    <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
+      <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
+      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6/libmom6.a" 
+               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p7_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
         <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
         <csh>
