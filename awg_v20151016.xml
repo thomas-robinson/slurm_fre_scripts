@@ -60,12 +60,17 @@ jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h
 ! diag-integral.out ascii file against the checksums listed below. The checksum
 ! can be computed with the 'taverage' AWG utility.
 
-ref> c96L32_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        0d9340ea1612ce1abd9e66f2ad1caca7ac66c132    
-ref> c96L48_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        ae9a975b5bfe518a8b634a0edc64e5e9985d2380
-ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        51addcac25ea8b55f9a3d909b94e1b96bc10f21d
+! v20150923 code
+! ref> c96L32_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        8d4be56456aa0a87cc1055cb7b7cebc94e2b7339
+! ref> c96L48_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        ae9a975b5bfe518a8b634a0edc64e5e9985d2380
+! ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        51addcac25ea8b55f9a3d909b94e1b96bc10f21d
+! v20151106 code
+ref> c96L32_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        8d4be56456aa0a87cc1055cb7b7cebc94e2b7339
+ref> c96L48_am4g6_fullaero/ncrc2.intel-prod-openmp/0m8d        f847027cfb5b0953992049d2846088390ddff600
+ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        a7b7b627b8d9dc8f8489b9143566be39d0a2a276
 
 
-ref> c96L32_am4g7/ncrc2.intel-prod-openmp/0m8d                  
+ref> c96L32_am4g7/ncrc2.intel-prod-openmp/0m8d                 c2c645e35f7923c272ded6bcb37933cc85d5b094
 ref> c96L32_am4g7_2000climo/ncrc2.intel-prod-openmp/0m8d          
 ref> c96L32_am4g7_1860climo/ncrc2.intel-prod-openmp/0m8d         
 ref> c96L32_am4g7_2000aero/ncrc2.intel-prod-openmp/0m8d        
@@ -924,6 +929,15 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2014.cpio</dataSource>
       </dataFile>
+      <dataFile label="input" target="INPUT/sim.dat" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/ncrc/home1/Larry.Horowitz/awg/ulm_201505/xml_v20151106/input/sim.AM3.dat</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/ncrc/home1/Larry.Horowitz/awg/ulm_201505/xml_v20151106/input/sim.AM4.dat</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/ncrc/home1/Jingqiu.Mao/AM4/input/AM3_hetchem/am3_uptake.dat</dataSource>
+      </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
       </dataFile>
@@ -1111,13 +1125,20 @@ else if ( "$npes" == "3456" ) then
   set ocean_layout =   "144,12"; set ocean_io_layout =  "1,4"
   set ice_layout   =   "144,12"; set ice_io_layout   =  "1,4"
 else if ( "$npes" == "4608" ) then
-  set atmos_npes = "2304"
-  set atmos_nthreads = "2"
-  set nxblocks = "1" ; set nyblocks = "2"
-  set fv_layout    =   "16,24";  set fv_io_layout    =  "1,4"
-  set land_layout  =   "16,24";  set land_io_layout  =  "1,4"
-  set ocean_layout =   "192,12"; set ocean_io_layout =  "1,4"
-  set ice_layout   =   "192,12"; set ice_io_layout   =  "1,4"
+# set atmos_npes = "2304"
+# set atmos_nthreads = "2"
+# set nxblocks = "1" ; set nyblocks = "2"
+# set fv_layout    =   "16,24";  set fv_io_layout    =  "1,4"
+# set land_layout  =   "16,24";  set land_io_layout  =  "1,4"
+# set ocean_layout =   "192,12"; set ocean_io_layout =  "1,4"
+# set ice_layout   =   "192,12"; set ice_io_layout   =  "1,4"
+  set atmos_npes = "1152"
+  set atmos_nthreads = "4"
+  set nxblocks = "1" ; set nyblocks = "4"
+  set fv_layout    =   "8,24";  set fv_io_layout    =  "1,4"
+  set land_layout  =   "8,24";  set land_io_layout  =  "1,4"
+  set ocean_layout =   "96,12"; set ocean_io_layout =  "1,4"
+  set ice_layout   =   "96,12"; set ice_io_layout   =  "1,4"
 else if ( "$npes" == "6912" ) then
   set atmos_npes = "3456"
   set atmos_nthreads = "2"
@@ -1766,8 +1787,8 @@ Experiment name = $(name)
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)"
-communityModel="am4p5"
-communityModelID="am4p5"
+communityModel="am4p6"
+communityModelID="am4p6"
 communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
@@ -1880,8 +1901,8 @@ Experiment name = $(name)
 <!-- MDBI -->
     <description
 communityProject="$(ProjectID)"
-communityModel="am4p5"
-communityModelID="am4p5"
+communityModel="am4p6"
+communityModelID="am4p6"
 communityExperimentName="$(name)"
 communityExperimentID="$(name)" >
 <!-- /MDBI -->
@@ -1989,6 +2010,233 @@ Experiment name = $(name)
 
   </experiment>
 
+  <experiment name="c96L48_am4g6_fullchem_chemv1" inherit="cm4p7_$(AWG_VERSION)_chemv1">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p6"
+communityModelID="am4p6"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
+but with "full chemistry" (as in AM3) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g5r5:
+- the fix of sea salt and dust for aerosol activation (in large-scale and UW convection) 
+- pick the max of 2 plumes in uw_conv.F90 from Ming Zhao
+- donner deep updates from Will
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_c96L48.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_amip_chem.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
+        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
+        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
+        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
+        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+
+  <experiment name="c96L48_am4g6_fullchem_chemv2" inherit="cm4p7_$(AWG_VERSION)_chemv2">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p6"
+communityModelID="am4p6"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
+but with "full chemistry" (as in AM3) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g5r5:
+- the fix of sea salt and dust for aerosol activation (in large-scale and UW convection) 
+- pick the max of 2 plumes in uw_conv.F90 from Ming Zhao
+- donner deep updates from Will
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_c96L48.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_amip_AM4chem.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
+        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
+        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
+        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
+        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
 
 
 <!--=+=====================-->
@@ -2112,6 +2360,122 @@ Experiment name = $(name)
 
   </experiment>
 
+  <experiment name="c96L48_am4g7_fullchem" inherit="cm4p7_$(AWG_VERSION)_chemv1">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p7"
+communityModelID="am4p7"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Derived from AM4 prototype configuration "am4g7" from MDT Atmosphere Working Group.
+Includes updates from David Paynter for radiaiton and 
+from Ming Zhao to improve wind stress and fix negative precipitation from UW convection.   
+Adds "full chemistry" (as in AM3) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g6:
+- radiation updates
+- improve wind stress 
+- fix negative precipitation from UW
+- do_liq_num = .true. when using new strat cloud
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p7_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g7_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g7_c96L48.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p7_amip_chem.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
+        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
+        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
+        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
+        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
 
   <experiment name="c96L32_am4g7_2000climo" inherit="cm4p7_$(AWG_VERSION)">
     <description>
