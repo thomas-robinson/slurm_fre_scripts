@@ -100,10 +100,13 @@
         do_legacy_strat_cloud = .false.,
 /
 
+ &ocean_rough_nml
+        rough_scheme = 'beljaars'
+/
+
  &random_number_streams_nml
         force_use_of_temp_for_seed = .true.
 /
-
 
 &rotstayn_klein_mp_nml
         rk_act_only_if_ql_gt_qmin = .true.
