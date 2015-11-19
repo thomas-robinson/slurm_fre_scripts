@@ -43,12 +43,13 @@ jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
 
 jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
 jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
@@ -71,6 +72,7 @@ ref> c96L48_am4g6_fullchem/ncrc2.intel-prod-openmp/0m8d        a7b7b627b8d9dc8f8
 
 
 ref> c96L32_am4g7/ncrc2.intel-prod-openmp/0m8d                 c2c645e35f7923c272ded6bcb37933cc85d5b094
+ref> c96L48_am4g7_fullchem/ncrc2.intel-prod-openmp/0m8d        9c0a24712d37d04c8a49034c60601d0864d116a1
 ref> c96L32_am4g7_2000climo/ncrc2.intel-prod-openmp/0m8d          
 ref> c96L32_am4g7_1860climo/ncrc2.intel-prod-openmp/0m8d         
 ref> c96L32_am4g7_2000aero/ncrc2.intel-prod-openmp/0m8d        
