@@ -69,7 +69,8 @@
         do_cg_drag = .true.
         do_topo_drag = .false.,
         do_conserve_energy = .true.,
-/
+        kstart= 0
+//
 
  &strat_cloud_nml
         use_online_aerosol = .true.,
