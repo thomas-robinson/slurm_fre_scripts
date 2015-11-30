@@ -264,6 +264,7 @@ configuration.
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/lustre/f1/unswept/Chris.Golaz/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="/lustre/f1/pdata/gfdl_M"/>
+      <property name="FP_ARCHIVE_ROOT"     value="/lustre/f1/unswept/Fabien.Paulot/archive"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
 
       <csh><![CDATA[
@@ -293,6 +294,7 @@ configuration.
       <property name="F2003_FLAGS"         value="-DINTERNAL_FILE_NML"/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GFDL)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/archive/cjg/mdt"/>
+      <property name="FP_ARCHIVE_ROOT"     value="/archive"/>
       <property name="LWH_ARCHIVE_ROOT"    value="/archive"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GFDL)"/>
 
@@ -903,6 +905,14 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     </input>
   </experiment>
 
+  <experiment name="field_table_am4p7_fullchem_nitrate">
+    <input>
+      <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/field_table/field_table_am4p7_fullchem_no3</dataSource>
+      </dataFile>
+    </input>
+  </experiment>
+
   <experiment name="common_data_lm3p2">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -958,6 +968,9 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
       </dataFile>
       <dataFile label="input" target="INPUT/AM4_201503" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/am4_optical_table_20150325.dat</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(FP_ARCHIVE_ROOT)/depvel/depvel_gc_am3_fast_hno3.nc</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -1276,7 +1289,7 @@ touch MOM_input
 
   <experiment name="c96_amip_postprocess">
     <postProcess>
-
+      <refineDiag scripts="$FRE_ANALYSIS_HOME/eem/code/cm4_web_analysis/refineDiagScript/refineDiag_data_stager_globalAve.csh"/>
       <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
@@ -3025,6 +3038,133 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
+        <segment simTime="12" units="months" runTime="3:00:00"/>
+      </production>
+      <regression name="basic">
+        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
+      </regression>
+      <regression name="restart">
+        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
+      </regression>
+      <regression name="scaling">
+        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
+        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
+      </regression>
+      <regression name="timing">
+        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
+        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
+        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
+        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
+        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
+        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
+        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
+        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
+    </postProcess>
+
+  </experiment>
+  <experiment name="c96L48_am4g7_fullchem_nitrate" inherit="cm4p8_$(AWG_VERSION)_chemv1">
+
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p7"
+communityModelID="am4p7"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+
+Derived from AM4 prototype configuration "am4g7" from MDT Atmosphere Working Group.
+Includes updates from David Paynter for radiaiton and 
+from Ming Zhao to improve wind stress and fix negative precipitation from UW convection.   
+Adds "full chemistry" (as in AM3, plus nitrate) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g6:
+- radiation updates
+- improve wind stress 
+- fix negative precipitation from UW
+- do_liq_num = .true. when using new strat cloud
+
+Chemistry changes from am4g7:
+- updated dry deposition: new depvel file, exponential loss
+- updated NH3 emissions (seasonality)
+- step updates for tracer operator splitting
+- dynamic BC and OC aging
+- active nitrate thermodynamics (ISORROPIA)
+- fix interpolator bug
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+
+    </description>
+
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = $nxblocks
+         nyblocks = $nyblocks
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p7_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g7_physics_test.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g7_c96L48.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p7_amip_chem_no3.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1980,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = 0
+        atmos_npes = $atmos_npes
+        atmos_nthreads = $atmos_nthreads
+      </namelist>
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
+      <dataFile label="input" target="INPUT/emissions.nh3.1x1.1859_2020.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(FP_ARCHIVE_ROOT)/emissions/rcp_with_htap_season/emissions.nh3.1x1.1859_2020_seasonality.nc</dataSource>
+      </dataFile>
+      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
+      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p7_fullchem_nitrate']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>

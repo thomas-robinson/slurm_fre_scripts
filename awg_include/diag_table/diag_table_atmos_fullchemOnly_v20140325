@@ -51,5 +51,18 @@
 "tracers",   "H2O_chem_dt", "H2O_chem_dt", "atmos_tracer", "all", .true.,  "none", 2
 "tracers",   "CH4_loss",    "CH4_loss",    "atmos_tracer", "all", .true.,  "none", 2
 
-"dynamics",  "O3", "O3", "atmos_hourly", "all", .true.,  "-1  1 -1  1 997. 1000.", 2
+"tracers",   "so2_emis",      "SO2_emis",       "atmos_tracer", "all", .true., "none", 2
+"tracers",   "so2_emis3d",    "SO2_emis3d",     "atmos_tracer", "all", .true., "none", 2
+"tracers",   "SO2_prodm",     "SO2_prodm",      "atmos_tracer", "all", .true., "none", 2
+"tracers",   "SO4_prodm",     "SO4_prodm",      "atmos_tracer", "all", .true., "none", 2
+"moist",     "so4_wet_depo",  "SO4_wdep_all",   "atmos_tracer", "all", .true., "none", 2
+"tracers",   "so2_reevap_ls", "SO2_evap_ls",    "atmos_tracer", "all", .true., "none", 2
+"tracers",   "so4_ddep",      "SO4_ddep",       "atmos_tracer", "all", .true., "none", 2
+"tracers",   "so4_wdep_ls",   "SO4_wdep_ls",    "atmos_tracer", "all", .true., "none", 2
+"dynamics",  "so4_col",       "so4_col",        "atmos_tracer", "all", .true., "none", 2
+"tracers",   "SO4_col",       "SO4_col_tracer", "atmos_tracer", "all", .true., "none", 2
+"tracers",   "pso4_h2o2",     "PROD_SO4_H2O2",  "atmos_tracer", "all", .true., "none", 2
+"tracers",   "pso4_o3",       "PROD_SO4_O3",    "atmos_tracer", "all", .true., "none", 2
+
+"dynamics",  "O3", "O3", "atmos_hourly", "all", .true.,  "-1  -1 -1  -1 997. 1000.", 2
 "radiation", "pm2.5", "pm2.5", "atmos_daily", "all", .true., "none", 2
