@@ -1289,7 +1289,7 @@ touch MOM_input
 
   <experiment name="c96_amip_postprocess">
     <postProcess>
-      <refineDiag scripts="$FRE_ANALYSIS_HOME/eem/code/cm4_web_analysis/refineDiagScript/refineDiag_data_stager_globalAve.csh"/>
+      <refineDiag script="$(AWG_INPUT_HOME_GFDL)/refineDiag/refineDiag_data_stager_globalAve.csh"/>
       <component type="atmos" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
