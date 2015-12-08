@@ -826,9 +826,10 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
 <!--
-     <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C96L48_LM3_OM4_025_grid_southshifted_19810101.remapped.v20150120.tar</dataSource>
--->
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/awg/input/ic/awg_C96L48_LM3_OM4_025_grid_southshifted_19810101.remapped.v20150120.tar</dataSource>
         <dataSource platform="$(platform)">/lustre/f1/unswept/Larry.Horowitz/awg/IC/awg_C96L48_LM3_OM4_025_grid_lm3p2_19810101.remapped.v20150604.tar</dataSource>
+-->
+        <dataSource platform="$(platform)">/lustre/f1/unswept/Larry.Horowitz/awg/IC/awg_C96L48_LM3_OM4_025_grid_lm3p2_topo_v20151101.tar</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -3079,6 +3080,7 @@ Experiment name = $(name)
     </postProcess>
 
   </experiment>
+
   <experiment name="c96L48_am4g7_fullchem_nitrate" inherit="cm4p8_$(AWG_VERSION)_chemv1">
 
 <!-- MDBI -->
@@ -3205,6 +3207,164 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
     </postProcess>
 
+  </experiment>
+
+  <experiment name="c96L48_am4g8_fullchem" inherit="c96L48_am4g7_fullchem">
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p8"
+communityModelID="am4p8"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+AM4 prototype configuration "am4g8" from MDT Atmosphere Working Group.
+Derived from "am4g7",  with a new topographic drag formulation Steve Garner.
+Adds "full chemistry" (as in AM3) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 32 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g7:
+- using a new topographic drag formulation
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+    </description>
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+    <input>
+      <namelist name="damping_driver_nml">
+        trayfric = 0.,
+        nlev_rayfric = 1,
+        do_mg_drag = .false.
+        do_cg_drag = .true.
+        do_topo_drag = .true.,
+        do_conserve_energy = .true.,
+        kstart= 0
+      </namelist>
+      <namelist name="topo_rough_nml">
+        use_topo_rough    = .true.
+        max_topo_rough    = 100.0
+        topo_rough_factor = 0.01
+        topo_rough_source = 'input',
+        topo_rough_file = 'INPUT/mg_drag.nc',
+      </namelist>
+      <namelist name="topo_drag_nml">
+        frcrit  = 0.7
+        alin    = 0.6
+        anonlin = 3.0
+        use_mg_scaling = .true.
+        do_pbl_average = .true.
+        use_mask_for_pbl = .true.
+        beta = 0.5
+        gamma = 0.4
+        epsi = 0.0
+        h_frac = 0.1
+        zref_fac = 1.0
+        no_drag_frac = 0.1
+        tboost = 1.5
+        pcut = 10.e2
+        samp = 2.
+        do_conserve_energy = .true.
+      </namelist>
+    </input>
+  </experiment>
+
+  <experiment name="c96L48_am4g8_fullchem_nitrate" inherit="c96L48_am4g7_fullchem_nitrate">
+<!-- MDBI -->
+    <description
+communityProject="$(ProjectID)"
+communityModel="am4p8"
+communityModelID="am4p8"
+communityExperimentName="$(name)"
+communityExperimentID="$(name)" >
+<!-- /MDBI -->
+AM4 prototype configuration "am4g8" from MDT Atmosphere Working Group.
+Derived from "am4g7",  with a new topographic drag formulation Steve Garner.
+Adds "full chemistry" (as in AM3, plus nitrate) and 48 levels.
+
+- c96 horizontal grid with approximately 100km resolution and 32 vertical levels.
+- Convection based on "double-plume" from Ming Zhao.
+- Tiedtke cloud scheme
+
+Changes from am4g7:
+- using a new topographic drag formulation
+
+Chemistry changes from am4g7:
+- updated dry deposition: new depvel file, exponential loss
+- updated NH3 emissions (seasonality)
+- step updates for tracer operator splitting
+- dynamic BC and OC aging
+- active nitrate thermodynamics (ISORROPIA)
+- fix interpolator bug
+
+For more information about AWG configurations, refer to
+http://cobweb.gfdl.noaa.gov/~cjg/awg
+    </description>
+<!-- MDBI -->
+    <realization r="1" i="1" p="1"/>
+    <communityComment>
+Experiment name = $(name)
+    </communityComment>
+    <scenario
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)"
+      parentExperimentID="N/A"
+      parentExperimentRIP="N/A"
+      branch_time="0.0">
+    </scenario>
+<!-- /MDBI -->
+    <input>
+      <namelist name="damping_driver_nml">
+        trayfric = 0.,
+        nlev_rayfric = 1,
+        do_mg_drag = .false.
+        do_cg_drag = .true.
+        do_topo_drag = .true.,
+        do_conserve_energy = .true.,
+        kstart= 0
+      </namelist>
+      <namelist name="topo_rough_nml">
+        use_topo_rough    = .true.
+        max_topo_rough    = 100.0
+        topo_rough_factor = 0.01
+        topo_rough_source = 'input',
+        topo_rough_file = 'INPUT/mg_drag.nc',
+      </namelist>
+      <namelist name="topo_drag_nml">
+        frcrit  = 0.7
+        alin    = 0.6
+        anonlin = 3.0
+        use_mg_scaling = .true.
+        do_pbl_average = .true.
+        use_mask_for_pbl = .true.
+        beta = 0.5
+        gamma = 0.4
+        epsi = 0.0
+        h_frac = 0.1
+        zref_fac = 1.0
+        no_drag_frac = 0.1
+        tboost = 1.5
+        pcut = 10.e2
+        samp = 2.
+        do_conserve_energy = .true.
+      </namelist>
+    </input>
   </experiment>
 
 
