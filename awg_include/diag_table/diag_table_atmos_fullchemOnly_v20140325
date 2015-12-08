@@ -31,6 +31,7 @@
 "dynamics",  "ch3cho",      "CH3CHO",      "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "dms",         "DMS",         "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "nh3",         "NH3",         "atmos_tracer", "all", .true.,  "none", 2
+"dynamics",  "nh4no3",      "NH4NO3",      "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "h2",          "H2",          "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "ho2",         "HO2",         "atmos_tracer", "all", .true.,  "none", 2
 "dynamics",  "c10h16",      "C10H16",      "atmos_tracer", "all", .true.,  "none", 2
