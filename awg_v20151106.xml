@@ -673,7 +673,7 @@ This version includes chemistry updates from Jingqiu Mao.
         <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_shared && git checkout user/lwh/chem_v20151106 )
+          ( cd atmos_shared && git checkout chem_v20151106_lwh )
           ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
          ]]>
         </csh>
