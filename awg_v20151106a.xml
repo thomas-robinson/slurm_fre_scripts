@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151106 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151106a revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,24 +12,24 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg_v20151106 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151106
-# .. cd xml_v20151106
+# .. git clone -b awg_v20151106a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151106a
+# .. cd xml_v20151106a
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg_v20151106.xml -p ncrc2.intel -t openmp cm4p8_v20151106
+# .. fremake -x awg_v20151106a.xml -p ncrc2.intel -t openmp cm4p8_v20151106a
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -s -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20151106.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
+# .. fredb-pp -x awg_v20151106a.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
 
 -->
 
@@ -38,26 +38,26 @@
             FRE commands listed should NOT include -s option to
             automatically sumbit jobs.
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
+jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g8
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g8
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
-jenny> frerun -r basic -x awg_v20151106.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
+jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
 
 
 
@@ -100,7 +100,7 @@ ref> c96L32_am4h7_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d   e463b29e64f9ac031
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="AWG_GIT_TAG" value="awg_v20151106"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20151106"/>                 <!-- AWG source code version -->
+  <property name="AWG_VERSION" value="v20151106a"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)_$(AWG_VERSION)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -157,8 +157,8 @@ properties below.
   <property name="EXP_AMIP_END"   value="2010"/>
   <property name="EXP_AMIP_LEN"   value="31"/>
   <property name="ANA_AMIP_START" value="1981"/>
-  <property name="ANA_AMIP_END"   value="2000"/>
-  <property name="ANA_AMIP_LEN"   value="20yr"/>
+  <property name="ANA_AMIP_END"   value="2010"/>
+  <property name="ANA_AMIP_LEN"   value="30yr"/>
 
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
@@ -353,12 +353,13 @@ Experiment to build executable. See git log for source code provenance.
           <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
+            ( cd atmos_shared && git checkout chem_v20151106_lwh )
             ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
            ]]>
           </csh>
         </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB -DAM3_CHEM</cppDefs>
       </compile>
     </component>
 
@@ -432,336 +433,6 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
 
     <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
-        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
-        <csh>
-          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
-          pushd mom6
-          git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
-          git submodule init src/MOM6  tools/python/MIDAS
-          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
-          git submodule update #This gets the right version of submodules
-          popd
-
-          pushd mom6
-          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
-          else
-            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
-          endif
-          popd
-
-          test -e mom6/.datasets
-          if ($status != 0) then
-            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
-          endif
-        </csh>
-      </source>
-      <compile>
-        <cppDefs><![CDATA[ $(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
-        <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
-      </compile>
-    </component>
-
-    <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
-      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> coupler.git </codeBase>
-        <csh><![CDATA[
-        ( cd coupler && git checkout $(AWG_GIT_TAG) )
-        ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
-      </compile>
-    </component>
-
-  </experiment>
-
-  <experiment name="cm4p8_$(AWG_VERSION)_chemv1">
-    <description>
-Experiment to build executable. See git log for source code provenance.
-This version includes chemistry updates from Jingqiu Mao.
-    </description>
-
-    <component name="fms" paths="shared">
-     <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
-     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/fms/libfms.a" 
-              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/fms"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> shared.git </codeBase>
-        <csh><![CDATA[
-          ( cd shared && git checkout $(AWG_GIT_TAG) )
-          ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
-      </compile>
-    </component>
-
-    <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
-      <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
-        <csh><![CDATA[
-          ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_shared && git checkout chem_v20151106_lwh )
-          ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -DCLUBB -DAM3_CHEM</cppDefs>
-      </compile>
-    </component>
-
-    <component name="atmos_dyn" paths="atmos_drivers/coupled
-                                       atmos_cubed_sphere/driver/coupled
-                                       atmos_cubed_sphere/model
-                                       atmos_cubed_sphere/model_nh_null
-                                       atmos_cubed_sphere/tools"
-                                requires="fms atmos_phys">
-     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn/libatmos_dyn.a" 
-              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
-        <csh><![CDATA[
-          ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
-      </compile>
-    </component>
-
-    <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
-      <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis/libice_sis.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
-        <csh><![CDATA[
-          ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
-          ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
-      </compile>
-    </component>
-
-    <component name="land_lad2" requires="fms" paths="land_lad2">
-      <description domainName="LM3" communityName="land_lad2" communityVersion="ulm_lad2_20151006_slm" communityGrid=""/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2/libland_lad2.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="ulm_lad2_20151006_slm">land_lad2.git</codeBase>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
-
-<!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
-        <csh><![CDATA[
-sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
-CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO $(F2003_FLAGS)
-FRETARGET = $(target)
-
-ifneq (\$(findstring hdf5,\${FRETARGET}),)
-else
-  CPPDEFS += -Duse_LARGEFILE
-endif
-
-vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
-
-land/%.f90: %.F90
-<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
-
-EOF
-
-foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
-  make -f land/Makefile-cpp land/$foo:t:r.f90
-end
-find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
-          ]]>
-        </csh>
-      </compile>
-    </component>
-
-    <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
-      <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6/libmom6.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
-        <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
-        <csh>
-          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
-          pushd mom6
-          git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
-          git submodule init src/MOM6  tools/python/MIDAS
-          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
-          git submodule update #This gets the right version of submodules
-          popd
-
-          pushd mom6
-          set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
-          else
-            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
-          endif
-          popd
-
-          test -e mom6/.datasets
-          if ($status != 0) then
-            echo ""; echo "" ; echo "   WARNING:  .datasets link in MOM6 examples directory is invalid"; echo ""; echo ""
-          endif
-        </csh>
-      </source>
-      <compile>
-        <cppDefs><![CDATA[ $(F2003_FLAGS) -D_FILE_VERSION="'"`git-version-string $<`"'" ]]></cppDefs>
-        <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
-      </compile>
-    </component>
-
-    <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
-      <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> coupler.git </codeBase>
-        <csh><![CDATA[
-        ( cd coupler && git checkout $(AWG_GIT_TAG) )
-        ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
-      </compile>
-    </component>
-
-  </experiment>
-
-  <experiment name="cm4p8_$(AWG_VERSION)_chemv2">
-    <description>
-Experiment to build executable. See git log for source code provenance.
-This version includes chemistry updates from Jingqiu Mao.
-    </description>
-
-    <component name="fms" paths="shared">
-     <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
-     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/fms/libfms.a" 
-              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/fms"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> shared.git </codeBase>
-        <csh><![CDATA[
-          ( cd shared && git checkout $(AWG_GIT_TAG) )
-          ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -Duse_libMPI -Duse_netCDF </cppDefs>
-      </compile>
-    </component>
-
-    <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
-      <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
-        <csh><![CDATA[
-          ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_shared && git checkout chem_v20151106_lwh )
-          ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -DCLUBB</cppDefs>
-      </compile>
-    </component>
-
-    <component name="atmos_dyn" paths="atmos_drivers/coupled
-                                       atmos_cubed_sphere/driver/coupled
-                                       atmos_cubed_sphere/model
-                                       atmos_cubed_sphere/model_nh_null
-                                       atmos_cubed_sphere/tools"
-                                requires="fms atmos_phys">
-     <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn/libatmos_dyn.a" 
-              headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/atmos_dyn"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
-        <csh><![CDATA[
-          ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
-      </compile>
-    </component>
-
-    <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
-      <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis/libice_sis.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/ice_sis"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
-        <csh><![CDATA[
-          ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
-          ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
-         ]]>
-        </csh>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS) -Duse_netCDF</cppDefs>
-      </compile>
-    </component>
-
-    <component name="land_lad2" requires="fms" paths="land_lad2">
-      <description domainName="LM3" communityName="land_lad2" communityVersion="ulm_lad2_20151006_slm" communityGrid=""/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2/libland_lad2.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/land_lad2"/>
-      <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="ulm_lad2_20151006_slm">land_lad2.git</codeBase>
-      </source>
-      <compile>
-        <cppDefs>$(F2003_FLAGS)</cppDefs>
-
-<!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
-        <csh><![CDATA[
-sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
-CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO $(F2003_FLAGS)
-FRETARGET = $(target)
-
-ifneq (\$(findstring hdf5,\${FRETARGET}),)
-else
-  CPPDEFS += -Duse_LARGEFILE
-endif
-
-vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
-
-land/%.f90: %.F90
-<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
-
-EOF
-
-foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
-  make -f land/Makefile-cpp land/$foo:t:r.f90
-end
-find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
-          ]]>
-        </csh>
-      </compile>
-    </component>
-
-    <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
-      <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
-      <library path="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6/libmom6.a" 
-               headerDir="/lustre/f1/unswept/$USER/$(stem)/cm4p8_$(AWG_VERSION)/$(platform)-$(target)/exec/mom6"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/github_mirror">
         <codeBase version="$(MOM6_GIT_TAG)"> NULL </codeBase>
         <csh>
@@ -937,16 +608,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/RCP/cmip5_rcp45.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2014.cpio</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/sim.dat" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/ncrc/home1/Larry.Horowitz/awg/ulm_201505/xml_v20151106/input/sim.AM3.dat</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/ncrc/home1/Larry.Horowitz/awg/ulm_201505/xml_v20151106/input/sim.AM4.dat</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/ncrc/home1/Jingqiu.Mao/AM4/input/AM3_hetchem/am3_uptake.dat</dataSource>
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.1x1.1859_2020.tar</dataSource>
@@ -977,9 +639,6 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
       </dataFile>
       <dataFile label="input" target="INPUT/AM4_201503" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/aerosol/am4_optical_table_20150325.dat</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(FP_ARCHIVE_ROOT)/depvel/depvel_gc_am3_fast_hno3.nc</dataSource>
       </dataFile>
     </input>
   </experiment>
@@ -2744,235 +2403,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g6_fullchem_chemv1" inherit="cm4p8_$(AWG_VERSION)_chemv1">
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)"
-communityModel="am4p6"
-communityModelID="am4p6"
-communityExperimentName="$(name)"
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
-but with "full chemistry" (as in AM3) and 48 levels.
-
-- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
-- Convection based on "double-plume" from Ming Zhao.
-- Tiedtke cloud scheme
-
-Changes from am4g5r5:
-- the fix of sea salt and dust for aerosol activation (in large-scale and UW convection) 
-- pick the max of 2 plumes in uw_conv.F90 from Ming Zhao
-- donner deep updates from Will
-
-For more information about AWG configurations, refer to
-http://cobweb.gfdl.noaa.gov/~cjg/awg
-
-    </description>
-
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-Experiment name = $(name)
-    </communityComment>
-    <scenario
-      communityForcing="N/A"
-      startTime="$(EXP_AMIP_START)"
-      endTime="$(EXP_AMIP_END)"
-      parentExperimentID="N/A"
-      parentExperimentRIP="N/A"
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <namelist name="atmos_model_nml">
-         nxblocks = $nxblocks
-         nyblocks = $nyblocks
-      </namelist>
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_c96L48.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_amip_chem.nml"/>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1980,1,1,0,0,0,
-        calendar = 'julian'
-        dt_atmos = 1800,
-        dt_cpld  = 7200,
-        use_lag_fluxes = .true.
-        concurrent = .false.
-        do_ocean = .false.
-        ocean_npes = 0
-        atmos_npes = $atmos_npes
-        atmos_nthreads = $atmos_nthreads
-      </namelist>
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
-    </input>
-
-    <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="3:00:00"/>
-      </production>
-      <regression name="basic">
-        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
-      </regression>
-      <regression name="restart">
-        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
-      </regression>
-      <regression name="scaling">
-        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
-      </regression>
-      <regression name="timing">
-        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
-        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
-        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
-        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
-        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
-        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
-        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
-        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
-      </regression>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
-    </postProcess>
-
-  </experiment>
-
-  <experiment name="c96L48_am4g6_fullchem_chemv2" inherit="cm4p8_$(AWG_VERSION)_chemv2">
-
-<!-- MDBI -->
-    <description
-communityProject="$(ProjectID)"
-communityModel="am4p6"
-communityModelID="am4p6"
-communityExperimentName="$(name)"
-communityExperimentID="$(name)" >
-<!-- /MDBI -->
-
-Derived from AM4 prototype configuration "am4g5r1" from MDT Atmosphere Working Group,
-but with "full chemistry" (as in AM3) and 48 levels.
-
-- c96 horizontal grid with approximately 100km resolution and 48 vertical levels.
-- Convection based on "double-plume" from Ming Zhao.
-- Tiedtke cloud scheme
-
-Changes from am4g5r5:
-- the fix of sea salt and dust for aerosol activation (in large-scale and UW convection) 
-- pick the max of 2 plumes in uw_conv.F90 from Ming Zhao
-- donner deep updates from Will
-
-For more information about AWG configurations, refer to
-http://cobweb.gfdl.noaa.gov/~cjg/awg
-
-    </description>
-
-<!-- MDBI -->
-    <realization r="1" i="1" p="1"/>
-    <communityComment>
-Experiment name = $(name)
-    </communityComment>
-    <scenario
-      communityForcing="N/A"
-      startTime="$(EXP_AMIP_START)"
-      endTime="$(EXP_AMIP_END)"
-      parentExperimentID="N/A"
-      parentExperimentRIP="N/A"
-      branch_time="0.0">
-    </scenario>
-<!-- /MDBI -->
-
-    <input>
-      <namelist name="atmos_model_nml">
-         nxblocks = $nxblocks
-         nyblocks = $nyblocks
-      </namelist>
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g6_c96L48.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p6_amip_AM4chem.nml"/>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1980,1,1,0,0,0,
-        calendar = 'julian'
-        dt_atmos = 1800,
-        dt_cpld  = 7200,
-        use_lag_fluxes = .true.
-        concurrent = .false.
-        do_ocean = .false.
-        ocean_npes = 0
-        atmos_npes = $atmos_npes
-        atmos_nthreads = $atmos_nthreads
-      </namelist>
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p6_fullchem']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='amip_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c96_data_lm3p2']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='L48_data']/input/node())"/>
-      <xi:include xpointer="xpointer(//experiment[@name='c96L48_initCond']/input/node())"/>
-    </input>
-
-    <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" npes="4608" runTime="16:00:00">
-        <segment simTime="12" units="months" runTime="3:00:00"/>
-      </production>
-      <regression name="basic">
-        <run days="8"   npes="432"  runTimePerJob="01:00:00"/>
-      </regression>
-      <regression name="restart">
-        <run days="4 4" npes="864"  runTimePerJob="00:40:00"/>
-      </regression>
-      <regression name="scaling">
-        <run days="8"   npes="1152" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="1728" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="2304" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="3456" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="4608" runTimePerJob="00:30:00"/>
-        <run days="8"   npes="6912" runTimePerJob="00:30:00"/>
-      </regression>
-      <regression name="timing">
-        <run months="1" npes="432"  runTimePerJob="04:00:00"/>
-        <run months="1" npes="864"  runTimePerJob="03:00:00"/>
-        <run months="1" npes="1152" runTimePerJob="02:00:00"/>
-        <run months="1" npes="1728" runTimePerJob="01:30:00"/>
-        <run months="1" npes="2304" runTimePerJob="01:30:00"/>
-        <run months="1" npes="3456" runTimePerJob="01:30:00"/>
-        <run months="1" npes="4608" runTimePerJob="01:30:00"/>
-        <run months="1" npes="6912" runTimePerJob="01:30:00"/>
-      </regression>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//experiment[@name='c96_amip_postprocess']/postProcess/node())"/>
-    </postProcess>
-
-  </experiment>
-
-  <experiment name="c96L48_am4g7_fullchem" inherit="cm4p8_$(AWG_VERSION)_chemv1">
+  <experiment name="c96L48_am4g7_fullchem" inherit="cm4p8_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -3089,7 +2520,7 @@ Experiment name = $(name)
 
   </experiment>
 
-  <experiment name="c96L48_am4g7_fullchem_nitrate" inherit="cm4p8_$(AWG_VERSION)_chemv1">
+  <experiment name="c96L48_am4g7_fullchem_nitrate" inherit="cm4p8_$(AWG_VERSION)">
 
 <!-- MDBI -->
     <description
@@ -3171,7 +2602,7 @@ Experiment name = $(name)
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//experiment[@name='common_data_lm3p2']/input/node())"/>
       <dataFile label="input" target="INPUT/emissions.nh3.1x1.1859_2020.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(FP_ARCHIVE_ROOT)/emissions/rcp_with_htap_season/emissions.nh3.1x1.1859_2020_seasonality.nc</dataSource>
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/historical/emissions.nh3.1x1.1859_2020_seasonality.nc</dataSource>
       </dataFile>
       <xi:include xpointer="xpointer(//experiment[@name='diag_table_lm3p2_fullchem']/input/node())"/>
       <xi:include xpointer="xpointer(//experiment[@name='field_table_am4p7_fullchem_nitrate']/input/node())"/>

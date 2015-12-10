@@ -504,6 +504,7 @@
         verbose = 1,
         retain_cm3_bugs =.false.,
         check_convergence = .true.
+        sim_data_filename = 'sim.AM3.dat'
 /
 
  &vegn_nml
