@@ -87,11 +87,11 @@ ref> c96L32_am4g8/ncrc2.intel-prod-openmp/0m8d                 92aa1878abce6d957
 ref> c96L48_am4g8_fullchem/ncrc2.intel-prod-openmp/0m8d        51f790cde424e1716bb6ae0031b96f9a57d46eb9
 ref> c96L48_am4g8_fullchem_nitrate/ncrc2.intel-prod-openmp/0m8d  4abf62afe4fe78567d2c95933368a9a5408073a9
 
-ref> c96L32_am4h7/ncrc2.intel-prod-openmp/0m8d                 ecb517df2dc0cb10e48db8e939a6c04294030de5 
-ref> c96L32_am4h7_2000climo/ncrc2.intel-prod-openmp/0m8d       0b748066b925a79293be35f914d7f114e76da81a 
-ref> c96L32_am4h7_1860climo/ncrc2.intel-prod-openmp/0m8d       16d044f4eefad90e6982625c59870eed5049869b
-ref> c96L32_am4h7_2000aero/ncrc2.intel-prod-openmp/0m8d        9fefe377006c004603868f04363eb7cfc603e76a
-ref> c96L32_am4h7_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d   e463b29e64f9ac031f69e82b8a4fff7b4d73ba1c
+ref> c96L32_am4h7/ncrc2.intel-prod-openmp/0m8d                 ce9df65d44958891f6137712f6fe3ad41a3bd551
+ref> c96L32_am4h7_2000climo/ncrc2.intel-prod-openmp/0m8d       415646e8ce17f122d1291ede6c26952459dd84ab
+ref> c96L32_am4h7_1860climo/ncrc2.intel-prod-openmp/0m8d       916425f7033d39362421669c2013892623a7e52e
+ref> c96L32_am4h7_2000aero/ncrc2.intel-prod-openmp/0m8d        d2026997764b2a8c72e081ed86607e3d5f8dc494
+ref> c96L32_am4h7_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d   55a5435231035045f6161d6dcd6d3504dc440b9a
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
