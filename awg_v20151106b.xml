@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151106a revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20151106b revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,24 +12,24 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg_v20151106a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151106a
-# .. cd xml_v20151106a
+# .. git clone -b awg_v20151106b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20151106b
+# .. cd xml_v20151106b
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg_v20151106a.xml -p ncrc2.intel -t openmp cm4p8_v20151106a
+# .. fremake -x awg_v20151106b.xml -p ncrc2.intel -t openmp cm4p8_v20151106b
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -s -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
+# .. frerun -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20151106a.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
+# .. fredb-pp -x awg_v20151106b.xml -p gfdl.ncrc2-intel -t openmp c96L32_am4g7
 
 -->
 
@@ -38,26 +38,26 @@
             FRE commands listed should NOT include -s option to
             automatically sumbit jobs.
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
+jenny> frerun -r basic,restart,scaling -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g6_fullaero  
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullaero
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp  c96L48_am4g6_fullchem
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g8
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L48_am4g7_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g8
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L48_am4g8_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7_1860climo
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000aero
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4g7_2000climo_p2K
 
-jenny> frerun -r basic,restart,scaling -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
-jenny> frerun -r basic -x awg_v20151106a.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4h7
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4h7_1860climo
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000aero
+jenny> frerun -r basic -x awg_v20151106b.xml -p ncrc2.intel -t openmp c96L32_am4h7_2000climo_p2K
 
 
 
@@ -100,8 +100,8 @@ ref> c96L32_am4h7_2000climo_p2K/ncrc2.intel-prod-openmp/0m8d   55a5435231035045f
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="AWG_GIT_TAG" value="awg_v20151106"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20151106a"/>                 <!-- AWG source code version -->
-  <property name="FRE_STEM" value="awg/$(RELEASE)_$(AWG_VERSION)"/>
+  <property name="AWG_VERSION" value="v20151106b"/>                 <!-- AWG source code version -->
+  <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="off"/>                        <!-- on/off switch for MDBI database -->
@@ -262,9 +262,9 @@ configuration.
 
     <platform name="ncrc2.intel">
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_m</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
-<!--     <src>$HOME/$(stem)/$(name)/src</src> -->
+         <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
          <stdout>/lustre/f1/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
       </directory>
