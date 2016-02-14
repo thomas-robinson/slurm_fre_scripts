@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/ulm_201505
 # .. cd $home/awg/ulm_201505
-# .. git clone -b awg_v20160212 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160212
+# .. git clone -b awg_v20160212b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160212
 # .. cd xml_v20160212
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
@@ -20,16 +20,16 @@
 
 # To check out source code and compile:
 # .. module load fre/bronx-10
-# .. fremake -x awg_v20160212.xml -p ncrc3.intel -t openmp cm4p9_v20160212
+# .. fremake -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp cm4p9_v20160212
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7
+# .. frerun -s -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7
+# .. frerun -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20160212.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g7
+# .. fredb-pp -x awg_v20160212_c3.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g7
 
 -->
 
@@ -38,22 +38,22 @@
             FRE commands listed should NOT include -s option to
             automatically sumbit jobs.
 
-jenny> frerun -r basic,restart,scaling -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L48_am4g7_fullchem
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L48_am4g7_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g8
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L48_am4g8_fullchem
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L48_am4g8_fullchem_nitrate
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000climo
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7_1860climo
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000aero
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L48_am4g7_fullchem
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L48_am4g7_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g8
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L48_am4g8_fullchem
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L48_am4g8_fullchem_nitrate
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000climo
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7_1860climo
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000aero
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4g7_2000climo_p2K
 
-jenny> frerun -r basic,restart,scaling -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4h7
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000climo
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4h7_1860climo
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000aero
-jenny> frerun -r basic -x awg_v20160212.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000climo_p2K
+jenny> frerun -r basic,restart,scaling -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4h7
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000climo
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4h7_1860climo
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000aero
+jenny> frerun -r basic -x awg_v20160212_c3.xml -p ncrc3.intel -t openmp c96L32_am4h7_2000climo_p2K
 
 
 
