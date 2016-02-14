@@ -1,15 +1,17 @@
  &aerosol_nml
-    family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA"
-    in_family1 = F,T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,
-    in_family2 = F,F,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-    in_family3 = F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F,
-    in_family4 = T,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
-    in_family5 = F,F,F,F,F,F,F,T,T,T,T,T,F,F,F,F,
-    in_family6 = F,F,F,F,F,F,T,F,F,F,F,F,F,F,F,F,
-    in_family7 = T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
-    in_family8 = T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,
-    in_family9 = F,T,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-    in_family10= F,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
+    family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA", "fine_aer", "coarse_aer"
+    in_family1 = F,T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family2 = F,F,T,T,T,T,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family3 = F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F,F,F
+    in_family4 = T,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F
+    in_family5 = F,F,F,F,F,F,F,T,T,T,T,T,F,F,F,F,F,F
+    in_family6 = F,F,F,F,F,F,T,F,F,F,F,F,F,F,F,F,F,T
+    in_family7 = T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T
+    in_family8 = T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,T,T
+    in_family9 = F,T,T,T,T,T,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family10= F,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F
+    in_family11= T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,T,T
+    in_family12= F,F,T,T,T,T,F,F,F,T,T,T,F,F,F,F,F,F
     aerosol_data_source = "predicted"
 /
 
@@ -326,6 +328,10 @@
 /
 
  &carbon_aerosol_nml
+      do_dynamic_bc = .true.,
+      frac_bcbb_phobic = 0.4,
+      frac_bcbb_philic = 0.6,
+      do_dynamic_om = .true.,
       bcff_source = 'gocart_2007',
         bcff_input_name(1)='anthro',
         bcff_filename='emissions.bc.1x1.1859_2020.nc',
@@ -481,13 +487,13 @@
         file_emis3d_1 = 'emissions3D.',
         file_emis3d_2 = '.1x1.1859_2020.nc',
         file_ub = 'ub_vals.mozart.nc',
-        file_dry = 'depvel.nc',
+        file_dry = 'depvel_gc_am3_fast_hno3.nc',
         inv_list = '',
         file_aircraft = 'emissions.aircraft.1x1.1859_2020.nc',
-        lght_no_prd_factor = 0.25,
+        lght_no_prd_factor = 0.6,
         normalize_lght_no_prd_area = .true.,
         min_land_frac_lght = 0.1,
-        cloud_chem_type = "f1p_bug",
+        cloud_chem_type = 'f1p',
         strat_chem_age_factor = 1.,
         strat_chem_dclydt_factor = 1.,
         do_tropchem = .true.,
@@ -503,10 +509,17 @@
         ch4_filename = 'ch4_gblannualdata',
         ch4_scale_factor = 1.e-9,
         do_fastjx_photo = .true.
+	frac_aerosol_incloud   = 0.7,
+	frac_dust_incloud = 0.0,
+        min_lwc_for_cloud_chem = 1.e-10,
+        aerosol_thermo_method = 'isorropia',
+        max_rh_aerosol = 95.,
+        small_value = 1.e-25,
+        gNH3 = 0.,
         verbose = 1,
         retain_cm3_bugs =.false.,
         check_convergence = .true.
-        sim_data_filename = 'sim.AM4.dat'
+        sim_data_filename = 'sim.AM3.dat'
 /
 
  &vegn_nml

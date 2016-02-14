@@ -485,7 +485,7 @@
         lght_no_prd_factor = 0.25,
         normalize_lght_no_prd_area = .true.,
         min_land_frac_lght = 0.1,
-        cloud_chem_type = "f1p",
+        cloud_chem_type = "f1p_bug",
         strat_chem_age_factor = 1.,
         strat_chem_dclydt_factor = 1.,
         do_tropchem = .true.,

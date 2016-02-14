@@ -1,7 +1,7 @@
  &cloud_generator_nml
       do_inhomogeneous_clouds = .true.
       defaultOverlap = 4
-      overlapLengthScale = 4.
+      overlapLengthScale = 1.
 /
 
  &cloud_spec_nml
@@ -14,14 +14,14 @@
         auto_th0_d = 0.5e-3
         tcrit_d    = -25.15,
         peff_l_d   = 5.0e-5
-        peff_i_d   = 12.e-5
+        peff_i_d   = 11.0e-5
         rkm_dp1 = 2.
         rkm_dp2 = 0.1
         cwfn_th = 10.
         tau_dp = 28800.
         mixing_assumption_d = 4
         do_ppen_d  = .true.
-        rpen_d     = 4.0
+        rpen_d     = 4.3
         do_pevap_d = .true.
         cfrac_d    = 0.15
         hcevap_d   = 0.9
@@ -127,12 +127,12 @@
         mc_thresh = 0.001,
         eros_scale = 1.e-6,
         eros_choice = .true.,
-        eros_scale_c = 3.e-5,
-        eros_scale_t = 3.e-5,
+        eros_scale_c = 4.e-5,
+        eros_scale_t = 4.e-5,
         super_choice = .true.,
         tracer_advec = .true.
-        vfact = 0.8
-        U_evap_snow = 0.8
+        vfact = 1.2
+        U_evap_snow = 1.0
         cfact = 1.0
         do_liq_num = .true.
         use_kk_auto = .false.
@@ -160,18 +160,20 @@
 
  &uw_conv_nml
         use_online_aerosol = .true.,
-        rkm_sh1         = 6.0,
+        rkm_sh1         = 7.0,
         rkm_sh          = 3.0,
         do_deep         = .true.,
         idpchoice       = 2
         do_rescale      = .true.
         do_rescale_t    = .true.
+        do_varying_rpen  = .false.
+        eis_max         = 20.
         use_sub_seasalt = .false.
         use_new_let     = .true.
         do_subcloud_flx = .false.
         do_new_pevap    = .false.
         plev_cin        = 60000.
-        plev_for        = 70000.
+        plev_for        = 60000.
         src_choice      = 1
         wrel_min        = 1.
         do_stime        = .true.
@@ -183,15 +185,17 @@
         tracer_check_type = 2
         stop_at_let     = .true.
         do_hlflx_zero   = .false.
+        do_peff_land    = .true.
+        lofactor0       = 0.5
 /
 
  &uw_plume_nml
         auto_th0 = 0.5e-3,
         tcrit    = -25.15,
         peff_l   = 5.0e-5
-        peff_i   = 12.e-5
+        peff_i   = 11.e-5
         frac_drs = 0.0
-        rpen     = 4.0
+        rpen     = 4.3
         wmin     = 0.5
         deltaqc0 = 0.5e-3 
         do_pdfpcp= .false.

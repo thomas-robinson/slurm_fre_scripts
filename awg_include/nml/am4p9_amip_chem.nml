@@ -487,7 +487,7 @@
         lght_no_prd_factor = 0.25,
         normalize_lght_no_prd_area = .true.,
         min_land_frac_lght = 0.1,
-        cloud_chem_type = "f1p_bug",
+        cloud_chem_type = "f1p",
         strat_chem_age_factor = 1.,
         strat_chem_dclydt_factor = 1.,
         do_tropchem = .true.,
@@ -506,7 +506,7 @@
         verbose = 1,
         retain_cm3_bugs =.false.,
         check_convergence = .true.
-        sim_data_filename = 'sim.AM4.dat'
+        sim_data_filename = 'sim.AM3.dat'
 /
 
  &vegn_nml
