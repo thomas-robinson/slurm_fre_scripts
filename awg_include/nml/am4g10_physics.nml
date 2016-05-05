@@ -6,7 +6,7 @@
  &cloud_generator_nml
       do_inhomogeneous_clouds = .true.
       defaultOverlap = 4
-      overlapLengthScale = 1.
+      overlapLengthScale = 2.
 /
 
  &cloud_spec_nml
@@ -19,9 +19,10 @@
         auto_th0_d = 0.5e-3
         tcrit_d    = -25.15,
         peff_l_d   = 5.0e-5
-        peff_i_d   = 11.0e-5
+        peff_i_d   = 11.e-5
         rkm_dp1 = 2.
         rkm_dp2 = 0.1
+        crh_max = 0.95
         cwfn_th = 10.
         tau_dp = 28800.
         mixing_assumption_d = 4
@@ -29,11 +30,12 @@
         rpen_d     = 4.3
         do_pevap_d = .true.
         cfrac_d    = 0.15
-        hcevap_d   = 0.9
-        pblfac_d   = 0.25
+        hcevap_d   = 0.8
+        hcevappbl_d = 1.0
+        pblfac_d   = 1.0
         frac_limit_d = 0.25
         dcwfndm_th = 100
-        lofactor_d = 0.5
+        lofactor_d = 1.0
         do_cgust_dp  = .true.
         cgust_choice = 1
 /
@@ -99,6 +101,7 @@
         cmt_mass_flux_source='uw',
         do_rh_clouds = .false., 
         do_gust_cv = .false.,
+        do_gust_cv_new = .true.,
         do_liq_num = .true.,
         force_donner_moist_conserv = .false.,
         do_donner_conservation_checks = .false.,
@@ -136,11 +139,11 @@
         mc_thresh = 0.001,
         eros_scale = 1.e-6,
         eros_choice = .true.,
-        eros_scale_c = 4.e-5,
-        eros_scale_t = 4.e-5,
+        eros_scale_c = 3.e-5,
+        eros_scale_t = 5.e-5,
         super_choice = .true.,
         tracer_advec = .true.
-        vfact = 1.2
+        vfact = 1.0
         U_evap_snow = 1.0
         cfact = 1.0
         do_liq_num = .true.
@@ -176,7 +179,6 @@
         do_rescale      = .true.
         do_rescale_t    = .true.
         do_varying_rpen  = .false.
-        eis_max         = 20.
         use_sub_seasalt = .false.
         use_new_let     = .true.
         do_subcloud_flx = .false.
@@ -185,7 +187,7 @@
         plev_for        = 60000.
         src_choice      = 1
         wrel_min        = 1.
-        do_stime        = .true.
+        do_stime        = .false.
         duration        = 10800
         do_prog_gust    = .true.
         tau_gust        = 10800
@@ -194,8 +196,13 @@
         tracer_check_type = 2
         stop_at_let     = .true.
         do_hlflx_zero   = .false.
-        do_peff_land    = .true.
+        do_peff_land    = .false.
         lofactor0       = 0.5
+        cldhgt_max_shallow = 3000.
+        do_umf_pbl      = .true.
+        do_new_convcld  = .true.
+        do_minmse       = .true.
+        do_uwcmt        = .false.
 /
 
  &uw_plume_nml
@@ -214,15 +221,18 @@
         mixing_assumption = 2
         mp_choice = 2
         do_pevap = .true.
+        do_new_pblfac = .true.
         cfrac    = 0.15
-        hcevap   = 0.9
-        pblfac   = 0.25
+        hcevap   = 0.8
+        hcevappbl = 1.0
+        pblfac   = 1.0
         emfrac_max = 0.25
         rmaxfrac = 0.1
         do_limit_wmax = .true.
         wmax = 20.
         do_tten_max = .false.
         tten_max = 1000
+        bigc = 0.0
 /
 
  &vert_turb_driver_nml

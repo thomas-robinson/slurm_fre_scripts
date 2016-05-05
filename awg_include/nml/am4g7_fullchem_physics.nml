@@ -133,7 +133,7 @@
         n_ocean = 50.e6,
         diff_thresh = 0.1,
         mc_thresh = 0.001,
-        eros_scale = 1.e-6,
+        eros_scale = 8.e-6,
         eros_choice = .true.,
         eros_scale_c = 3.e-5,
         eros_scale_t = 3.e-5,

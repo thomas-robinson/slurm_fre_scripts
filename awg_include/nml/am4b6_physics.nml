@@ -154,13 +154,8 @@
         do_dtime        = .false.
         stime0          = 0.8
         dtime0          = 0.1
-        do_prog_tke     = .false.
-        tau_tke         = 7200
-        bfact           = 0.05
-        pblrat0         = 2.0
         do_prog_gust    = .true.
         tau_gust        = 10800
-        gfact           = 1.0
         do_gust_qt      = .false.
         gqt_choice      = 0
         cgust0          = 2.

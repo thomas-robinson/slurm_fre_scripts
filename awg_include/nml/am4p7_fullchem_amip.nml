@@ -1,15 +1,17 @@
  &aerosol_nml
-    family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA"
-    in_family1 = F,T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,
-    in_family2 = F,F,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-    in_family3 = F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F,
-    in_family4 = T,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
-    in_family5 = F,F,F,F,F,F,F,T,T,T,T,T,F,F,F,F,
-    in_family6 = F,F,F,F,F,F,T,F,F,F,F,F,F,F,F,F,
-    in_family7 = T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
-    in_family8 = T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,
-    in_family9 = F,T,T,T,T,T,F,F,F,F,F,F,F,F,F,F,
-    in_family10= F,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,
+    family_names = "small_dust", "large_dust", "black_carbon","organic_carbon", "sea_salt", "sulfate", "aerosol", "pm2.5", "dust", "POA", "fine_aer", "coarse_aer"
+    in_family1 = F,T,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family2 = F,F,T,T,T,T,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family3 = F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F,F,F
+    in_family4 = T,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F
+    in_family5 = F,F,F,F,F,F,F,T,T,T,T,T,F,F,F,F,F,F
+    in_family6 = F,F,F,F,F,F,T,F,F,F,F,F,F,F,F,F,F,T
+    in_family7 = T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T
+    in_family8 = T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,T,T
+    in_family9 = F,T,T,T,T,T,F,F,F,F,F,F,F,F,F,F,F,F
+    in_family10= F,F,F,F,F,F,F,F,F,F,F,F,F,F,T,T,F,F
+    in_family11= T,T,F,F,F,F,T,T,T,F,F,F,T,T,T,T,T,T
+    in_family12= F,F,T,T,T,T,F,F,F,T,T,T,F,F,F,F,F,F
     aerosol_data_source = "predicted"
 /
 
@@ -34,8 +36,15 @@
     do_lwaerosol = .true.,
     do_swaerosol = .true.,
     aerosol_data_set = "Ginoux_Reddy"
-    optical_filename = "AM4_201503",
+    optical_filename = "AM4_201510",
     sulfate_indices = 30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
+                      30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
+                      30,35,35,35,35,35,40,40,40,40,40,45,45,45,45,45,
+                      50,50,50,50,50,55,55,55,55,55,60,60,60,60,60,65,
+                      65,65,65,65,70,70,70,70,70,75,75,75,75,75,80,80,
+                      80,80,82,82,84,84,86,86,88,88,90,91,92,93,94,95,
+                      96,97,97,97,97, 
+    nitrate_indices = 30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
                       30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
                       30,35,35,35,35,35,40,40,40,40,40,45,45,45,45,45,
                       50,50,50,50,50,55,55,55,55,55,60,60,60,60,60,65,
@@ -323,9 +332,20 @@
    "seasalt_coarse_91%", "seasalt_coarse_92%", "seasalt_coarse_93%", "seasalt_coarse_94%",
    "seasalt_coarse_95%", "seasalt_coarse_96%", "seasalt_coarse_97%", "seasalt_coarse_98%",
    "seasalt_coarse_99%"
+   "nitrate_30%", "nitrate_35%", "nitrate_40%", "nitrate_45%",
+   "nitrate_50%", "nitrate_55%", "nitrate_60%", "nitrate_65%",
+   "nitrate_70%", "nitrate_75%", "nitrate_80%", "nitrate_82%",
+   "nitrate_84%", "nitrate_86%", "nitrate_88%", "nitrate_90%",
+   "nitrate_91%", "nitrate_92%", "nitrate_93%", "nitrate_94%",
+   "nitrate_95%", "nitrate_96%", "nitrate_97%", "nitrate_98%",
+   "nitrate_99%"
 /
 
  &carbon_aerosol_nml
+      do_dynamic_bc = .true.,
+      frac_bcbb_phobic = 0.4,
+      frac_bcbb_philic = 0.6,
+      do_dynamic_om = .true.,
       bcff_source = 'gocart_2007',
         bcff_input_name(1)='anthro',
         bcff_filename='emissions.bc.1x1.1859_2020.nc',
@@ -392,6 +412,8 @@
 /
 
  &radiative_gases_nml
+      use_co2_10um = .true.
+
       verbose = 3
       gas_printout_freq = 240
 
@@ -479,13 +501,13 @@
         file_emis3d_1 = 'emissions3D.',
         file_emis3d_2 = '.1x1.1859_2020.nc',
         file_ub = 'ub_vals.mozart.nc',
-        file_dry = 'depvel.nc',
+        file_dry = 'depvel_gc_am3_fast_hno3.nc',
         inv_list = '',
         file_aircraft = 'emissions.aircraft.1x1.1859_2020.nc',
-        lght_no_prd_factor = 0.25,
+        lght_no_prd_factor = 0.6,
         normalize_lght_no_prd_area = .true.,
         min_land_frac_lght = 0.1,
-        cloud_chem_type = "f1p_bug",
+        cloud_chem_type = 'f1p',
         strat_chem_age_factor = 1.,
         strat_chem_dclydt_factor = 1.,
         do_tropchem = .true.,
@@ -501,6 +523,12 @@
         ch4_filename = 'ch4_gblannualdata',
         ch4_scale_factor = 1.e-9,
         do_fastjx_photo = .true.
+	frac_aerosol_incloud   = 0.7,
+	frac_dust_incloud = 0.0,
+        min_lwc_for_cloud_chem = 1.e-10,
+        aerosol_thermo_method = 'isorropia',
+        max_rh_aerosol = 95.,
+        gNH3 = 0.,
         verbose = 1,
         retain_cm3_bugs =.false.,
         check_convergence = .true.

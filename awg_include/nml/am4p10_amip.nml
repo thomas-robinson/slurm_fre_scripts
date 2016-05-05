@@ -34,8 +34,15 @@
     do_lwaerosol = .true.,
     do_swaerosol = .true.,
     aerosol_data_set = "Ginoux_Reddy"
-    optical_filename = "AM4_201503",
+    optical_filename = "AM4_201510",
     sulfate_indices = 30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
+                      30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
+                      30,35,35,35,35,35,40,40,40,40,40,45,45,45,45,45,
+                      50,50,50,50,50,55,55,55,55,55,60,60,60,60,60,65,
+                      65,65,65,65,70,70,70,70,70,75,75,75,75,75,80,80,
+                      80,80,82,82,84,84,86,86,88,88,90,91,92,93,94,95,
+                      96,97,97,97,97, 
+    nitrate_indices = 30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
                       30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
                       30,35,35,35,35,35,40,40,40,40,40,45,45,45,45,45,
                       50,50,50,50,50,55,55,55,55,55,60,60,60,60,60,65,
@@ -323,6 +330,13 @@
    "seasalt_coarse_91%", "seasalt_coarse_92%", "seasalt_coarse_93%", "seasalt_coarse_94%",
    "seasalt_coarse_95%", "seasalt_coarse_96%", "seasalt_coarse_97%", "seasalt_coarse_98%",
    "seasalt_coarse_99%"
+   "nitrate_30%", "nitrate_35%", "nitrate_40%", "nitrate_45%",
+   "nitrate_50%", "nitrate_55%", "nitrate_60%", "nitrate_65%",
+   "nitrate_70%", "nitrate_75%", "nitrate_80%", "nitrate_82%",
+   "nitrate_84%", "nitrate_86%", "nitrate_88%", "nitrate_90%",
+   "nitrate_91%", "nitrate_92%", "nitrate_93%", "nitrate_94%",
+   "nitrate_95%", "nitrate_96%", "nitrate_97%", "nitrate_98%",
+   "nitrate_99%"
 /
 
  &carbon_aerosol_nml
@@ -369,6 +383,7 @@
         omna_input_name='omemisnat'
       omss_source = 'ODowd'
         omss_coef = 0.05
+      no_biobur_if_no_pbl = .false.
 /
 
  &ice_spec_nml
@@ -384,7 +399,7 @@
       ozone_dataset_entry = $baseDate
       data_name = "ozone",
       filename = "o3.climatology.nc"
-      do_coupled_stratozone=.true.
+      do_coupled_stratozone=.false.
 /
 
  &radiation_driver_diag_nml
@@ -454,59 +469,43 @@
       calc_n2o_tfs_monthly = .true.,
       n2o_tf_time_displacement = 360.0,
 
-
 /
 
  &shortwave_driver_nml
       do_cmip_diagnostics = .true.,
       swform = 'esfsw99'
       solar_dataset_entry = $baseDate
-      time_varying_solar_constant = .true,
+      time_varying_solar_constant = .true.,
 /
 
-
  &simple_sulfate_nml
+        gas_conc_filename='gas_conc_3D_am3p9.nc'
+        gas_conc_time_dependency_type='constant'
+        cont_volc_source='do_cont_volc'
+        expl_volc_source='do_expl_volc'
           aerocom_emission_filename='so2_0.25_volcanoes.nc'
+        aircraft_source='do_aircraft',
+          aircraft_filename='emis_fuel_aircraft.1859_2010.nc',
+          aircraft_emission_name(1)='fuel'
+          so2_aircraft_EI=0.001
+          aircraft_time_dependency_type='time_varying',aircraft_dataset_entry=$baseDate
+        anthro_source='do_anthro',
+          anthro_emission_name(1)='so2ff',
+          anthro_emission_name(2)='so4ff',
+          anthro_filename='anthro_so2.1859_2010.nc',
+          anthro_time_dependency_type='time_varying',anthro_dataset_entry=$baseDate
+        biobur_source='do_biobur',
+          biobur_emission_name(1)='so2bb',
+          biobur_emission_name(2)='so4bb',
+          biobur_filename='anthro_so2.1859_2010.nc',
+          biobur_time_dependency_type='time_varying',biobur_dataset_entry=$baseDate
+        cloud_chem_solver="f1p"
+        pH_cloud=4.5
+        no_biobur_if_no_pbl = .false.
 /
 
  &tropchem_driver_nml
-        relaxed_dt = 864000.,
-        ub_pres = 1.,
-        relaxed_dt_lbc = 86400.,
-        lb_pres = 800.e2,
-        file_sulfate = 'sulfate.nc',
-        file_conc = 'tracerIC.19800101.v2.nc',
-        file_emis_1 = 'emissions.',
-        file_emis_2 = '.1x1.1859_2020.nc',
-        file_emis3d_1 = 'emissions3D.',
-        file_emis3d_2 = '.1x1.1859_2020.nc',
-        file_ub = 'ub_vals.mozart.nc',
-        file_dry = 'depvel.nc',
-        inv_list = '',
-        file_aircraft = 'emissions.aircraft.1x1.1859_2020.nc',
-        lght_no_prd_factor = 0.25,
-        normalize_lght_no_prd_area = .true.,
-        min_land_frac_lght = 0.1,
-        cloud_chem_type = "f1p_bug",
-        strat_chem_age_factor = 1.,
-        strat_chem_dclydt_factor = 1.,
-        do_tropchem = .true.,
-        use_tdep_jvals = .true.,
-        file_jval_lut = 'jvals.v6fix.twilight.solarmax',
-        file_jval_lut_min = 'jvals.v6fix.twilight.solarmin',
-        o3_column_top = 0.002,
-        repartition_water_tracers = .true.,
-        allow_negative_cosz = .true.,
-        allow_psc_settling_type1 = .true.,
-        force_cly_conservation = .true.,
-        set_min_h2o_strat = .true.,
-        ch4_filename = 'ch4_gblannualdata',
-        ch4_scale_factor = 1.e-9,
-        do_fastjx_photo = .true.
-        verbose = 1,
-        retain_cm3_bugs =.false.,
-        check_convergence = .true.
-        sim_data_filename = 'sim.AM4.dat'
+        do_tropchem = .false.
 /
 
  &vegn_nml

@@ -48,7 +48,7 @@
            "emission", "prescribed", "source_fraction=0.10"
            "convection", "all"
            "dry_deposition","wind_driven","surfr=100."
-           "wet_deposition","aerosol_below","frac_incloud=0.07, frac_incloud_uw=0.12, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
+           "wet_deposition","aerosol_below","frac_incloud=0.14, frac_incloud_uw=0.24, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
            "radiative_param", "online", "name_in_rad_mod=dust1, name_in_clim_mod=small_dust"/
 
  "TRACER", "atmos_mod", "dust2"
@@ -59,7 +59,7 @@
            "emission", "prescribed", "source_fraction=0.225"
            "convection", "all"
            "dry_deposition","wind_driven","surfr=100."
-           "wet_deposition","aerosol_below","frac_incloud=0.07, frac_incloud_uw=0.12, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
+           "wet_deposition","aerosol_below","frac_incloud=0.14, frac_incloud_uw=0.24, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
            "radiative_param", "online", "name_in_rad_mod=dust2, name_in_clim_mod=large_dust"/
 
  "TRACER", "atmos_mod", "dust3"
@@ -70,7 +70,7 @@
            "emission", "prescribed", "source_fraction=0.225"
            "convection", "all"
            "dry_deposition","wind_driven","surfr=100."
-           "wet_deposition","aerosol_below","frac_incloud=0.07, frac_incloud_uw=0.12, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
+           "wet_deposition","aerosol_below","frac_incloud=0.14, frac_incloud_uw=0.24, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
            "radiative_param", "online", "name_in_rad_mod=dust3, name_in_clim_mod=large_dust"/
 
  "TRACER", "atmos_mod", "dust4"
@@ -81,7 +81,7 @@
            "emission", "prescribed", "source_fraction=0.225"
            "convection", "all"
            "dry_deposition","wind_driven","surfr=100."
-           "wet_deposition","aerosol_below","frac_incloud=0.07, frac_incloud_uw=0.12, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
+           "wet_deposition","aerosol_below","frac_incloud=0.14, frac_incloud_uw=0.24, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
            "radiative_param", "online", "name_in_rad_mod=dust4, name_in_clim_mod=large_dust"/
 
  "TRACER", "atmos_mod", "dust5"
@@ -92,7 +92,7 @@
            "emission", "prescribed", "source_fraction=0.225"
            "convection", "all"
            "dry_deposition","wind_driven","surfr=100."
-           "wet_deposition","aerosol_below","frac_incloud=0.07, frac_incloud_uw=0.12, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
+           "wet_deposition","aerosol_below","frac_incloud=0.14, frac_incloud_uw=0.24, frac_incloud_donner=0.12, alphar=0.001, alphas=0.001"
            "radiative_param", "online", "name_in_rad_mod=dust5, name_in_clim_mod=large_dust"/
 
 "tracer","atmos_mod","so4"
@@ -102,7 +102,7 @@
 "wet_deposition","aerosol_below","frac_incloud=0.3, frac_incloud_uw=0.4, frac_incloud_donner=0.4, frac_incloud_snow=0.0, alphar=0.001, alphas=0.001"
 "dry_deposition","file","name=so4"
 "convection","all"
-"radiative_param", "online", "name_in_rad_mod=so4, name_in_clim_mod=sulfate, scale_factor=4.56"
+"radiative_param", "online", "name_in_rad_mod=so4, name_in_clim_mod=sulfate, scale_factor=3.31"
 /
 
  "TRACER", "atmos_mod", "ssalt1"
@@ -298,7 +298,7 @@
 "tracer","atmos_mod","hno3"
 "longname","HNO3"
 "units","VMR"
-"wet_deposition","henry_below_noice","henry=3.19e6,dependence=8700."
+"wet_deposition","henry_below","henry=3.19e6,dependence=8700."
 "dry_deposition","file"
 "init_conc","file"
 "convection","all"
@@ -760,6 +760,7 @@
 "wet_deposition","aerosol_below","frac_incloud=0.3, frac_incloud_uw=0.4, frac_incloud_donner=0.4, frac_incloud_snow=0.0,alphar=0.001, alphas=0.001"
 "dry_deposition","file","name=nh4"
 "convection","all"
+"radiative_param", "online", "name_in_rad_mod=nitrate, name_in_clim_mod=nitrate, scale_factor=2.14"
 /
 
 "tracer","atmos_mod","nh4"
