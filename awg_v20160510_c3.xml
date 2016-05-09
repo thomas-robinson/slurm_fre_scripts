@@ -76,8 +76,8 @@ ref> c96L48_am4g10_fullchem_2000climo_p2K/ncrc3.intel-prod-openmp/0m8d   a390d1a
 
 ref> c96L32_am4h7/ncrc3.intel-prod-openmp/0m8d                           a7ac1cc3a5a2cc100d654ec23a82658f1f3c91e6
 
-ref> c96L32_am4b6_DDLite/ncrc2.intel-prod-openmp/0m8d                    b59ab84ab8ff532ba0cdda9e45de7b9633a1d0d5
-ref> c96L48_am4b6_DDFull/ncrc2.intel-prod-openmp/0m8d                    f779a27edeaf721e64ff992e2cfa8d6474c4429d
+ref> c96L32_am4b6_DDLite/ncrc3.intel-prod-openmp/0m8d                    b59ab84ab8ff532ba0cdda9e45de7b9633a1d0d5
+ref> c96L48_am4b6_DDFull/ncrc3.intel-prod-openmp/0m8d                    f779a27edeaf721e64ff992e2cfa8d6474c4429d
                       
 -->
 
@@ -87,7 +87,7 @@ ref> c96L48_am4b6_DDFull/ncrc2.intel-prod-openmp/0m8d                    f779a27
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   
-  <property name="AWG_GIT_TAG" value="awg_v20160510"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="awg_v20160506"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="v20160510"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-10"/>
@@ -234,7 +234,7 @@ configuration.
 
     <platform name="ncrc3.intel">
 <!-- Please make sure to change "f" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_f</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -2277,7 +2277,7 @@ Experiment name = $(name)
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p9_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g9_physics_fullchem.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g9_fullchem_physics.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4g9_c96L48.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p9_fullchem_amip.nml"/>
       <namelist name="coupler_nml">
