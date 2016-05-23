@@ -4053,6 +4053,37 @@ configuration with present-day climatological SSTs, but pre-industrial GHGs and 
   </experiment>
 
 
+
+  <experiment name="c96L32_am4g10r8_1860climo" inherit="c96L32_am4g10r8_2000climo">
+    <description>
+Same model as c96L32_am4g10_2000climo, but
+configuration with present-day climatological SSTs, but pre-industrial GHGs and aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p10_1860climo.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g10r8_2000aero" inherit="c96L32_am4g10r8_2000climo">
+    <description>
+Same model as c96L32_am4g10_2000climo, but
+configuration with present-day climatological SSTs, pre-industrial GHGs and present-day aerosols.
+    </description>
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p10_2000aero.nml"/>
+    </input>
+  </experiment>
+
+  <experiment name="c96L32_am4g10r8_2000climo_p2K" inherit="c96L32_am4g10r8_2000climo">
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p10_2000climo_p2K.nml"/>
+    </input>
+  </experiment>
+
+
+
+
+
   <experiment name="c96L32_am4h7_1860climo" inherit="c96L32_am4h7_2000climo">
     <description>
 Same model as c96L32_am4h7_2000climo, but
