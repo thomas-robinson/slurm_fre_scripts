@@ -4,7 +4,8 @@
         parcel_buoy   = 0.25,
         parcel_option = 2,
         beta_rad      = 0.2,
-        Ashear        = 25.0, 
+        Ashear        = 20.0, 
+        beta_surf     = 0.23,
         radperturb    = 0.10, 
         critjump      = 0.10,
 /
@@ -15,12 +16,10 @@
         npx      = 97,
         npy      = 97,
         ntiles   = 6,
-        npz      = 48,
+        npz      = 32,
         k_split  = 1,
-        n_split  = 14,
+        n_split  = 12,
         a2b_ord  = 4,
-        hord_dp = -8,
-        hord_tr = -8,
         adjust_dry_mass = $adjust_dry_mass,
         consv_te = 0.7,
         fill = .true.
@@ -32,13 +31,20 @@
         d4_bg = 0.15,
         tau = 0.      
         z_tracer=.false.
+        kord_tm = -10
+        kord_mt =  10
+        kord_tr =  10
+        hord_mt =  10
+        hord_vt = -10
+        hord_tm = -10
+        hord_dp = -10
+        hord_tr = -8
 /
 
  &mg_drag_nml
         gmax  = 1.0,
         acoef = 1.,
         do_conserve_energy = .true.,
-        flux_cut_level = 30.e2,
         source_of_sgsmtn = 'input/computed'
 /
 
@@ -46,10 +52,10 @@
  &cg_drag_nml
         cg_drag_freq = 1800,
         cg_drag_offset = 0,
-        Bt_0 =  0.004 ,
+        Bt_0 =  0.005,
         Bt_aug= 0.000,
-        Bt_nh=  0.001,
-        Bt_sh= -0.001,
+        Bt_nh=  -0.001,
+        Bt_sh=  -0.003,
         Bt_eq=  0.000,
         Bt_eq_width= 4.0,
         phi0n =  30.,

@@ -4,7 +4,8 @@
         parcel_buoy   = 0.25,
         parcel_option = 2,
         beta_rad      = 0.2,
-        Ashear        = 25.0, 
+        Ashear        = 20.0, 
+        beta_surf     = 0.23,
         radperturb    = 0.10, 
         critjump      = 0.10,
 /
@@ -19,8 +20,6 @@
         k_split  = 1,
         n_split  = 14,
         a2b_ord  = 4,
-        hord_dp = -8,
-        hord_tr = -8,
         adjust_dry_mass = $adjust_dry_mass,
         consv_te = 0.7,
         fill = .true.
@@ -32,6 +31,14 @@
         d4_bg = 0.15,
         tau = 0.      
         z_tracer=.false.
+        kord_tm = -10
+        kord_mt =  10
+        kord_tr =  10
+        hord_mt =  10
+        hord_vt = -10
+        hord_tm = -10
+        hord_dp = -10
+        hord_tr = -8
 /
 
  &mg_drag_nml
