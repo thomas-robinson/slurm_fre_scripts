@@ -52,6 +52,7 @@ ref> c96L32_am4g8/ncrc3.intel-prod-openmp/0m8d                           8b47386
 ref> c96L32_am4g9/ncrc3.intel-prod-openmp/0m8d                           ab278976405bbde19c7c3c44280ae8d15d8c6bb1
 ref> c96L32_am4g10/ncrc3.intel-prod-openmp/0m8d                          263465f9573aed93a62ec4eb488caaab44df260e
 ref> c96L32_am4g10r8/ncrc3.intel-prod-openmp/0m8d                        05c459ca8ed927fffd1e922728ace952928d510b
+ref> c192L32_am4g10r8/ncrc3.intel-prod-openmp/0m8d                       4c9007a31f12dcf330dc3927809b33917ab049ba
 
 ref> c96L48_am4g7_fullchem/ncrc3.intel-prod-openmp/0m8d                  098233f4fbc38f824f625dfb32309794f20ad09e
 ref> c96L48_am4g9_fullchem/ncrc3.intel-prod-openmp/0m8d                  ec6d7a560e1e273b68d9bc5163f7144a86f375d6
@@ -65,6 +66,7 @@ ref> c96L32_am4g10_2000climo/ncrc3.intel-prod-openmp/0m8d                489c5c7
 ref> c96L32_am4g10_1860climo/ncrc3.intel-prod-openmp/0m8d                917e6840a4ffe201d1e2a0a55ad69d6f26cf96a0
 ref> c96L32_am4g10_2000aero/ncrc3.intel-prod-openmp/0m8d                 8afd6116ef92280d3c822c2a7c9cf6f2190c39d4 
 ref> c96L32_am4g10_2000climo_p2K/ncrc3.intel-prod-openmp/0m8d            ddaae105739717cf20cf5250fe155ebfb51b9201       
+ref> c96L32_am4g10r8_2000climo/ncrc3.intel-prod-openmp/0m8d              5b69cb7c623cd580dc4f30fd014c00f350a88a20 
 
 ref> c96L48_am4g7_fullchem_2000climo/ncrc3.intel-prod-openmp/0m8d        9ec4e18d03a364d4715543383e0c8554c6109e4e          
 ref> c96L48_am4g9_fullchem_2000climo/ncrc3.intel-prod-openmp/0m8d        436281a4355aee82f12be81b3e53b042c40380ca
@@ -685,7 +687,7 @@ find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
   <freInclude name="common_data_lm3p2">
     <input>
       <dataFile label="input" target="INPUT/soil_type.nc" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">${CPERM}/Krista.A.Dunne/mod_input_files/any_grid/soil_type_hwsd_5minute.nc</dataSource>
+         <dataSource platform="$(platform)">$CPERM/Krista.A.Dunne/mod_input_files/any_grid/soil_type_hwsd_5minute.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
@@ -3190,7 +3192,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
@@ -3285,7 +3287,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
@@ -3401,7 +3403,7 @@ except eros_scale=8.e-6 in strat_cloud_nml to re-balance TOA radiation.
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_production']/node())"/>
       </production>
@@ -3534,7 +3536,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
@@ -3647,7 +3649,7 @@ This is the same as
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_production']/node())"/>
       </production>
@@ -3731,7 +3733,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
@@ -3840,7 +3842,7 @@ Chemistry changes from am4g7:
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_production']/node())"/>
       </production>
@@ -3918,7 +3920,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
     </input>
 
     <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
@@ -4027,7 +4029,7 @@ Chemistry changes from am4g7:
     </input>
 
     <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_production']/node())"/>
       </production>
@@ -4119,7 +4121,7 @@ configuration with present-day climatological SSTs, present-day GHGs and aerosol
 
     <runtime>
 
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
       </production>
