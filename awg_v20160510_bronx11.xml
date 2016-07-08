@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b xml_bronx11c http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_bronx11
+# .. git clone -b xml_bronx11e http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_bronx11
 # .. cd xml_bronx11
 
 # Change f to your group, such as f, w, o...
@@ -344,31 +344,8 @@ Experiment to build executable. See git log for source code provenance.
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="$(RELEASE)">land_lad2.git</codeBase>
       </source>
-      <compile>
+      <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS)</cppDefs>
-<!--The following csh block is needed for compiler pre-processors that are not ANSI-compliant, such as pathscale-->
-        <csh><![CDATA[
-sed -e 's/<TAB>/\t/' >land/Makefile-cpp <<EOF
-CPPDEFS = -DUSE_LOG_DIAG_FIELD_INFO -D_FILE_VERSION="\`git-version-string \$<\`"
-FRETARGET = $(target)
-
-ifneq (\$(findstring hdf5,\${FRETARGET}),)
-else
-  CPPDEFS += -Duse_LARGEFILE
-endif
-
-vpath %.F90 \$(shell find ${src_dir}/land_lad2 -type d)
-
-land/%.f90: %.F90
-<TAB>cpp \${CPPDEFS} -C -v -I ${src_dir}/shared/include -o \$@ \$<
-
-EOF
-
-foreach foo ( `find ${src_dir}/land_lad2 -type f -name \*.F90` )
-  make -f land/Makefile-cpp land/$foo:t:r.f90
-end
-find ${bld_dir}/land -type f -name \*.f90 > land/pathnames_land
-       ]]></csh>
       </compile>
     </component>
 
