@@ -441,7 +441,7 @@
       max_topo_rough    = 100.0 
       topo_rough_factor = 0.01
       topo_rough_source = 'input',
-      topo_rough_file = 'INPUT/mg_drag.res.nc',
+      topo_rough_file = 'INPUT/topo_rough_land.nc',
 /
 
  &vegn_data_nml
