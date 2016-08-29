@@ -3154,6 +3154,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       </regression>
       <regression name="basic">
           <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_basic']/node())"/>
       </regression>
       <regression name="rts">
           <xi:include xpointer="xpointer(//freInclude[@name='c96_216_rts']/node())"/>
