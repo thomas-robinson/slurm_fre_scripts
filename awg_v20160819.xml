@@ -53,9 +53,9 @@ ref> c96L32_am4g10r14/ncrc3.intel-prod-openmp/0m8d                       b0952a1
 ref> c96L32_am4g11/ncrc3.intel-prod-openmp/0m8d                          96ea203f0d0867bb9d5e6fedb500b705b7519ac1                   
 ref> c192L32_am4g11/ncrc3.intel-prod-openmp/0m8d                         4ba84176d26bf0f312b245d57e75a045eb646f19
 
-ref> c96L32_am4g10r14_2010climo/ncrc3.intel-prod-openmp/0m8d             af8868763838db3dd8a0bd8ec9a89e427d29ec43  
+ref> c96L32_am4g10r14_2010climo/ncrc3.intel-prod-openmp/0m8d             18968d3ace08bc37d4318551501e8d278e8af0bf  
 ref> c96L32_am4g10r14_1860climo_volcano/ncrc3.intel-prod-openmp/0m8d     86bb7c7e8dad0a35245d2c109ad5ede51fe9b540
-ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                583ee502c82bc39add6b83af8d1c9a9b2e227c3c     
+ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                e105451b8482d7ba1d1b8f500555ffcd5e830ed3   
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
