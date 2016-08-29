@@ -3143,8 +3143,8 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_faero']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='field_table_faero']/input/node())"/>
     </input>
-    <runtime>
 
+    <runtime>
       <production simTime="$(EXP_AMIP_LEN)" units="years" >
           <segment simTime="12" units="months" />
           <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
@@ -3154,6 +3154,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       </regression>
       <regression name="basic">
           <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_basic']/node())"/>
       </regression>
       <regression name="rts">
           <xi:include xpointer="xpointer(//freInclude[@name='c96_216_rts']/node())"/>
@@ -3186,19 +3187,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
           <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_timing']/node())"/>
           <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_timing']/node())"/>
       </regression>
-    </runtime>
-    <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
-          <segment simTime="12" units="months" />
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
-      </production>
-      <regression name="debug">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_debug']/node())"/>
-      </regression>
-      <regression name="basic">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
-      </regression>
-
       <regression name="do_chksum">
         <run days="1" overrideParams="coupler_nml : do_chksum=.true.">
                 <resources jobWallclock="00:30:00">
@@ -3208,18 +3196,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
                 <ice                            layout = "144,3"   io_layout = "1,3" />
                 </resources>
         </run>
-      </regression>
-      <regression name="rts">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_basic']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_rts']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_restart']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_scaling']/node())"/>
-      </regression>
-      <regression name="month">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_timing']/node())"/>
-      </regression>
-      <regression name="month1728">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_timing']/node())"/>
       </regression>
       <regression name="twomonth">
         <run months="2">
@@ -3231,19 +3207,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
                 </resources>
         </run>
       </regression>
-      <regression name="timing">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_timing']/node())"/>
-      </regression>
-
     </runtime>
 
     <postProcess>
