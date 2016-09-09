@@ -384,6 +384,7 @@
       omss_source = 'ODowd'
         omss_coef = 0.05
       no_biobur_if_no_pbl = .false.
+      do_biobur_pbl_bug = .false.
 /
 
  &ice_spec_nml
@@ -506,7 +507,7 @@
       photosynthesis_to_use = 'leuning'
       snow_rad_to_use = 'paint-leaves'
       co2_to_use_for_photosynthesis ='prescribed'
-      co2_for_photosynthesis = 286.0e-6
+      co2_for_photosynthesis = 284.65e-6
       do_cohort_dynamics   = .TRUE.,              
       do_patch_disturbance = .TRUE.,              
       do_phenology         = .TRUE.,              

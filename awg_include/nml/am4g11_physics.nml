@@ -16,13 +16,13 @@
 /
 
  &deep_conv_nml
-        crh_th_ocean = 0.4
-        crh_th_land  = 0.4
+        crh_th_ocean = 0.0
+        crh_th_land  = 0.0
         auto_th0_d = 0.5e-3
         tcrit_d    = -25.15,
         peff_l_d   = 5.0e-5
         peff_i_d   = 11.e-5
-        rkm_dp1 = 0.5
+        rkm_dp1 = 1.0
         rkm_dp2 = 0.05
         crh_max = 1.0
         cwfn_th = 10.
@@ -32,8 +32,8 @@
         rpen_d     = 4.0
         do_pevap_d = .true.
         cfrac_d    = 0.15
-        hcevap_d   = 0.8
-        hcevappbl_d = 1.0
+        hcevap_d   = 0.85
+        hcevappbl_d = 0.95
         pblfac_d   = 1.0
         frac_limit_d = 0.25
         dcwfndm_th = 100
@@ -141,7 +141,7 @@
         n_ocean = 50.e6,
         diff_thresh = 0.1,
         mc_thresh = 0.001,
-        eros_scale = 2.e-6,
+        eros_scale = 1.e-6,
         eros_choice = .true.,
         eros_scale_c = 3.e-5,
         eros_scale_t = 5.e-5,
@@ -160,7 +160,6 @@
 /
 
  &strat_clouds_W_nml
-
 /
 
  &surface_flux_nml
@@ -229,15 +228,15 @@
         do_pnqv  = .true.
         mixing_assumption = 3
 	scaleh0  = 1000.
-        beta = 100000.
+        beta = 0.
         rkm_max = 15
         mp_choice = 2
         do_pevap = .true.
         do_new_pblfac = .true.
         include_emf_s = .false.
         cfrac    = 0.15
-        hcevap   = 0.8
-        hcevappbl = 1.0
+        hcevap   = 0.85
+        hcevappbl = 0.95
         pblfac   = 1.0
         emfrac_max = 0.25
         rmaxfrac = 0.1

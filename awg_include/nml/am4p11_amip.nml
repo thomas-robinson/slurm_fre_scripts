@@ -384,6 +384,7 @@
       omss_source = 'ODowd'
         omss_coef = 0.05
       no_biobur_if_no_pbl = .false.
+      do_biobur_pbl_bug = .false. 
 /
 
  &ice_spec_nml
@@ -501,7 +502,7 @@
           biobur_time_dependency_type='time_varying',biobur_dataset_entry=$baseDate
         cloud_chem_solver="f1p"
         pH_cloud=4.5
-        no_biobur_if_no_pbl = .false.
+        no_biobur_if_no_pbl = .false.        
 /
 
  &tropchem_driver_nml

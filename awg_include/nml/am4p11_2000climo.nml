@@ -384,6 +384,7 @@
       omss_source = 'ODowd'
         omss_coef = 0.05
       no_biobur_if_no_pbl = .false.
+      do_biobur_pbl_bug = .false.
 /
 
  &ice_spec_nml

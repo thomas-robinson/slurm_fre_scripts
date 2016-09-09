@@ -36,8 +36,8 @@
 ! diag-integral.out ascii file against the checksums listed below. The checksum
 ! can be computed with the 'taverage' AWG utility.
 
-ref> c96L32_am4g11/ncrc3.intel-prod-openmp/0m8d                          96ea203f0d0867bb9d5e6fedb500b705b7519ac1
-ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                583ee502c82bc39add6b83af8d1c9a9b2e227c3c 
+ref> c96L32_am4g11/ncrc3.intel-prod-openmp/0m8d                          
+ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                a13b272596be939d3681f769dc087b3635d658dc
 
 -->
 
@@ -547,10 +547,10 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="climo_sst_cmip6">
     <input>
       <dataFile label="input" target="INPUT/hadisst_sst.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/sst.climo.2005-2014.data.nc</dataSource>
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/sst.climo.1981-2014.data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/ice.climo.2005-2014.data.nc</dataSource>
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/ice.climo.1981-2014.data.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -1132,8 +1132,8 @@ $baseDate
 <!-- MDBI -->
     <publicMetadata DBswitch="$(MDBIswitch)">
       <project>$(ProjectID)</project>
-      <model>am4p10</model>
-      <modelID>am4p10</modelID>
+      <model>am4p11</model>
+      <modelID>am4p11</modelID>
       <experimentName>$(name)</experimentName>
       <experimentID>$(name)</experimentID>
       <comment>
