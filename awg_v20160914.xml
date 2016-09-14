@@ -60,7 +60,7 @@ ref> c96L32_am4g11_1860climo/ncrc3.intel-prod-openmp/0m8d                ca5dd1f
 Note:  c96L32_am4g11_1860climo crashes at 0003-03-16 08:00:00
 
 ref> c96L32_am4g11r11/ncrc3.intel-prod-openmp/0m8d                       00270bb3c86ade3302baeba6c7684ca0eac80957
-ref> c96L32_am4g11r11_2010climo/ncrc3.intel-prod-openmp/0m8d             711dc7322b36c6f1138e4f42e331efeea8e6d36f
+ref> c96L32_am4g11r11_2010climo/ncrc3.intel-prod-openmp/0m8d             35ddef298dcd37f1c06e64019b1e40341df87b3a
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
