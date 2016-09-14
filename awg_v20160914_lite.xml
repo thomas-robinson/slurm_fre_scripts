@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20160819 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20160914 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,32 +12,32 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20160819 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160819
-# .. cd xml_v20160819
+# .. git clone -b awg_v20160914 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160914
+# .. cd xml_v20160914
 
 # Change f to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-11
-# .. fremake -x awg_v20160819_lite.xml -p ncrc3.intel -t openmp cm4p11_v20160819 
+# .. fremake -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp cm4p11_v20160914 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20160819_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
+# .. frerun -s -r basic -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20160819_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
+# .. frerun -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20160819_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11
+# .. fredb-pp -x awg_v20160914_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11
 
 
 ! Reference results for automated tests. Jenny will verify the sha1 checksum of of the
 ! diag-integral.out ascii file against the checksums listed below. The checksum
 ! can be computed with the 'taverage' AWG utility.
 
-ref> c96L32_am4g11/ncrc3.intel-prod-openmp/0m8d                          
-ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                a13b272596be939d3681f769dc087b3635d658dc
+ref> c96L32_am4g11/ncrc3.intel-prod-openmp/0m8d                          4cd62b82eb7937bd93aef2016d4e0fc180fc43e8
+ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                75972e04232a7738888e6d4bef85907eeff55c75
 
 -->
 
@@ -46,8 +46,8 @@ ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                a13b272
   <property name="RELEASE" value="verona"/>                    <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="awg_v20160819"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20160819"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="awg_v20160914"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="v20160914"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-11"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -195,7 +195,7 @@ configuration.
       <freVersion>bronx-11</freVersion>
       <compiler type="intel" version="15.0.2.164" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_m</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -296,7 +296,7 @@ Experiment to build executable. See git log for source code provenance.
         </csh>
       </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS) -DSPMD</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DSPMD -DCLIMATE_NUDGE</cppDefs>
       </compile>
     </component>
 
