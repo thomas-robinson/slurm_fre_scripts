@@ -144,7 +144,7 @@
         eros_scale = 1.e-6,
         eros_choice = .true.,
         eros_scale_c = 3.e-5,
-        eros_scale_t = 3.e-5,
+        eros_scale_t = 4.e-5,
         super_choice = .true.,
         tracer_advec = .true.
         vfact = 1.0

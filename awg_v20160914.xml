@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20160914a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160914
+# .. git clone -b awg_v20160914b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160914
 # .. cd xml_v20160914
 
 # Change f to your group, such as f, w, o...
@@ -59,8 +59,8 @@ ref> c96L32_am4g11_2010climo/ncrc3.intel-prod-openmp/0m8d                75972e0
 ref> c96L32_am4g11_1860climo/ncrc3.intel-prod-openmp/0m8d                ca5dd1f002ee7cf621c9a7c6b69ad7470d1fdba7
 Note:  c96L32_am4g11_1860climo crashes at 0003-03-16 08:00:00
 
-ref> c96L32_am4g11r11/ncrc3.intel-prod-openmp/0m8d                       00270bb3c86ade3302baeba6c7684ca0eac80957
-ref> c96L32_am4g11r11_2010climo/ncrc3.intel-prod-openmp/0m8d             35ddef298dcd37f1c06e64019b1e40341df87b3a
+ref> c96L32_am4g11r11/ncrc3.intel-prod-openmp/0m8d                       a44dfe5a657f0c16bc1b761f6c66ea3a094365af
+ref> c96L32_am4g11r11_2010climo/ncrc3.intel-prod-openmp/0m8d             6c1f3d0ec2fced6fccc6fe6cdda90dfff28527e2
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
