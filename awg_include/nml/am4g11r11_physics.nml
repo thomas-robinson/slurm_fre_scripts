@@ -89,7 +89,6 @@
 /
 
 &interpolator_nml
-      retain_cm3_bug = .false.
 /
 
  &moist_processes_nml
