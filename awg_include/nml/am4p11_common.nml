@@ -68,6 +68,7 @@
         max_num_axis_sets = 50
         max_files = 40
         issue_oor_warnings = .false.
+        max_axis_attributes=4
 /
 
  &dust_nml

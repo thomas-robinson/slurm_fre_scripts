@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. git clone -b awg_v20161108 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
 # .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
@@ -201,7 +201,7 @@ configuration.
       <freVersion>bronx-11</freVersion>
       <compiler type="intel" version="15.0.2.164" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_m</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -246,7 +246,7 @@ configuration.
       <freVersion>bronx-11</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_m</project>
+      <project>gfdl_YOURGROUPLETTER</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -789,7 +789,7 @@ $baseDate
 
 <freInclude name="c96_216_basic">
         <run days="8">
-                <resources jobWallclock="00:30:00">
+                <resources jobWallclock="02:30:00">
                 <atm ranks="216" threads="1"    layout = "3,12"    io_layout = "1,4" />
                 <lnd                            layout = "3,12"    io_layout = "1,4" />
                 <ocn ranks="0"   threads="0"    layout = "72,3"    io_layout = "1,3" />
@@ -1292,7 +1292,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       </namelist>
 
       <namelist name="interpolator_nml">
-        retain_cm3_bug = .true.
+        retain_cm3_bug = .false.
       </namelist>
 
       <!-- Input datasets -->
@@ -1402,10 +1402,10 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       </namelist>
 
       <namelist name="interpolator_nml">
-        retain_cm3_bug = .true.
+        retain_cm3_bug = .false.
       </namelist>
 
-     <!-- Input datasets -->
+      <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='common_AM4']/input/node())"/>
@@ -1413,7 +1413,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='emissions_2010_cmip6']/input/node())"/>
-      
+ 
       <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
