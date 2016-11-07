@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20160914 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20161108 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,29 +12,35 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20160914b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20160914
-# .. cd xml_v20160914
+# .. git clone -b awg_v20161108b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-11
-# .. fremake -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp cm4p11_v20160914 
+# .. fremake -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp cm4p11_v20161108 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
+# .. frerun -s -r basic -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20160914_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11
+# .. frerun -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20160914_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11
+# .. fredb-pp -x awg_v20161108_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11r11_cmip6Em
 
+
+     LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
+     Notes: Only fremake and frerun are currently supported.
+            FRE commands listed should NOT include -s option to
+            automatically sumbit jobs.
 
 ! Reference results for automated tests. Jenny will verify the sha1 checksum of of the
 ! diag-integral.out ascii file against the checksums listed below. The checksum
 ! can be computed with the 'taverage' AWG utility.
+
 On gaea c3
 
 ref> c96L32_am4g11r11_cmip6Em/ncrc3.intel-prod-openmp/0m8d               029a11380e29be655f4b8940932c468e215376b5    
@@ -43,19 +49,19 @@ ref> c96L32_am4g11r11_2010climo_cmip6Em/ncrc3.intel-prod-openmp/0m8d     3634232
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="verona"/>                    <!-- base code release -->
+  <property name="RELEASE" value="verona"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="awg_v20160914"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20160914"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="awg_v20161108"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="v20161108"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-11"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
   <property name="MDBIswitch" value="off"/>                        <!-- on/off switch for MDBI database -->
   <property name="ProjectID" value="AWG"/>                         <!-- database top level -->
 
-  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)_test/awg_include"/>
-  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)_test/awg_include"/>
+  <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
+  <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
   <property name="MIZ_ARCHIVE_ROOT_GAEA" value="$CPERM/Ming.Zhao/archive/mdt"/>
   <property name="MIZ_ARCHIVE_ROOT_GFDL" value="/archive/miz/mdt/"/>
 
@@ -236,7 +242,7 @@ configuration.
       </csh>
     </platform>
 
-   <platform name="ncrc4.intel">
+    <platform name="ncrc4.intel">
       <freVersion>bronx-11</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
@@ -290,7 +296,7 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p11_$(AWG_VERSION)_test">
+  <experiment name="cm4p11_$(AWG_VERSION)">
     <description>
 
 Experiment to build executable. See git log for source code provenance.
@@ -366,7 +372,7 @@ Experiment to build executable. See git log for source code provenance.
         <codeBase version="$(RELEASE)">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
-       <cppDefs>$(F2003_FLAGS)</cppDefs>
+       <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
       </compile>
     </component>
 
@@ -486,15 +492,16 @@ Experiment to build executable. See git log for source code provenance.
       </dataFile>
       <dataFile label="input" target="INPUT/AM4_201510" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/rad/am4_optical_table_20151029.dat</dataSource>
-    </dataFile>
+      </dataFile>
     </input>
   </freInclude>
 
-   <freInclude name="common_cmip6">
+  <freInclude name="common_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
       </dataFile>
+
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/litechem/o3.climatology.add_Dec1849.nc</dataSource>
       </dataFile>
@@ -583,12 +590,12 @@ Experiment to build executable. See git log for source code provenance.
 
   <freInclude name="emissions_TimeSeries_cmip6">
     <input>
-      <dataFile label="input" target="INPUT/anthro_so2.1849_2015.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-07-26/lite_chemistry/emissions.simple.so2.0.5x0.5.1849-2015.nc</dataSource>
-      </dataFile>
-
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-07-26/1849-2015/emissions.0.5x0.5.1849-2015.tar</dataSource>
+      </dataFile>
+
+      <dataFile label="input" target="INPUT/anthro_so2.1849_2015.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-07-26/lite_chemistry/emissions.simple.so2.0.5x0.5.1849-2015.nc</dataSource>
       </dataFile>
 
       <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
@@ -693,15 +700,6 @@ touch MOM_input
     </input>
   </freInclude>
 
-
-  <freInclude name="c96L32_aero_initCond">
-    <input>
-      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L32/aero_ic/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20160209.tar</dataSource>
-      </dataFile>
-    </input>
-  </freInclude>
-
   <freInclude name="field_table_am4p11">
     <input>
       <dataFile label="fieldTable" target="INPUT/" chksum="" size="" timestamp="">
@@ -746,6 +744,13 @@ $baseDate
     </input>
   </freInclude>
 
+  <freInclude name="c96L32_aero_initCond">
+    <input>
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L32/aero_ic/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20160209.tar</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
 
 <!--================================-->
 <!--= LAYOUTS FOR C96 EXPERIMENTS  =-->
@@ -1227,7 +1232,7 @@ $baseDate
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
-  <experiment name="c96L32_am4g11r11_cmip6Em" inherit="cm4p11_$(AWG_VERSION)_test">
+  <experiment name="c96L32_am4g11r11_cmip6Em" inherit="cm4p11_$(AWG_VERSION)">
 <!-- MDBI -->
     <publicMetadata DBswitch="$(MDBIswitch)">
       <project>$(ProjectID)</project>
@@ -1293,10 +1298,9 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-
       <xi:include xpointer="xpointer(//freInclude[@name='common_AM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
 
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='emissions_TimeSeries_cmip6']/input/node())"/>
 
@@ -1370,7 +1374,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 <!--==========================-->
 <!--= AMIP-CLIMO EXPERIMENTS =-->
 <!--==========================-->
-  <experiment name="c96L32_am4g11r11_2010climo_cmip6Em" inherit="cm4p11_$(AWG_VERSION)_test">
+  <experiment name="c96L32_am4g11r11_2010climo_cmip6Em" inherit="cm4p11_$(AWG_VERSION)">
     <input>
       <namelist name="atmos_model_nml">
          nxblocks = 1
@@ -1404,8 +1408,8 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
      <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-
       <xi:include xpointer="xpointer(//freInclude[@name='common_AM4']/input/node())"/>
+
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='emissions_2010_cmip6']/input/node())"/>
@@ -1475,4 +1479,3 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
   </experiment>
 
 </experimentSuite>
-
