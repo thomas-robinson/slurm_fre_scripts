@@ -43,8 +43,8 @@
 
 On gaea c3
 
-ref> c96L32_am4g11r11_cmip6Em/ncrc3.intel-prod-openmp/0m8d               029a11380e29be655f4b8940932c468e215376b5    
-ref> c96L32_am4g11r11_2010climo_cmip6Em/ncrc3.intel-prod-openmp/0m8d     363423281774f1443e2f2f22e529e6c4e549193b
+ref> c96L32_am4g11r11_cmip6Em/ncrc3.intel-prod-openmp/0m8d               23299736ccce8cc164d44ca34b4dea0f4b3a2038    
+ref> c96L32_am4g11r11_2010climo_cmip6Em/ncrc3.intel-prod-openmp/0m8d     e59cd801a31b70919b090df040d003b0080ed218
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
