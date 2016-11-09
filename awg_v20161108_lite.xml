@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. git clone -b awg_v20161108a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
 # .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
@@ -505,6 +505,10 @@ Experiment to build executable. See git log for source code provenance.
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/litechem/o3.climatology.add_Dec1849.nc</dataSource>
       </dataFile>
+
+      <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
+      </dataFile>
     </input>
   </freInclude>
 
@@ -596,10 +600,6 @@ Experiment to build executable. See git log for source code provenance.
 
       <dataFile label="input" target="INPUT/anthro_so2.1849_2015.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-07-26/lite_chemistry/emissions.simple.so2.0.5x0.5.1849-2015.nc</dataSource>
-      </dataFile>
-
-      <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
       </dataFile>
 
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
