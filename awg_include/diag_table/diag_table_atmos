@@ -144,7 +144,6 @@
 "uw_conv",  "cql_uwc",     "cql_uwc",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cqi_uwc",     "cqi_uwc",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cqn_uwc",     "cqn_uwc",     "atmos_month", "all", .true., "none", 2
-"uw_conv",  "cqn_uwc",     "cqn_uwc",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cmf_uwc",     "cmf_uwc",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cmf_uws",     "cmf_uws",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cmf_uwd",     "cmf_uwd",     "atmos_month", "all", .true., "none", 2
