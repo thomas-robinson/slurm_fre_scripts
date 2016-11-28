@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. git clone -b awg_v20161108c http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
 # .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
@@ -212,6 +212,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
+      <property name="NCORE_PER_NODE"      value="32"/>
 
       <csh><![CDATA[
         module load git
@@ -236,6 +237,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="/archive/cjg/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="/archive"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GFDL)"/>
+      <property name="NCORE_PER_NODE"      value="1"/>
       <csh><![CDATA[
         module load git
         ]]>
@@ -257,6 +259,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
+      <property name="NCORE_PER_NODE"      value="36"/>
 
       <csh><![CDATA[
         module load git
@@ -281,6 +284,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="/archive/cjg/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="/archive"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GFDL)"/>
+      <property name="NCORE_PER_NODE"      value="1"/>
       <csh><![CDATA[
         module load git
         ]]>
@@ -501,13 +505,19 @@ Experiment to build executable. See git log for source code provenance.
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
       </dataFile>
+      <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
+      </dataFile>
 
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/litechem/o3.climatology.add_Dec1849.nc</dataSource>
       </dataFile>
 
-      <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/2000/emissions.isoprene.1x1.2000.nc</dataSource>
+      </dataFile>
+       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/2000/emissions.terpenes.1x1.2000.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -1289,6 +1299,8 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
         ocean_npes = $ocn_ranks
         atmos_npes = $atm_ranks
         atmos_nthreads = $atm_threads
+        use_hyper_thread = $ht
+        ncores_per_node = $(NCORE_PER_NODE)
       </namelist>
 
       <namelist name="interpolator_nml">
@@ -1399,6 +1411,8 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
         ocean_npes = $ocn_ranks
         atmos_npes = $atm_ranks
         atmos_nthreads = $atm_threads
+        use_hyper_thread = $ht
+        ncores_per_node = $(NCORE_PER_NODE)
       </namelist>
 
       <namelist name="interpolator_nml">
@@ -1476,6 +1490,13 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     <postProcess>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_climo_postprocess']/postProcess/node())"/>
     </postProcess>
+  </experiment>
+
+
+  <experiment name="c96L32_am4g11r11_cmip6Em_hyper" inherit="c96L32_am4g11r11_cmip6Em">
+  </experiment>
+
+  <experiment name="c96L32_am4g11r11_cmip6Em_nohyper" inherit="c96L32_am4g11r11_cmip6Em">
   </experiment>
 
 </experimentSuite>
