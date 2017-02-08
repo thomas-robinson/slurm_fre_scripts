@@ -23,13 +23,13 @@
 # .. fremake -x awg_v20161108.xml -p ncrc3.intel -t openmp cm4p11_v20161108 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20161108.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. frerun -s -r basic -x awg_v20161108.xml -p ncrc3.intel -t openmp c96L32_am4g12r04
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20161108.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. frerun -x awg_v20161108.xml -p ncrc3.intel -t openmp c96L32_am4g12r04
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20161108.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. fredb-pp -x awg_v20161108.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g12r04
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
