@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108d http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. git clone -b awg_v20161108e http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
 # .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
@@ -23,13 +23,13 @@
 # .. fremake -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp cm4p11_v20161108 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. frerun -s -r basic -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r04 
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. frerun -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r04
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20161108_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g11r11_cmip6Em
+# .. fredb-pp -x awg_v20161108_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g12r04
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -43,8 +43,8 @@
 
 On gaea c3
 
-ref> c96L32_am4g11r11_cmip6Em/ncrc3.intel-prod-openmp/0m8d               23299736ccce8cc164d44ca34b4dea0f4b3a2038    
-ref> c96L32_am4g11r11_2010climo_cmip6Em/ncrc3.intel-prod-openmp/0m8d     e59cd801a31b70919b090df040d003b0080ed218
+ref> c96L32_am4g12r04/ncrc3.intel-prod-openmp/0m8d               da3111680f656b821810a5f4a7e021462ab59750    
+ref> c96L32_am4g12r04_2010climo/ncrc3.intel-prod-openmp/0m8d     2ef5d68859d5cd954bd7c87985568b6be90a34d2
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
@@ -52,7 +52,7 @@ ref> c96L32_am4g11r11_2010climo_cmip6Em/ncrc3.intel-prod-openmp/0m8d     e59cd80
   <property name="RELEASE" value="verona"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="awg_v20161108"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="awg_v20170106"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="v20161108"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-11"/>
@@ -326,8 +326,8 @@ Experiment to build executable. See git log for source code provenance.
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
           <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout $(AWG_GIT_TAG) )
+            ( cd atmos_shared && git checkout user/h1g/time_depend_initFix_20170124 )
+            ( cd atmos_param  && git checkout user/h1g/merge_atmos_param_20170118 )
            ]]>
           </csh>
         </source>
@@ -346,7 +346,7 @@ Experiment to build executable. See git log for source code provenance.
         <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_cubed_sphere && git checkout $(AWG_GIT_TAG) )
+          ( cd atmos_cubed_sphere && git checkout user/h1g/fix_adj_mass_vmr_20170208 )
          ]]>
         </csh>
       </source>
@@ -371,9 +371,9 @@ Experiment to build executable. See git log for source code provenance.
     </component>
 
     <component name="land_lad2" requires="fms" paths="land_lad2">
-      <description domainName="LM3" communityName="land_lad2" communityVersion="ulm_lad2_20160112_slm" communityGrid=""/>
+      <description domainName="LM3" communityName="land_lad2" communityVersion="lad2_20170118_slm" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(RELEASE)">land_lad2.git</codeBase>
+        <codeBase version="lad2_20170118_slm">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
@@ -500,6 +500,30 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
+ <freInclude name="common_AM4_test">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2.dec2009.tar</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/depvel/depvel_gc_am3_tran.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/AM4_201510" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/rad/am4_optical_table_20151029.dat</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
   <freInclude name="common_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -558,26 +582,6 @@ Experiment to build executable. See git log for source code provenance.
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Solar/AVG_2010/lean_solar_spectral_data.dat</dataSource>
-      </dataFile>
-    </input>
-  </freInclude>
-
-  <freInclude name="Volcano_Solar_1860_cmip6">
-    <input>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1860/extsw_data.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1860/omgsw_data.nc</dataSource>
-      </dataFile>
-        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1860/asmsw_data.nc</dataSource>
-      </dataFile>
-        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1860/extlw_data.nc</dataSource>
-      </dataFile>
-      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Solar/AVG_1860/lean_solar_spectral_data.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -754,13 +758,16 @@ $baseDate
     </input>
   </freInclude>
 
-  <freInclude name="c96L32_aero_initCond">
+
+
+  <freInclude name="c96L32_initCond_Newtopo">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L32/aero_ic/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20160209.tar</dataSource>
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L32/topo_v20161229/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20161229.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
+
 
 <!--================================-->
 <!--= LAYOUTS FOR C96 EXPERIMENTS  =-->
@@ -1146,7 +1153,7 @@ $baseDate
 
   <freInclude name="c96_climo_postprocess">
     <postProcess>
-
+      <refineDiag script="$(AWG_INPUT_HOME_GFDL)/refineDiag/refineDiag_data_stager_globalAve.csh"/>
       <component type="atmos" zInterp="era40" start="$(ANA_CLIMO_START)" source="atmos_month" sourceGrid="atmos-cubedsphere" xyInterp="180,288">
         <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_CLIMO_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmos8xDailyTS/*)"/>
@@ -1242,12 +1249,12 @@ $baseDate
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
-  <experiment name="c96L32_am4g11r11_cmip6Em" inherit="cm4p11_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g12r04" inherit="cm4p11_$(AWG_VERSION)">
 <!-- MDBI -->
     <publicMetadata DBswitch="$(MDBIswitch)">
       <project>$(ProjectID)</project>
-      <model>am4p11</model>
-      <modelID>am4p11</modelID>
+      <model>am4p12</model>
+      <modelID>am4p12</modelID>
       <experimentName>$(name)</experimentName>
       <experimentID>$(name)</experimentID>
       <comment>
@@ -1262,30 +1269,19 @@ Experiment name = $(name)
     </publicMetadata>
       <realization r="1" i="1" p="1"/>
 <!-- /MDBI -->
-<description>
-AM4 prototype configuration "am4g11" from MDT Atmosphere Working Group.
-- c96 horizontal grid with approximately 100km resolution and 32 vertical levels.
-- Convection based on "double-plume" from Ming Zhao.
-- Tiedtke cloud scheme
 
-Changes from am4g10:
-- PBL and convection re-tuning radiation updates
-- topo-drag replaces mg-drag
 
-For more information about AWG configurations, refer to
-http://cobweb.gfdl.noaa.gov/~cjg/awg
-    </description>
     <input>
       <namelist name="atmos_model_nml">
          nxblocks = 1
          nyblocks = $atm_threads
       </namelist>
       <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g11.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p11_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g11r11_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g11r11_c96L32.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p11_amip_cmip6.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r04_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_c96L32.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12_amip.nml"/>
       <namelist name="coupler_nml">
         months = $months,
         days   = $days,
@@ -1301,10 +1297,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
         atmos_nthreads = $atm_threads
         use_hyper_thread = $ht
         ncores_per_node = $(NCORE_PER_NODE)
-      </namelist>
-
-      <namelist name="interpolator_nml">
-        retain_cm3_bug = .false.
       </namelist>
 
       <!-- Input datasets -->
@@ -1326,7 +1318,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
 
-      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_aero_initCond']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_initCond_Newtopo']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11']/input/node())"/>
@@ -1383,21 +1375,18 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 
 
 
-<!--==========================-->
-<!--= AMIP-CLIMO EXPERIMENTS =-->
-<!--==========================-->
-  <experiment name="c96L32_am4g11r11_2010climo_cmip6Em" inherit="cm4p11_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g12r04_2010climo" inherit="cm4p11_$(AWG_VERSION)">
     <input>
       <namelist name="atmos_model_nml">
          nxblocks = 1
          nyblocks = $atm_threads
       </namelist>
       <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g11.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p11_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g11r11_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g11r11_c96L32.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p11_2010climo_cmip6.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r04_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_c96L32.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12_2010climo.nml"/>
       <namelist name="coupler_nml">
         months = $months,
         days   = $days,
@@ -1415,10 +1404,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
         ncores_per_node = $(NCORE_PER_NODE)
       </namelist>
 
-      <namelist name="interpolator_nml">
-        retain_cm3_bug = .false.
-      </namelist>
-
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
@@ -1427,7 +1412,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='emissions_2010_cmip6']/input/node())"/>
- 
+
       <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
@@ -1437,7 +1422,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
 
-      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_aero_initCond']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_initCond_Newtopo']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11']/input/node())"/>
@@ -1491,4 +1476,6 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='c96_climo_postprocess']/postProcess/node())"/>
     </postProcess>
   </experiment>
+
+
 </experimentSuite>
