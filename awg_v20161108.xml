@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108e http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
+# .. git clone -b awg_v20161108f http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
 # .. cd xml_v20161108
 
 # Change f to your group, such as f, w, o...
@@ -73,17 +73,18 @@ ref> c96L32_am4g12r04/ncrc3.intel-prod-openmp/0m8d                       da31116
 ref> c96L32_am4g12r13/ncrc3.intel-prod-openmp/0m8d                       09c26712d772bb9c05bed420a710e1ee9cb1079a
 ref> c96L32_am4g12r14/ncrc3.intel-prod-openmp/0m8d                       345ccc290d2df7800f4333e76b6f29814da619f0
 ref> c96L32_am4g12r15/ncrc3.intel-prod-openmp/0m8d                       e62f5a893ae1f0db1c76b76d05f40b40ae37bad5
-ref> c96L32_am4g12r16/ncrc3.intel-prod-openmp/0m8d                       21bc77402e68767d07b5ea29b7b1ed72cdcbedfd
-ref> c96L32_am4g12r17/ncrc3.intel-prod-openmp/0m8d                       7c1798b75add7382f16d677309aea0ce2c474e1a
+ref> c96L32_am4g12r16/ncrc3.intel-prod-openmp/0m8d                       5312039470144b1707e0d34755bbfcf2a1b636a6
+ref> c96L32_am4g12r17/ncrc3.intel-prod-openmp/0m8d                       ce19bda53c7f99335f89eed26f825cf9a8de6d99
+ref> c96L32_am4g12r18/ncrc3.intel-prod-openmp/0m8d                       d14c5a088136a2d697bd7c088820942bfc4215d2
 
 ref> c96L32_am4g11r20_2010climo/ncrc3.intel-prod-openmp/0m8d             e8de3416431834728ea8b78477004492c017a230
 ref> c96L32_am4g12r04_2010climo/ncrc3.intel-prod-openmp/0m8d             2ef5d68859d5cd954bd7c87985568b6be90a34d2    
 ref> c96L32_am4g12r13_2010climo/ncrc3.intel-prod-openmp/0m8d             5f22556a3c270dff3ca97314c3bdc20d4d124ae6
 ref> c96L32_am4g12r14_2010climo/ncrc3.intel-prod-openmp/0m8d             c48fc0061a5bee42c58773f6985e077aa0163b80
 ref> c96L32_am4g12r15_2010climo/ncrc3.intel-prod-openmp/0m8d             800e6700ef6639274f46ba4fed95ebc4f16cb810 
-ref> c96L32_am4g12r16_2010climo/ncrc3.intel-prod-openmp/0m8d             74739080c478f697a431ab5f9d9090b4c1e25874
-ref> c96L32_am4g12r17_2010climo/ncrc3.intel-prod-openmp/0m8d             5eeb87bd0cf594bc80ade266707ccb4714588e99
-
+ref> c96L32_am4g12r16_2010climo/ncrc3.intel-prod-openmp/0m8d             6f3f0004ae4b80ee726ce412770f9eafa36f0049
+ref> c96L32_am4g12r17_2010climo/ncrc3.intel-prod-openmp/0m8d             09eb30ed3082c8ea988b4f489f43b7d3a6e41ff9
+ref> c96L32_am4g12r18_2010climo/ncrc3.intel-prod-openmp/0m8d             adcffed5cbe3367337c8caafa372199b24b611f0
 
 ref> c96L32_am4g12r04_1850climo/ncrc3.intel-prod-openmp/0m8d             4b75533773bed50a5e221baa01885f665d2c2a71  
 -->
@@ -549,6 +550,30 @@ Experiment to build executable. See git log for source code provenance.
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2.dec2009.tar</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/depvel/depvel_gc_am3_tran.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/AM4_201510" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/rad/am4_optical_table_20151029.dat</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+ <freInclude name="common_AM4_v20170208">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
@@ -3083,7 +3108,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       </namelist>
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_test']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
@@ -3285,7 +3310,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_test']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
@@ -3296,6 +3321,210 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 
     </input>
   </experiment>
+
+
+
+  <experiment name="c96L32_am4g12r18" inherit="c96L32_am4g12r13">
+    <input>
+    <namelist name="strat_cloud_nml">
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.5,
+        Dmin = 1.0e-07,
+        n_land = 300.e6,
+        n_ocean = 100.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 4.e-5,
+        eros_scale_t = 5.e-5,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 0.9
+        U_evap_snow = 1.0
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        var_limit = 0.7
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 0.
+        use_sub_seasalt = .false.
+        aerosol_activation_scheme = "total"
+    </namelist>
+   <namelist name="moist_processes_nml">
+        do_lsc=.false., 
+        do_strat=.true.,
+        do_mca=.false., 
+        do_ras=.false., 
+        do_uw_conv=.true.,
+        do_donner_deep = .false.,
+        do_diag_clouds = .false.,
+        do_cmt=.true., 
+        cmt_mass_flux_source='uw',
+        do_rh_clouds = .false., 
+        do_gust_cv = .false.,
+        do_gust_cv_new = .false.,
+        do_liq_num = .true.,
+        force_donner_moist_conserv = .false.,
+        do_donner_conservation_checks = .false.,
+        do_limit_donner = .false.,
+        do_limit_uw = .false.,
+        limit_conv_cloud_frac = .false.,
+        do_donner_before_uw = .false.,
+        do_legacy_strat_cloud = .false.,
+        do_height_adjust = .true.
+   </namelist>
+    <namelist name="cloud_generator_nml">
+      do_inhomogeneous_clouds = .true.
+      defaultOverlap = 4
+      overlapLengthScale = 1.2
+    </namelist>
+    <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        rkm_sh1         = 7.0,
+        rkm_sh          = 3.0,
+        do_deep         = .true.,
+        idpchoice       = 2
+        do_rescale      = .true.
+        do_rescale_t    = .true.
+        use_sub_seasalt = .false.
+        use_new_let     = .true.
+        do_new_subflx   = .true.
+        do_new_pevap    = .false.
+        plev_cin        = 60000.
+        plev_for        = 60000.
+        src_choice      = 1
+        wrel_min        = 1.
+        do_new_qnact    = .true.
+        do_prog_gust    = .true.
+        cgust0          = 2.
+        cgust_max       = 4.
+        tracer_check_type = 2
+        stop_at_let     = .true.
+        lofactor0       = 0.5
+        do_umf_pbl      = .true.
+        do_new_convcld  = .true.
+        do_minmse       = .true.
+        reproduce_old_version = .false.
+        do_conv_micro_N = .false.
+        N0 = 100.e6
+        do_eis_limit = .false.
+        eis_max = 8.
+    </namelist>
+      <namelist name="deep_conv_nml">
+        crh_th_ocean = 0.4
+        crh_th_land  = 0.4
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -25.15,
+        peff_l_d   = 6.5e-5
+        peff_i_d   = 11.e-5
+        rkm_dp1 = 1.0
+        rkm_dp2 = 0.1
+        crh_max = 1.0
+        cwfn_th = 10.
+        tau_dp = 28800.
+        mixing_assumption_d = 6
+        do_ppen_d  = .true.
+        rpen_d     = 2.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.85
+        hcevappbl_d = 0.95
+        pblfac_d   = 1.0
+        frac_limit_d = 0.25
+        dcwfndm_th = 100
+        lofactor_d = 1.0
+        do_cgust_dp  = .true.
+        cgust_choice = 1
+        include_emf_d = .false.
+      </namelist>
+      <namelist name="uw_plume_nml">
+        auto_th0 = 0.2e-3,
+        tcrit    = -25.15,
+        peff_l   = 6.5e-5
+        peff_i   = 11.e-5
+        frac_drs = 0.5
+        rpen     = 2.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .false.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 6
+	scaleh0  = 1000.
+        beta = 0.0
+        rkm_max = 15
+        mp_choice = 3
+        do_pevap = .true.
+        do_new_pblfac = .true.
+        include_emf_s = .false.
+        cfrac    = 0.15
+        hcevap   = 0.85
+        hcevappbl = 0.95
+        pblfac   = 1.0
+        emfrac_max = 0.25
+        rmaxfrac = 0.1
+        do_limit_wmax = .true.
+        do_limit_fdr  = .true.
+        wmax = 20.
+        do_tten_max = .false.
+        tten_max = 1000
+        bigc = 0.0
+        nom_ratio = 0.7
+      </namelist>
+
+      <namelist name="fv_core_nml">
+        layout   = $atm_layout
+        io_layout = $atm_io_layout
+        npx      = 97,
+        npy      = 97,
+        ntiles   = 6,
+        npz      = 32,
+        k_split  = 1,
+        n_split  = 12,
+        a2b_ord  = 4,
+        adjust_dry_mass = $adjust_dry_mass,
+        adj_mass_vmr    = .true.
+        retain_mass_vmr_bug  = .false.
+        consv_te = 0.6,
+        fill = .true.
+        print_freq = 0,
+        grid_type = 0,
+        nord = 2,
+        dddmp = 0.0,
+        d2_bg = 0.0,
+        d4_bg = 0.15,
+        tau = 0.      
+        z_tracer=.false.
+        kord_tm = -10
+        kord_mt =  10
+        kord_tr =  10
+        hord_mt =  10
+        hord_vt = -10
+        hord_tm = -10
+        hord_dp = -10
+        hord_tr = -8
+        do_uni_zfull = .true.
+        consv_am = .true.
+      </namelist>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='emissions_TimeSeries_cmip6']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='amip_sst_cmip6']/input/node())"/>
+
+    </input>
+  </experiment>
+
 
 
 
@@ -4370,7 +4599,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_test']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
@@ -4574,7 +4803,7 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_test']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
@@ -4585,6 +4814,210 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
       <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
     </input>
   </experiment>
+
+
+
+  <experiment name="c96L32_am4g12r18_2010climo" inherit="c96L32_am4g12r13_2010climo">
+    <input>
+    <namelist name="strat_cloud_nml">
+        use_online_aerosol = .true.,
+        U00 = 0.80,
+        U00_profile = .true.,
+        rthresh = 8.5,
+        Dmin = 1.0e-07,
+        n_land = 300.e6,
+        n_ocean = 100.e6,
+        diff_thresh = 0.1,
+        mc_thresh = 0.001,
+        eros_scale = 1.e-6,
+        eros_choice = .true.,
+        eros_scale_c = 4.e-5,
+        eros_scale_t = 5.e-5,
+        super_choice = .true.,
+        tracer_advec = .true.
+        vfact = 0.9
+        U_evap_snow = 1.0
+        cfact = 1.0
+        do_liq_num = .true.
+        use_kk_auto = .false.
+        var_limit = 0.7
+        num_mass_ratio1 = 1.0
+        num_mass_ratio2 = 0.
+        use_sub_seasalt = .false.
+        aerosol_activation_scheme = "total"
+    </namelist>
+   <namelist name="moist_processes_nml">
+        do_lsc=.false., 
+        do_strat=.true.,
+        do_mca=.false., 
+        do_ras=.false., 
+        do_uw_conv=.true.,
+        do_donner_deep = .false.,
+        do_diag_clouds = .false.,
+        do_cmt=.true., 
+        cmt_mass_flux_source='uw',
+        do_rh_clouds = .false., 
+        do_gust_cv = .false.,
+        do_gust_cv_new = .false.,
+        do_liq_num = .true.,
+        force_donner_moist_conserv = .false.,
+        do_donner_conservation_checks = .false.,
+        do_limit_donner = .false.,
+        do_limit_uw = .false.,
+        limit_conv_cloud_frac = .false.,
+        do_donner_before_uw = .false.,
+        do_legacy_strat_cloud = .false.,
+        do_height_adjust = .true.
+   </namelist>
+    <namelist name="cloud_generator_nml">
+      do_inhomogeneous_clouds = .true.
+      defaultOverlap = 4
+      overlapLengthScale = 1.2
+    </namelist>
+    <namelist name="uw_conv_nml">
+        use_online_aerosol = .true.,
+        rkm_sh1         = 7.0,
+        rkm_sh          = 3.0,
+        do_deep         = .true.,
+        idpchoice       = 2
+        do_rescale      = .true.
+        do_rescale_t    = .true.
+        use_sub_seasalt = .false.
+        use_new_let     = .true.
+        do_new_subflx   = .true.
+        do_new_pevap    = .false.
+        plev_cin        = 60000.
+        plev_for        = 60000.
+        src_choice      = 1
+        wrel_min        = 1.
+        do_new_qnact    = .true.
+        do_prog_gust    = .true.
+        cgust0          = 2.
+        cgust_max       = 4.
+        tracer_check_type = 2
+        stop_at_let     = .true.
+        lofactor0       = 0.5
+        do_umf_pbl      = .true.
+        do_new_convcld  = .true.
+        do_minmse       = .true.
+        reproduce_old_version = .false.
+        do_conv_micro_N = .false.
+        N0 = 100.e6
+        do_eis_limit = .false.
+        eis_max = 8.
+    </namelist>
+      <namelist name="deep_conv_nml">
+        crh_th_ocean = 0.4
+        crh_th_land  = 0.4
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -25.15,
+        peff_l_d   = 6.5e-5
+        peff_i_d   = 11.e-5
+        rkm_dp1 = 1.0
+        rkm_dp2 = 0.1
+        crh_max = 1.0
+        cwfn_th = 10.
+        tau_dp = 28800.
+        mixing_assumption_d = 6
+        do_ppen_d  = .true.
+        rpen_d     = 2.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.85
+        hcevappbl_d = 0.95
+        pblfac_d   = 1.0
+        frac_limit_d = 0.25
+        dcwfndm_th = 100
+        lofactor_d = 1.0
+        do_cgust_dp  = .true.
+        cgust_choice = 1
+        include_emf_d = .false.
+      </namelist>
+      <namelist name="uw_plume_nml">
+        auto_th0 = 0.2e-3,
+        tcrit    = -25.15,
+        peff_l   = 6.5e-5
+        peff_i   = 11.e-5
+        frac_drs = 0.5
+        rpen     = 2.0
+        wmin     = 0.5
+        deltaqc0 = 0.5e-3 
+        do_pdfpcp= .false.
+        do_pmadjt= .true.
+        do_emmax = .true.
+        do_pnqv  = .true.
+        mixing_assumption = 6
+	scaleh0  = 1000.
+        beta = 0.0
+        rkm_max = 15
+        mp_choice = 3
+        do_pevap = .true.
+        do_new_pblfac = .true.
+        include_emf_s = .false.
+        cfrac    = 0.15
+        hcevap   = 0.85
+        hcevappbl = 0.95
+        pblfac   = 1.0
+        emfrac_max = 0.25
+        rmaxfrac = 0.1
+        do_limit_wmax = .true.
+        do_limit_fdr  = .true.
+        wmax = 20.
+        do_tten_max = .false.
+        tten_max = 1000
+        bigc = 0.0
+        nom_ratio = 0.7
+      </namelist>
+
+      <namelist name="fv_core_nml">
+        layout   = $atm_layout
+        io_layout = $atm_io_layout
+        npx      = 97,
+        npy      = 97,
+        ntiles   = 6,
+        npz      = 32,
+        k_split  = 1,
+        n_split  = 12,
+        a2b_ord  = 4,
+        adjust_dry_mass = $adjust_dry_mass,
+        adj_mass_vmr    = .true.
+        retain_mass_vmr_bug  = .false.
+        consv_te = 0.6,
+        fill = .true.
+        print_freq = 0,
+        grid_type = 0,
+        nord = 2,
+        dddmp = 0.0,
+        d2_bg = 0.0,
+        d4_bg = 0.15,
+        tau = 0.      
+        z_tracer=.false.
+        kord_tm = -10
+        kord_mt =  10
+        kord_tr =  10
+        hord_mt =  10
+        hord_vt = -10
+        hord_tm = -10
+        hord_dp = -10
+        hord_tr = -8
+        do_uni_zfull = .true.
+        consv_am = .true.
+      </namelist>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
+     <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='emissions_2010_cmip6']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
+    </input>
+  </experiment>
+
 
 
 
