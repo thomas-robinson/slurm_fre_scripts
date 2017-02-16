@@ -1,6 +1,6 @@
  &aer_ccn_act_nml
-      sul_concen = 0.3
-      low_concen = 0.5
+      sul_concen = 0.01
+      low_concen = 0.01
       high_concen = 1.0
 /
 
@@ -68,13 +68,14 @@
         max_num_axis_sets = 50
         max_files = 40
         issue_oor_warnings = .false.
+        max_axis_attributes=4
 /
 
  &dust_nml
       dust_source_name = 'source',
       dust_source_filename = 'dust_source_Iceland_1x1.nc'
       uthresh = 3.5
-      coef_emis = 1.8e-10
+      coef_emis = 2.0e-10
       use_sj_sedimentation_solver=.true.
 /
 
@@ -94,6 +95,7 @@
      do_n2o_sw_effects = .true.
      do_sw_continuum   = .true.
      do_quench = .true.
+     remain_rayleigh_bug = .false.
 /
 
  &esfsw_parameters_nml
@@ -333,6 +335,14 @@
 
  &secondary_organics_nml
         gas_conc_filename ='gas_conc_3D_am3p9.nc'
+	isoprene_source = 'guenther'
+	isoprene_filename = 'emissions.isoprene.1x1.2000.nc'
+	isoprene_input_name(1) = 'biogenic'
+	isoprene_SOA_yield = 0.10
+	terpene_source = 'guenther'
+	terpene_filename  = 'emissions.terpenes.1x1.2000.nc'
+	terpene_input_name(1) = 'biogenic'
+	terpene_SOA_yield = 0.10
 /
 
  &snow_data_nml
@@ -416,7 +426,7 @@
 /
 
  &ssalt_nml
-     coef_emis_fine=1., coef_emis_coarse=1.,
+     coef_emis_fine=1.33, coef_emis_coarse=1.33,
      use_sj_sedimentation_solver=.true.
 /
 

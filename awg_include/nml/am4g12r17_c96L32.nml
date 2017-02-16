@@ -22,7 +22,8 @@
         a2b_ord  = 4,
         adjust_dry_mass = $adjust_dry_mass,
         adj_mass_vmr    = .true.
-        consv_te = 0.7,
+        retain_mass_vmr_bug  = .false.
+        consv_te = 0.6,
         fill = .true.
         print_freq = 0,
         grid_type = 0,

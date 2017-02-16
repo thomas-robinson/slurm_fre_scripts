@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20161108 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20170216 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,24 +12,24 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20161108f http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20161108
-# .. cd xml_v20161108
+# .. git clone -b awg_v20170216 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170216
+# .. cd xml_v20170216
 
 # Change f to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-11
-# .. fremake -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp cm4p11_v20161108 
+# .. fremake -x awg_v20170216_lite.xml -p ncrc3.intel -t openmp cm4p12_v20170216 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r04 
+# .. frerun -s -r basic -x awg_v20170216_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r17 
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20161108_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r04
+# .. frerun -x awg_v20170216_lite.xml -p ncrc3.intel -t openmp c96L32_am4g12r17
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20161108_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g12r04
+# .. fredb-pp -x awg_v20170216_lite.xml -p gfdl.ncrc3-intel -t openmp c96L32_am4g12r17
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -42,9 +42,8 @@
 ! can be computed with the 'taverage' AWG utility.
 
 On gaea c3
-
-ref> c96L32_am4g12r04/ncrc3.intel-prod-openmp/0m8d               da3111680f656b821810a5f4a7e021462ab59750    
-ref> c96L32_am4g12r04_2010climo/ncrc3.intel-prod-openmp/0m8d     2ef5d68859d5cd954bd7c87985568b6be90a34d2
+ref> c96L32_am4g12r17/ncrc3.intel-prod-openmp/0m8d               ce19bda53c7f99335f89eed26f825cf9a8de6d99    
+ref> c96L32_am4g12r17_2010climo/ncrc3.intel-prod-openmp/0m8d     09eb30ed3082c8ea988b4f489f43b7d3a6e41ff9
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
@@ -53,7 +52,7 @@ ref> c96L32_am4g12r04_2010climo/ncrc3.intel-prod-openmp/0m8d     2ef5d68859d5cd9
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
   <property name="AWG_GIT_TAG" value="awg_v20170106"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20161108"/>                 <!-- AWG source code version -->
+  <property name="AWG_VERSION" value="v20170216"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="fre/bronx-11"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -112,6 +111,8 @@ properties below.
   <property name="ANA_AMIP_START" value="1981"/>
   <property name="ANA_AMIP_END"   value="2010"/>
   <property name="ANA_AMIP_LEN"   value="30yr"/>
+
+  <property name="CVDP_startyear" value="1981"/>
 
   <!-- Post-processing chunk length -->
   <!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
@@ -300,7 +301,7 @@ configuration.
   <!--The property MOM6_EXAMPLES should point to the mom6 directory that is checked out. It is needed by MOM6 to access its inpu data files-->
   <property name="MOM6_EXAMPLES"  value="$root/cm4_compile/src/mom6"/>
 
-  <experiment name="cm4p11_$(AWG_VERSION)">
+  <experiment name="cm4p12_$(AWG_VERSION)">
     <description>
 
 Experiment to build executable. See git log for source code provenance.
@@ -326,8 +327,8 @@ Experiment to build executable. See git log for source code provenance.
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
           <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout user/h1g/time_depend_initFix_20170124 )
-            ( cd atmos_param  && git checkout user/h1g/merge_atmos_param_20170118 )
+            ( cd atmos_shared && git checkout g12_20170215_h1g )
+            ( cd atmos_param  && git checkout g12_20170214_h1g )
            ]]>
           </csh>
         </source>
@@ -346,7 +347,7 @@ Experiment to build executable. See git log for source code provenance.
         <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout $(AWG_GIT_TAG) )
-          ( cd atmos_cubed_sphere && git checkout user/h1g/fix_adj_mass_vmr_20170208 )
+          ( cd atmos_cubed_sphere && git checkout g12_20170214_h1g )
          ]]>
         </csh>
       </source>
@@ -371,9 +372,9 @@ Experiment to build executable. See git log for source code provenance.
     </component>
 
     <component name="land_lad2" requires="fms" paths="land_lad2">
-      <description domainName="LM3" communityName="land_lad2" communityVersion="lad2_20170118_slm" communityGrid=""/>
+      <description domainName="LM3" communityName="land_lad2" communityVersion="lad2_20170209_slm" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="lad2_20170118_slm">land_lad2.git</codeBase>
+        <codeBase version="lad2_20170209_slm">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
@@ -500,13 +501,13 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
- <freInclude name="common_AM4_test">
+ <freInclude name="common_AM4_v20170208">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2.dec2009.tar</dataSource>
+        <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
@@ -758,8 +759,6 @@ $baseDate
     </input>
   </freInclude>
 
-
-
   <freInclude name="c96L32_initCond_Newtopo">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
@@ -815,16 +814,6 @@ $baseDate
         </run>
 </freInclude>
 
-<freInclude name="c96_432_basic">
-        <run days="8">
-                <resources jobWallclock="01:00:00">
-                <atm ranks="432" threads="1"    layout = "3,24"    io_layout = "1,4" />
-                <lnd                            layout = "3,24"    io_layout = "1,4" />
-                <ocn ranks="0"   threads="0"    layout = "144,3"   io_layout = "1,3" /> 
-                <ice                            layout = "144,3"   io_layout = "1,3" />
-                </resources>
-        </run>
-</freInclude>
 
 <freInclude name="c96_216_rts">
         <run days="8">
@@ -1135,7 +1124,7 @@ $baseDate
         </timeAverage>
       </component>
 
-      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" cubicToLatLon="none">
+      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" >
           <xi:include href="awg_include/analysis/analysis_amip.xml" xpointer="xpointer(*/landMonthTSNative/*)"/>
         </timeSeries>
@@ -1144,7 +1133,7 @@ $baseDate
         </timeSeries>
       </component>
 
-      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" cubicToLatLon="none">
+      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" sourceGrid="land-cubedsphere">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" />
       </component>
 
@@ -1188,7 +1177,7 @@ $baseDate
         </timeAverage>
       </component>
 
-      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer" cubicToLatLon="180,288" interpMethod="conserve_order1">
+      <component type="atmos_month_aer" start="$(ANA_CLIMO_START)" source="atmos_month_aer"  sourceGrid="atmos-cubedsphere" xyInterp="180,288" interpMethod="conserve_order1">
         <timeAverage source="monthly" interval="$(PP_CLIMO_CHUNK)"/>
         <timeAverage source="monthly" interval="$(ANA_CLIMO_LEN)">
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/atmosMonthAerAve/*)"/>
@@ -1229,7 +1218,7 @@ $baseDate
         </timeAverage>
       </component>
 
-      <component type="land_cubic" start="$(ANA_CLIMO_START)" source="land_month" cubicToLatLon="none">
+      <component type="land_cubic" start="$(ANA_CLIMO_START)" source="land_month" sourceGrid="land-cubedsphere">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)" >
           <xi:include href="awg_include/analysis/analysis_climo.xml" xpointer="xpointer(*/landMonthTSNative/*)"/>
         </timeSeries>
@@ -1238,7 +1227,7 @@ $baseDate
         </timeSeries>
       </component>
 
-      <component type="land_instant_cubic" start="$(ANA_CLIMO_START)" source="land_month_inst" cubicToLatLon="none">
+      <component type="land_instant_cubic" start="$(ANA_CLIMO_START)" source="land_month_inst" sourceGrid="land-cubedsphere">
         <timeSeries freq="monthly" chunkLength="$(PP_CLIMO_CHUNK)" />
       </component>
 
@@ -1249,7 +1238,7 @@ $baseDate
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
-  <experiment name="c96L32_am4g12r04" inherit="cm4p11_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g12r17" inherit="cm4p12_$(AWG_VERSION)">
 <!-- MDBI -->
     <publicMetadata DBswitch="$(MDBIswitch)">
       <project>$(ProjectID)</project>
@@ -1278,9 +1267,9 @@ Experiment name = $(name)
       </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r04_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_c96L32.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r17_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r17_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r17_c96L32.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p12_amip.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1302,7 +1291,7 @@ Experiment name = $(name)
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
@@ -1375,7 +1364,7 @@ Experiment name = $(name)
 
 
 
-  <experiment name="c96L32_am4g12r04_2010climo" inherit="cm4p11_$(AWG_VERSION)">
+  <experiment name="c96L32_am4g12r17_2010climo" inherit="cm4p12_$(AWG_VERSION)">
     <input>
       <namelist name="atmos_model_nml">
          nxblocks = 1
@@ -1383,9 +1372,9 @@ Experiment name = $(name)
       </namelist>
       <!-- Namelist -->
       <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r04_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r04_c96L32.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12r17_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r17_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4g12r17_c96L32.nml"/>
       <namelist file="$(AWG_INPUT_HOME)/nml/am4p12_2010climo.nml"/>
       <namelist name="coupler_nml">
         months = $months,
@@ -1407,7 +1396,7 @@ Experiment name = $(name)
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
 
       <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
