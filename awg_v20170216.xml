@@ -743,6 +743,19 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
+  <freInclude name="climo_sst_PI_cmip6">
+    <input>
+      <dataFile label="input" target="INPUT/hadisst_sst.data.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/sst.climo.1870-1882.data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/ice.climo.1870-1882.data.nc</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+
   <freInclude name="c96_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
@@ -3084,6 +3097,24 @@ http://cobweb.gfdl.noaa.gov/~cjg/awg
     <postProcess>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_climo_postprocess']/postProcess/node())"/>
     </postProcess>
+  </experiment>
+
+
+  <experiment name="c96L32_am4g12r17_1850climo_PIsst" inherit="c96L32_am4g12r17_2010climo">
+    <input>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p12_1850climo.nml"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_1850_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='emissions_1850_cmip6']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_PI_cmip6']/input/node())"/>
+
+    </input>
   </experiment>
 
 
