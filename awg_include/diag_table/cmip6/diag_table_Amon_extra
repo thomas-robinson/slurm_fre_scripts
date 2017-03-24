@@ -1,0 +1,52 @@
+############################
+# additional CMIP6 fields
+############################
+
+"moist",       "prsnc",              "prsnc",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "prrc",               "prrc",             "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "prra",               "prra",             "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "lwp",                "lwp",              "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "iwp",                "iwp",              "atmos_month_cmip",   "all", .true.,  "none", 2
+
+# cmip surface fields
+"flux",        "sftlf",              "sftlf",            "atmos_month_cmip",   "all", .false., "none", 2
+"flux",        "tslsi",              "tslsi",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"flux",        "tos",                "tos",              "atmos_month_cmip",   "all", .true.,  "none", 2
+"flux",        "sic",                "sic",              "atmos_month_cmip",   "all", .true.,  "none", 2
+
+# cmip radiation fields
+"radiation",   "rsdsdiff",           "rsdsdiff",         "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rsdscsdiff",         "rsdscsdiff",       "atmos_month_cmip",   "all", .true.,  "none", 2
+ 
+# temperature tendencies
+"moist",       "tntscp",             "tntscp",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "tntc",               "tntc",             "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "tntrl",              "tntrl",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "tntrs",              "tntrs",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "tntrlcs",            "tntrlcs",          "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "tntrscs",            "tntrscs",          "atmos_month_cmip",   "all", .true.,  "none", 2
+"phys",        "tntmp",              "tntmp",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"vert_diff",   "tntpbl",             "tntpbl",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "tnta",               "tnta",             "atmos_month_cmip",   "all", .true.,  "none", 2
+
+# spec hum tendencies
+"moist",       "tnhusscp",           "tnhusscp",         "atmos_month_cmip",   "all", .true.,  "none", 2
+"moist",       "tnhusc",             "tnhusc",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"phys",        "tnhusmp",            "tnhusmp",          "atmos_month_cmip",   "all", .true.,  "none", 2
+"vert_diff",   "tnhuspbl",           "tnhuspbl",         "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "tnhusa",             "tnhusa",           "atmos_month_cmip",   "all", .true.,  "none", 2
+
+# gravity wave tendencies
+"damping",     "utendogw",           "utendogw",         "atmos_month_cmip",   "all", .true.,  "none", 2
+"damping",     "vtendogw",           "vtendogw",         "atmos_month_cmip",   "all", .true.,  "none", 2
+"damping",     "utendnogw",          "utendnogw",        "atmos_month_cmip",   "all", .true.,  "none", 2
+"damping",     "vtendnogw",          "vtendnogw",        "atmos_month_cmip",   "all", .true.,  "none", 2
+
+# single pressure level fields
+"atmos",       "ua200",              "ua200",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "ua850",              "ua850",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "ta850",              "ta850",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "zg500",              "zg500",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "p200",               "p200",             "atmos_month_cmip",   "all", .false., "none", 2
+"atmos",       "p850",               "p850",             "atmos_month_cmip",   "all", .false., "none", 2
+

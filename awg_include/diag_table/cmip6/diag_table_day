@@ -1,0 +1,166 @@
+##########################
+# CMIP Table day
+##########################
+
+#########################
+# DAILY DIAGNOSTICS
+#########################
+ "atmos_daily_cmip",     24, "hours",  1, "days", "time",
+ "land_daily_cmip",      24, "hours",  1, "days", "time",
+
+"land",    "geolon_t",   "geolon_t",   "land_daily_cmip", "all", .false., "none", 1
+"land",    "geolat_t",   "geolat_t",   "land_daily_cmip", "all", .false., "none", 1
+"land",    "dummy_lon",   "dummy_lon",   "land_daily_cmip", "all", .false., "none", 1
+"land",    "dummy_lat",   "dummy_lat",   "land_daily_cmip", "all", .false., "none", 1
+
+#########################
+# 2d fields
+##########################
+
+#1. Near-Surface Specific Humidity, 1.0 (lon,lat,time,height2m)
+"flux",          "huss",          "huss",          "atmos_daily_cmip", "all", .true.,  "none", 2
+"flux",          "height2m",      "height2m",      "atmos_daily_cmip", "all", .false., "none", 2
+
+#2. Daily Minimum Near-Surface Air Temperature, K (lon,lat,time,height2m)
+"flux",          "tas",           "tasmin",        "atmos_daily_cmip", "all",   min,   "none", 2
+
+#3. Daily Maximum Near-Surface Air Temperature, K (lon,lat,time,height2m)
+"flux",          "tas",           "tasmax",        "atmos_daily_cmip", "all",   max,   "none", 2
+
+#4. Near-Surface Air Temperature, K (lon,lat,time,height2m)
+"flux",          "tas",           "tas",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#5. Precipitation, kg m-2 s-1 (lon,lat,time)
+"moist",         "pr",            "pr",            "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#6. Sea Level Pressure, Pa (lon,lat,time)
+"flux",          "psl",           "psl",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#7. Near-Surface Wind Speed, m s-1 (lon,lat,time,height10m)
+"flux",          "sfcWind",       "sfcWind",       "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#####################
+# 2d ocean fields
+#####################
+
+#8. Square of Sea Surface Temperature, degree_C2 (lon,lat,time)
+#"ocean",         "tossq",         "tossq",         "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#9. Sea Surface Temperature, K (lon,lat,time)
+#"ocean",         "tos",           "tos",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#10. Mean Daily Maximum Ocean Mixed Layer Thickness Defined by Mixing Scheme, m (lon,lat,time)
+#"ocean",         "omldamax",      "omldamax",      "atmos_daily_cmip", "all", .true.,  "none", 2
+
+############################
+# 2d fields (atmos & land)
+############################
+
+#11. Moisture in Upper Portion of Soil Column, kg m-2 (lon,lat,time,sdepth1)
+"cmor_land",     "mrsos",         "mrsos",         "land_daily_cmip",  "all", .true.,  "none", 2
+
+#12. Near-Surface Relative Humidity, % (lon,lat,time,height2m)
+"flux",          "rhs",           "rhs",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#13. Surface Daily Minimum Relative Humidity, % (lon,lat,time,height2m)
+"flux",          "rhs",           "rhsmin",        "atmos_daily_cmip", "all",   min,   "none", 2
+
+#14. Surface Daily Maximum Relative Humidity, % (lon,lat,time,height2m)
+"flux",          "rhs",           "rhsmax",        "atmos_daily_cmip", "all",   max,   "none", 2
+
+#15. Snow Area Fraction, % (lon,lat,time)
+#"moist",         "snc",           "snc",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#16. Cloud Area Fraction, 1.0 (lon,lat,time)
+"moist",         "clt",           "clt",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#17. Surface Temperature where Land or Sea Ice, K (lon,lat,time)
+"flux",          "tslsi",         "tslsi",         "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#18. Surface Snow Amount, kg m-2 (lon,lat,time)
+"cmor_land",     "snw",           "snw",           "land_daily_cmip",  "all", .true.,  "none", 2
+
+#19. Convective Precipitation, kg m-2 s-1 (lon,lat,time)
+"moist",         "prc",           "prc",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#20. Snowfall Flux, kg m-2 s-1 (lon,lat,time)
+"moist",         "prsn",          "prsn",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#21. Total Run-off, kg m-2 s-1 (lon,lat,time)
+"cmor_land",     "mrro",          "mrro",          "land_daily_cmip",  "all", .true.,  "none", 2
+
+#22. Eastward Near-Surface Wind, m s-1 (lon,lat,time,height10m)
+"flux",          "uas",           "uas",           "atmos_daily_cmip", "all", .true.,  "none", 2
+"flux",          "height10m",     "height10m",     "atmos_daily_cmip", "all", .false., "none", 2
+
+#23. Northward Near-Surface Wind, m s-1 (lon,lat,time,height10m)
+"flux",          "vas",           "vas",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#24. Daily Maximum Near-Surface Wind Speed, m s-1 (lon,lat,time,height10m)
+"flux",          "sfcWind",       "sfcWindmax",    "atmos_daily_cmip", "all",   max,   "none", 2
+
+#25. Surface Upward Latent Heat Flux, W m-2 (lon,lat,time)
+"flux",          "hfls",          "hfls",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#26. Surface Upward Sensible Heat Flux, W m-2 (lon,lat,time)
+"flux",          "hfss",          "hfss",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#27. surface downwelling longwave radiation, W m-2 (lon,lat,time)
+"radiation",     "rlds",          "rlds",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#28. surface upwelling longwave radiation, W m-2 (lon,lat,time)
+"radiation",     "rlus",          "rlus",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#29. Surface Downwelling Shortwave Radiation, W m-2 (lon,lat,time)
+"radiation",     "rsds",          "rsds",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#30. surface upwelling shortwave radiation, W m-2 (lon,lat,time)
+"radiation",     "rsus",          "rsus",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#31. toa outgoing longwave radiation, W m-2 (lon,lat,time)
+"radiation",     "rlut",          "rlut",          "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#####################
+# 2d sea-ice fields
+#####################
+
+#32. X-Component of Sea Ice Velocity, m s-1 (lon,lat,time)
+#"ice",          "usi",           "usi",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#33. Y-Component of Sea Ice Velocity, m s-1 (lon,lat,time)
+#"ice",          "vsi",           "vsi",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#34. Sea Ice Area Fraction, 1.0 (lon,lat,time)
+#"ice",          "sic",           "sic",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#35. Sea Ice Thickness, m (lon,lat,time)
+#"ice",          "sit",           "sit",           "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#####################################
+# 3d atmos fields on pressure levels
+#####################################
+
+#36. Air Temperature, K (lon,lat,plev8,time)
+"atmos_plev8",   "ta",            "ta_unmsk",      "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#37. Relative Humidity, % (lon,lat,plev8,time)
+"atmos_plev8",   "hur",           "hur_unmsk",     "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#38. Specific Humidity, 1.0 (lon,lat,plev8,time)
+"atmos_plev8",   "hus",           "hus_unmsk",     "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#39. omega (=dp/dt), Pa s-1 (lon,lat,plev8,time)
+"atmos_plev8",   "wap",           "wap_unmsk",     "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#40. Northward Wind, m s-1 (lon,lat,plev8,time)
+"atmos_plev8",   "va",            "va_unmsk",      "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#41. Eastward Wind, m s-1 (lon,lat,plev8,time)
+"atmos_plev8",   "ua",            "ua_unmsk",      "atmos_daily_cmip", "all", .true.,  "none", 2
+
+#42. Geopotential Height, m (lon,lat,plev8,time)
+"atmos_plev8",   "zg",            "zg_unmsk",      "atmos_daily_cmip", "all", .true.,  "none", 2
+
+### include surface pressure for masking pressure level fields
+"atmos",         "ps",            "ps",            "atmos_daily_cmip", "all", .true.,  "none", 2
+
