@@ -160,6 +160,10 @@
 "uw_conv",  "cqi_uws",     "cqi_uws",     "atmos_month", "all", .true., "none", 2
 "uw_conv",  "cqi_uwd",     "cqi_uwd",     "atmos_month", "all", .true., "none", 2
 
+#  fraction of time for shallow convection
+"uw_conv",  "sci",         "sci",         "atmos_month", "all", .true., "none", 2
+#  total convective cloud cover
+"uw_conv",  "cltc",        "cltc",        "atmos_month", "all", .true., "none", 2
 
 # temperature tendencies
 "atmos",     "tdt_dyn",                        "tdt_dyn",          "atmos_month",     "all", .true.,  "none", 2
