@@ -31,6 +31,8 @@
 "land",    "area_lake",  "lake_area",  "land_static", "all", .false., "none", 2
 "land",    "area_soil",  "soil_area",  "land_static", "all", .false., "none", 2
 "land",    "land_frac",  "land_frac",  "land_static", "all", .false., "none", 2
+"land",    "glac_area",  "glac_area",  "land_static", "all", .false., "none", 2
+"land",    "frac_soil",  "frac_soil",  "land_static", "all", .false., "none", 2
 
 "soil",    "soil_Ksat",  "soil_Ksat",  "land_static", "all", .false., "none", 2
 "soil",    "soil_rlief", "soil_rlief", "land_static", "all", .false., "none", 2
