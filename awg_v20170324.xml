@@ -2435,6 +2435,167 @@ Experiment name = $(name)
 
 
 
+  <experiment name="c96L33_am4p0_cmip6Diag" inherit="cm4p12_$(AWG_VERSION)">
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = 1
+         nyblocks = $atm_threads
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/cmip6_am4p0_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_c96L33.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_amip.nml"/>
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1979,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = $ocn_ranks
+        atmos_npes = $atm_ranks
+        atmos_nthreads = $atm_threads
+        use_hyper_thread = $ht
+        ncores_per_node = $(NCORE_PER_NODE)
+      </namelist>
+
+      <namelist name="mpp_io_nml">
+        cf_compliance = .true.
+      </namelist>
+
+      <namelist name="aerosolrad_driver_nml">
+        do_swaerosol_forcing = .true.
+        do_lwaerosol_forcing = .true.
+      </namelist>
+
+      <namelist name="deep_conv_nml">
+        crh_th_ocean = 0.4
+        crh_th_land  = 0.4
+        auto_th0_d = 0.2e-3
+        tcrit_d    = -25.15,
+        peff_l_d   = 6.0e-5
+        peff_i_d   = 11.e-5
+        rkm_dp1 = 0.9
+        rkm_dp2 = 0.1
+        crh_max = 1.0
+        cwfn_th = 10.
+        tau_dp = 28800.
+        mixing_assumption_d = 6
+        do_ppen_d  = .true.
+        rpen_d     = 4.0
+        do_pevap_d = .true.
+        cfrac_d    = 0.15
+        hcevap_d   = 0.85
+        hcevappbl_d = 0.95
+        pblfac_d   = 1.0
+        frac_limit_d = 0.25
+        dcwfndm_th = 100
+        lofactor_d = 1.0
+        do_cgust_dp  = .true.
+        cgust_choice = 1
+        include_emf_d = .false.
+      </namelist>
+
+      <!-- Input datasets -->
+      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='amip_sst_cmip6']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='data_table_AM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='data_table_co2']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_grid']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='c96L33_initCond']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11_cmip6']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="$(EXP_AMIP_LEN)" units="years" >
+          <segment simTime="12" units="months" />
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
+      </production>
+      <regression name="debug">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_debug']/node())"/>
+      </regression>
+      <regression name="basic">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
+      </regression>
+      <regression name="rts">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_rts']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_rts']/node())"/>
+      </regression>
+      <regression name="debugrts">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_debugrts']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_debugrts']/node())"/>
+      </regression>
+      <regression name="restart">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_restart']/node())"/>
+      </regression>
+      <regression name="scaling">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_scaling']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_scaling']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_scaling']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_scaling']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_scaling']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_scaling']/node())"/>
+      </regression>
+      <regression name="timing">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_timing']/node())"/>
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_timing']/node())"/>
+      </regression>
+      <regression name="year">
+       <run months="12">
+                <resources jobWallclock="4:00:00">
+                <atm ranks="432" threads="1"    layout = "3,24"    io_layout = "1,4" />
+                <lnd                            layout = "3,24"    io_layout = "1,4" />
+                <ocn ranks="0"   threads="0"    layout = "144,3"   io_layout = "1,3" />
+                <ice                            layout = "144,3"   io_layout = "1,3" />
+                </resources>
+        </run>
+       <run months="12">
+                <resources jobWallclock="2:30:00">
+                <atm ranks="432" threads="2"    layout = "3,24"    io_layout = "1,4" />
+                <lnd                            layout = "3,24"    io_layout = "1,4" />
+                <ocn ranks="0"   threads="0"    layout = "144,3"   io_layout = "1,3" />
+                <ice                            layout = "144,3"   io_layout = "1,3" />
+                </resources>
+        </run>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_amip_postprocess_cmip6']/postProcess/node())"/>
+    </postProcess>
+  </experiment>
+
+
+
+
 <!--==========================-->
 <!--= AMIP-CLIMO EXPERIMENTS =-->
 <!--==========================-->
