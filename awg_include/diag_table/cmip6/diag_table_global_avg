@@ -16,7 +16,7 @@
 "atmos_global",     "rss",       "rss",      "atmos_global_cmip",  "all", .true.,  "none", 2
 "atmos_global",     "rls",       "rls",      "atmos_global_cmip",  "all", .true.,  "none", 2
 
-"atmos_global",     "height2m",  "height2m", "atmos_global_cmip",  "all", .true.,  "none", 2
+"flux",             "height2m",  "height2m", "atmos_global_cmip",  "all", .false., "none", 1
 "atmos_global",     "hfls",      "hfls",     "atmos_global_cmip",  "all", .true.,  "none", 2
 "atmos_global",     "hfss",      "hfss",     "atmos_global_cmip",  "all", .true.,  "none", 2
 "atmos_global",     "ts",        "ts",       "atmos_global_cmip",  "all", .true.,  "none", 2

@@ -1,6 +1,15 @@
-############################
-# additional CMIP6 fields
-############################
+##################
+# Table: AUXmon
+##################
+# Auxilary Monthly Fields
+# Not in current CMIP6 tables but available in the model.
+##################
+
+#"atmos_month_cmip",         1, "months",    1,  "days",  "time",
+#"land_month_cmip",          1, "months",    1,  "days",  "time",
+
+##################
+
 
 "moist",       "prsnc",              "prsnc",            "atmos_month_cmip",   "all", .true.,  "none", 2
 "moist",       "prrc",               "prrc",             "atmos_month_cmip",   "all", .true.,  "none", 2
@@ -17,6 +26,13 @@
 # cmip radiation fields
 "radiation",   "rsdsdiff",           "rsdsdiff",         "atmos_month_cmip",   "all", .true.,  "none", 2
 "radiation",   "rsdscsdiff",         "rsdscsdiff",       "atmos_month_cmip",   "all", .true.,  "none", 2
+# aerosol forcing at surface
+"radiation",   "rsdsca",             "rsdsca",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rsusca",             "rsusca",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rldsca",             "rldsca",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rsdscc",             "rsdscc",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rsuscc",             "rsuscc",           "atmos_month_cmip",   "all", .true.,  "none", 2
+"radiation",   "rldscc",             "rldscc",           "atmos_month_cmip",   "all", .true.,  "none", 2
  
 # temperature tendencies
 "moist",       "tntscp",             "tntscp",           "atmos_month_cmip",   "all", .true.,  "none", 2
@@ -43,10 +59,32 @@
 "damping",     "vtendnogw",          "vtendnogw",        "atmos_month_cmip",   "all", .true.,  "none", 2
 
 # single pressure level fields
+"atmos",       "ua10",               "ua10",             "atmos_month_cmip",   "all", .true.,  "none", 2
 "atmos",       "ua200",              "ua200",            "atmos_month_cmip",   "all", .true.,  "none", 2
-"atmos",       "ua850",              "ua850",            "atmos_month_cmip",   "all", .true.,  "none", 2
-"atmos",       "ta850",              "ta850",            "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "ua850",              "ua850_unmsk",      "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "ta850",              "ta850_unmsk",      "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "zg10",               "zg10",             "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "zg100",              "zg100",            "atmos_month_cmip",   "all", .true.,  "none", 2
 "atmos",       "zg500",              "zg500",            "atmos_month_cmip",   "all", .true.,  "none", 2
-"atmos",       "p200",               "p200",             "atmos_month_cmip",   "all", .false., "none", 2
-"atmos",       "p850",               "p850",             "atmos_month_cmip",   "all", .false., "none", 2
+"atmos",       "zg1000",             "zg1000_unmsk",     "atmos_month_cmip",   "all", .true.,  "none", 2
+"atmos",       "p10",                "p10",              "atmos_month_cmip",   "all", .false., "none", 1
+"atmos",       "p200",               "p200",             "atmos_month_cmip",   "all", .false., "none", 1
+"atmos",       "p850",               "p850",             "atmos_month_cmip",   "all", .false., "none", 1
+"atmos",       "p500",               "p500",             "atmos_month_cmip",   "all", .false., "none", 1
+"atmos",       "p1000",              "p1000",            "atmos_month_cmip",   "all", .false., "none", 1
+
+# land model fields
+ "cmor_land",   "snw",         "snw",         "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "snm",         "snm",         "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "lwsnl",       "lwsnl",       "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "mrsfl",       "mrsfl",       "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "mrsll",       "mrsll",       "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "mrsol",       "mrsol",       "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "mrlso",       "mrlso",       "land_month_cmip",  "all", .true., "none", 2
+ "cmor_land",   "tasLut",      "tasLut",      "land_month_cmip",  "all", .true., "none", 2
+
+# aerosol fields
+"tracers",      "fam_bc_col_kg_m2",      "loadbc",       "aerosol_month_cmip",  "all", .true.,  "none", 2
+"tracers",      "fam_dust_col_kg_m2",    "loaddust",     "aerosol_month_cmip",  "all", .true.,  "none", 2
+"tracers",      "fam_seasalt_col_kg_m2", "loadss",       "aerosol_month_cmip",  "all", .true.,  "none", 2
 

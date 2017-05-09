@@ -118,7 +118,6 @@
    </landMonthTS>
    <landMonthTSNative>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_dsch_ratio.csh"/>
-      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_basin_map.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_ts_bas_rad.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_ts_bas_web.csh"/>
    </landMonthTSNative>
@@ -128,9 +127,12 @@
    <landMonthTSNativeWEB>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_ts_bas_web.csh"/>
    </landMonthTSNativeWEB>
-   <landDailyTSNative>
+   <riverMonthTSNative>
+      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_basin_map.csh"/>
+   </riverMonthTSNative>
+   <riverDailyTSNative>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_ts_bas_dly.csh"/>
-   </landDailyTSNative>
+   </riverDailyTSNative>
 
    <!-- Ocean analysis scripts -->
    <oceanAnnualTS>

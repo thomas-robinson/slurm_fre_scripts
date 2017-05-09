@@ -1,274 +1,260 @@
-##########################
-# CMIP Table Amon
-##########################
+##################
+# Table: Amon
+# Version: 1.00.04
+##################
 
-#########################
-# ATMOSPHERE DIAGNOSTICS
-#########################
- "atmos_month_cmip",      1, "months",  1, "days", "time",
-#"atmos_scalar",          1, "months",  1, "days", "time",
+ "atmos_month_cmip",         1, "months",    1,  "days",  "time",
 
-##########################
-# monthly mean, 2d fields
-##########################
+##################
 
-#1. Surface Altitude
-"atmos",     "orog",                           "orog",             "atmos_month_cmip",   "all", .false., "none", 2
+##. Auxiliary fields required for model level output
+ "cmip",          "ap",            "ap",            "atmos_month_cmip",        "all",  .false., "none", 1
+ "cmip",          "b",             "b",             "atmos_month_cmip",        "all",  .false., "none", 1
+ "cmip",          "ap_bnds",       "ap_bnds",       "atmos_month_cmip",        "all",  .false., "none", 1
+ "cmip",          "b_bnds",        "b_bnds",        "atmos_month_cmip",        "all",  .false., "none", 1
+ "cmip",          "lev_bnds",      "lev_bnds",      "atmos_month_cmip",        "all",  .false., "none", 1
 
-#2. Near-Surface Air Temperature
-"flux",      "tas",                            "tas",              "atmos_month_cmip",   "all", .true.,  "none", 2
-"flux",      "height2m",                       "height2m",         "atmos_month_cmip",   "all", .false., "none", 2
+##. Near-Surface Air Temperature, K (longitude,latitude,time,height2m)
+ "flux",          "tas",           "tas",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#3. Surface Temperature
-"flux",      "ts",                             "ts",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Temperature, K (longitude,latitude,time)
+ "flux",          "ts",            "ts",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#4. Daily Minimum Near-Surface Air Temperature
-# REFINE_DIAG NEEDED -- done in atmos_month_refine.csh
-#"flux",      "tas",                            "tasmin",           "atmos_daily_cmip",   "all",  min,    "none", 2
+##. Daily Minimum Near-Surface Air Temperature, K (longitude,latitude,time,height2m)
+# REFINE_DIAG NEEDED -- already in diag_table_day
+#"flux",         "tas",           "tasmin",        "atmos_daily_cmip",        "all",    min,   "none", 2
 
-#5. Daily Maximum Near-Surface Air Temperature
-# REFINE_DIAG NEEDED -- done in atmos_month_refine.csh
-#"flux",      "tas",                            "tasmax",           "atmos_daily_cmip",   "all",  max,    "none", 2
+##. Daily Maximum Near-Surface Air Temperature, K (longitude,latitude,time,height2m)
+# REFINE_DIAG NEEDED -- already in diag_table_day
+#"flux",         "tas",           "tasmax",        "atmos_daily_cmip",        "all",    max,   "none", 2
 
-#6. Sea Level Pressure
-"flux",      "psl",                            "psl",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Sea Level Pressure, Pa (longitude,latitude,time)
+ "flux",          "psl",           "psl",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#7. Surface Air Pressure
-"atmos",     "ps",                             "ps",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Air Pressure, Pa (longitude,latitude,time)
+ "atmos",         "ps",            "ps",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#8. Eastward Near-Surface Wind
-"flux",      "uas",                            "uas",              "atmos_month_cmip",   "all", .true.,  "none", 2
-"flux",      "height10m",                      "height10m",        "atmos_month_cmip",   "all", .false., "none", 2
+##. Eastward Near-Surface Wind, m s-1 (longitude,latitude,time,height10m)
+ "flux",          "uas",           "uas",           "atmos_month_cmip",        "all",  .true.,  "none", 2
+ "flux",          "height10m",     "height10m",     "atmos_month_cmip",        "all",  .false., "none", 1
 
-#9. Northward Near-Surface Wind
-"flux",      "vas",                            "vas",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Northward Near-Surface Wind, m s-1 (longitude,latitude,time,height10m)
+ "flux",          "vas",           "vas",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#10. Near-Surface Wind Speed
-"flux",      "sfcWind",                        "sfcWind",          "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Near-Surface Wind Speed, m s-1 (longitude,latitude,time,height10m)
+ "flux",          "sfcWind",       "sfcWind",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#11. Near-Surface Relative Humidity
-"flux",      "hurs",                           "hurs",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Near-Surface Relative Humidity, % (longitude,latitude,time,height2m)
+ "flux",          "hurs",          "hurs",          "atmos_month_cmip",        "all",  .true.,  "none", 2
+ "flux",          "height2m",      "height2m",      "atmos_month_cmip",        "all",  .false., "none", 1
 
-#12. Near-Surface Specific Humidity
-"flux",      "huss",                           "huss",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Near-Surface Specific Humidity, 1.0 (longitude,latitude,time,height2m)
+ "flux",          "huss",          "huss",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#13. Precipitation (liquid and solid)
-"moist",     "pr",                             "pr",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Precipitation, kg m-2 s-1 (longitude,latitude,time)
+ "moist",         "pr",            "pr",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#14. Snowfall Flux
-"moist",     "prsn",                           "prsn",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Snowfall Flux, kg m-2 s-1 (longitude,latitude,time)
+ "moist",         "prsn",          "prsn",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#15. Convective Precipitation
-"moist",     "prc",                            "prc",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Convective Precipitation, kg m-2 s-1 (longitude,latitude,time)
+ "moist",         "prc",           "prc",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#16. Evaporation
-"flux",      "evspsbl",                        "evspsbl",          "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Evaporation, kg m-2 s-1 (longitude,latitude,time)
+ "flux",          "evspsbl",       "evspsbl",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#17. Surface Snow and Ice Sublimation Flux
-# NOT REPORTED IN CMIP5
+##. Surface Snow and Ice Sublimation Flux, kg m-2 s-1 (longitude,latitude,time)
+# NOT AVAILABLE
+#"UNKNOWN",       "sbl",           "sbl",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#18. Surface Downward Eastward Wind Stress
-"flux",      "tauu",                           "tauu",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downward Eastward Wind Stress, Pa (longitude,latitude,time)
+ "flux",          "tauu",          "tauu",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#19. Surface Downward Northward Wind Stress
-"flux",      "tauv",                           "tauv",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downward Northward Wind Stress, Pa (longitude,latitude,time)
+ "flux",          "tauv",          "tauv",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#20. Surface Upward Latent Heat Flux
-"flux",      "hfls",                           "hfls",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Upward Latent Heat Flux, W m-2 (longitude,latitude,time)
+ "flux",          "hfls",          "hfls",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#21. Surface Upward Sensible Heat Flux
-"flux",      "hfss",                           "hfss",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Upward Sensible Heat Flux, W m-2 (longitude,latitude,time)
+ "flux",          "hfss",          "hfss",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#22. Surface Downwelling Longwave Radiation
-"radiation", "rlds",                           "rlds",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downwelling Longwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rlds",          "rlds",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#23. Surface Upwelling Longwave Radiation
-"radiation", "rlus",                           "rlus",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Upwelling Longwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rlus",          "rlus",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#24. Surface Downwelling Shortwave Radiation
-"radiation", "rsds",                           "rsds",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downwelling Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsds",          "rsds",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#25. Surface Upwelling Shortwave Radiation
-"radiation", "rsus",                           "rsus",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Upwelling Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsus",          "rsus",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#26. Surface Downwelling Clear-Sky Shortwave Radiation
-"radiation", "rsdscs",                         "rsdscs",           "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downwelling Clear-Sky Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsdscs",        "rsdscs",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#27. Surface Upwelling Clear-Sky Shortwave Radiation
-"radiation", "rsuscs",                         "rsuscs",           "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Upwelling Clear-Sky Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsuscs",        "rsuscs",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#28. Surface Downwelling Clear-Sky Longwave Radiation
-"radiation", "rldscs",                         "rldscs",           "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Surface Downwelling Clear-Sky Longwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rldscs",        "rldscs",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#29. TOA Incident Shortwave Radiation
-"radiation", "rsdt",                           "rsdt",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. TOA Incident Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsdt",          "rsdt",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#30. TOA Outgoing Shortwave Radiation
-"radiation", "rsut",                           "rsut",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Top-of-Atmosphere Outgoing Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsut",          "rsut",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#31. TOA Outgoing Longwave Radiation
-"radiation", "rlut",                           "rlut",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. TOA Outgoing Longwave Radiatio, W m-2 (longitude,latitude,time)
+ "radiation",     "rlut",          "rlut",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#32. TOA Outgoing Clear-Sky Longwave Radiation
-"radiation", "rlutcs",                         "rlutcs",           "atmos_month_cmip",   "all", .true.,  "none", 2
+##. TOA Outgoing Clear-sky Longwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rlutcs",        "rlutcs",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#33. TOA Outgoing Clear-Sky Shortwave Radiation
-"radiation", "rsutcs",                         "rsutcs",           "atmos_month_cmip",   "all", .true.,  "none", 2
+##. TOA Outgoing Clear-Sky Shortwave Radiation, W m-2 (longitude,latitude,time)
+ "radiation",     "rsutcs",        "rsutcs",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#34. Water Vapor Path
-"moist",     "prw",                            "prw",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Water Vapor Path, kg m-2 (longitude,latitude,time)
+ "moist",         "prw",           "prw",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#35. Total Cloud Fraction
-"moist",     "clt",                            "clt",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Total Cloud Fraction, 1.0 (longitude,latitude,time)
+ "moist",         "clt",           "clt",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#36. Condensed Water Path
-"moist",     "clwvi",                          "clwvi",            "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Condensed Water Path, kg m-2 (longitude,latitude,time)
+ "moist",         "clwvi",         "clwvi",         "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#37. Ice Water Path
-"moist",     "clivi",                          "clivi",            "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Ice Water Path, kg m-2 (longitude,latitude,time)
+ "moist",         "clivi",         "clivi",         "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#38. Net Downward Flux at Top of Model
-"radiation", "rtmt",                           "rtmt",             "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Net Downward Radiative Flux at Top of Model, W m-2 (longitude,latitude,time)
+ "radiation",     "rtmt",          "rtmt",          "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#39. Air Pressure at Convective Cloud Base
-"moist",     "ccb",                            "ccb",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Air Pressure at Convective Cloud Base, Pa (longitude,latitude,time)
+ "moist",         "ccb",           "ccb",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#40. Air Pressure at Convective Cloud Top
-"moist",     "cct",                            "cct",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Air Pressure at Convective Cloud Top, Pa (longitude,latitude,time)
+ "moist",         "cct",           "cct",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#41. Fraction of Time Convection Occurs
-"moist",     "ci",                             "ci",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Fraction of Time Convection Occurs in Cell, 1.0 (longitude,latitude,time)
+ "moist",         "ci",            "ci",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#42. Fraction of Time Shallow Convection Occurs
-# "sci" NOT REPORTED IN CMIP5
+##. Fraction of Time Shallow Convection Occurs, 1.0 (longitude,latitude,time)
+# NOT AVAILABLE
+ "uw_conv",       "sci_uw",        "sci",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#43. Carbon Mass Flux into Atmosphere Due to All Anthropogenic Emissions of CO2
-# "fco2antt" only for emission-driven coupled carbon climate model runs
+##. Carbon Mass Flux into Atmosphere Due to All Anthropogenic Emissions of CO2, kg m-2 s-1 (longitude,latitude,time)
+# NOT AVAILABLE?
+#"UNKNOWN",       "fco2antt",      "fco2antt",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#44. Carbon Mass Flux into Atmosphere Due to Fossil Fuel Emissions of CO2
-# "fco2fos" only for emission-driven coupled carbon climate model runs
+##. Carbon Mass Flux into Atmosphere Due to Fossil Fuel Emissions of CO2, kg m-2 s-1 (longitude,latitude,time)
+# NOT AVAILABLE?
+#"UNKNOWN",       "fco2fos",       "fco2fos",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#45. Surface Carbon Mass Flux into the Atmosphere Due to Natural Sources
-# "fco2nat" only for emission-driven coupled carbon climate model runs
+##. Surface Carbon Mass Flux into the Atmosphere Due to Natural Sources, kg m-2 s-1 (longitude,latitude,time)
+# NOT AVAILABLE?
+#"UNKNOWN",       "fco2nat",       "fco2nat",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
+##. Percentage Cloud Cover, % (longitude,latitude,alevel,time)
+ "moist",         "cl",            "cl",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-####################################
-# monthly mean, 3d fields
-# these fields are on model levels
-####################################
+##. Mass Fraction of Cloud Liquid Water, kg kg-1 (longitude,latitude,alevel,time)
+ "moist",         "clw",           "clw",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#46. Percentage Cloud Cover
-"moist",     "cl",                             "cl",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Mass Fraction of Cloud Ice, kg kg-1 (longitude,latitude,alevel,time)
+ "moist",         "cli",           "cli",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#47. Mass Fraction of Cloud Liquid Water
-"moist",     "clw",                            "clw",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Convective Mass Flux, kg m-2 s-1 (longitude,latitude,alevhalf,time)
+ "moist",         "mc",            "mc",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#48. Mass Fraction of Cloud Ice
-"moist",     "cli",                            "cli",              "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Air Temperature, K (longitude,latitude,plev19,time)
+ "atmos_plev19",  "ta",            "ta_unmsk",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#49. Convective Mass Flux
-###  This should be on half levels  ###
-"moist",     "mc",                             "mc",               "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Eastward Wind, m s-1 (longitude,latitude,plev19,time)
+ "atmos_plev19",  "ua",            "ua_unmsk",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#50. Pressure on Model Levels
-"radiation", "pfull",                          "pfull",            "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Northward Wind, m s-1 (longitude,latitude,plev19,time)
+ "atmos_plev19",  "va",            "va_unmsk",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#51. Pressure on Model Half-Levels
-"radiation", "phalf",                          "phalf",            "atmos_month_cmip",   "all", .true.,  "none", 2
+##. Specific Humidity, 1.0 (longitude,latitude,plev19,time)
+ "atmos_plev19",  "hus",           "hus_unmsk",     "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-################################
-# formula terms
-# needed for model level fields
-################################
+##. Relative Humidity, % (longitude,latitude,plev19,time)
+ "atmos_plev19",  "hur",           "hur_unmsk",     "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-"cmip",      "ap",                             "ap",               "atmos_month_cmip",   "all", .false., "none", 1
-"cmip",      "b",                              "b",                "atmos_month_cmip",   "all", .false., "none", 1
-"cmip",      "ap_bnds",                        "ap_bnds",          "atmos_month_cmip",   "all", .false., "none", 1
-"cmip",      "b_bnds",                         "b_bnds",           "atmos_month_cmip",   "all", .false., "none", 1
-"cmip",      "lev_bnds",                       "lev_bnds",         "atmos_month_cmip",   "all", .false., "none", 1
+##. omega (=dp/dt), Pa s-1 (longitude,latitude,plev19,time)
+ "atmos_plev19",  "wap",           "wap_unmsk",     "atmos_month_cmip",        "all",  .true.,  "none", 2
 
+##. Geopotential Height, m (longitude,latitude,plev19,time)
+ "atmos_plev19",  "zg",            "zg_unmsk",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-################################################
-# monthly mean, 3d fields
-# these fields are on standard pressure levels
-################################################
+##. Ozone volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time)
+ "radiation_plev19",  "o3",        "o3_unmsk",      "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#52. Air Temperature
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "ta",                    "ta_unmsk",         "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#53. Eastward Wind
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "ua",                    "ua_unmsk",         "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#54. Northward Wind
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "va",                    "va_unmsk",         "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#55. Specific Humidity
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "hus",                   "hus_unmsk",        "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#56. Relative Humidity
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "hur",                   "hur_unmsk",        "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#57. omega (=dp/dt)
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "wap",                   "wap_unmsk",        "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#58. Geopotential Height
-# REFINE_DIAG NEEDED FOR SUB-SURFACE MASKING
-"atmos_plev",   "zg",                    "zg_unmsk",         "atmos_month_cmip",     "all", .true.,  "none", 2
-
-#59. Mole Fraction of O3
-"radiation_plev","tro3",                 "tro3_unmsk",       "atmos_month_cmip",    "all", .true.,  "none", 2
-
-#60. Mole Fraction of O3
+##. Ozone volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time2)
 # CLIMATOLOGY DONE IN POST-PROCESSING
+#"radiation_plev19", "o3",            "o3Clim",        "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#61. Mole Fraction of CO2
-# This field was not reported CMIP5. It was replaced by #63 below,
+##. CO2 volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time)
+# This field was not reported CMIP5. It was replaced by #60 below,
 # which is applicable for well-mixed co2 models.
-#62. Mole Fraction of CO2 (CLIMATOLOGY)
+#"UNKNOWN",       "co2",           "co2",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#63. Total Atmospheric Mass of CO2
-"radiation", "co2mass",        "co2mass",        "atmos_scalar", "all", .true., "none", 2
+##. CO2 volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time2)
+# This field was not reported CMIP5.
+#"UNKNOWN",       "co2",           "co2Clim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#64. Total Atmospheric Mass of CO2
-# CLIMATOLOGY DONE IN POST-PROCESSING (co2massClim)
+##. Total Atmospheric Mass of CO2, kg (time)
+ "radiation",     "co2mass",       "co2mass",       "atmos_scalar",        "all",  .true.,  "none", 2
 
-#65. Mole Fraction of CH4
-# This field was not reported CMIP5. It was replaced by #67 below,
-# which is applicable for well-mixed co2 models.
-#66. Mole Fraction of CH4 (CLIMATOLOGY)
+##. Total Atmospheric Mass of CO2, kg (time2)
+# CLIMATOLOGY DONE IN POST-PROCESSING
+#"radiation",     "co2mass",       "co2massClim",   "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#67. Global Mean Mole Fraction of CH4
-"radiation", "ch4global",      "ch4global",      "atmos_scalar", "all", .true., "none", 2
+##. CH4 volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time)
+# This field was not reported CMIP5. It was replaced by #64 below.
+#"UNKNOWN",       "ch4",           "ch4",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#68. Global Mean Mole Fraction of CH4
-# CLIMATOLOGY DONE IN POST-PROCESSING (ch4globalClim)
+##. CH4 volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time2)
+# This field was not reported CMIP5. It was replaced by #65 below.
+#"UNKNOWN",       "ch4",           "ch4Clim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#69. Mole Fraction of N2O
-# This field was not reported CMIP5. It was replaced by #71 below,
-# which is applicable for well-mixed co2 models.
-#70. Mole Fraction of N2O (CLIMATOLOGY)
+##. Global Mean Mole Fraction of CH4, 1e-09 (time)
+ "radiation",     "ch4global",     "ch4global",     "atmos_scalar",        "all",  .true.,  "none", 2
 
-#71. Global Mean Mole Fraction of N2O
-"radiation", "n2oglobal",      "n2oglobal",      "atmos_scalar", "all", .true., "none", 2
+##. Global Mean Mole Fraction of CH4, 1e-09 (time2)
+# CLIMATOLOGY DONE IN POST-PROCESSING
+#"radiation",     "ch4global",     "ch4globalClim", "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#72. Global Mean Mole Fraction of N2O
-# CLIMATOLOGY DONE IN POST-PROCESSING (n2oglobalClim)
+##. N2O volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time)
+# This field was not reported CMIP5. It was replaced by #68 below.
+#"UNKNOWN",       "n2o",           "n2o",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#73. Global Mean Mole Fraction of CFC11
-"radiation", "cfc11global",    "cfc11global",    "atmos_scalar", "all", .true., "none", 2
+##. N2O volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time2)
+# This field was not reported CMIP5. It was replaced by #69 below.
+#"UNKNOWN",       "n2o",           "n2oClim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#74. Global Mean Mole Fraction of CFC12
-"radiation", "cfc12global",    "cfc12global",    "atmos_scalar", "all", .true., "none", 2
+##. Global Mean Mole Fraction of N2O, 1e-09 (time)
+ "radiation",     "n2oglobal",     "n2oglobal",     "atmos_scalar",        "all",  .true.,  "none", 2
 
-#75. Global Mean Mole Fraction of HCFC22
-"radiation", "hcfc22global",   "hcfc22global",   "atmos_scalar", "all", .true., "none", 2
+##. Global Mean Mole Fraction of N2O, 1e-09 (time2)
+# CLIMATOLOGY DONE IN POST-PROCESSING
+#"radiation",     "n2oglobal",     "n2oglobalClim", "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-#76. Global Mean Mole Fraction of CFC113
-"radiation", "cfc113global",   "cfc113global",   "atmos_scalar", "all", .true., "none", 2
+##. Global Mean Mole Fraction of CFC11, 1e-12 (time): Priority 3
+ "radiation",     "cfc11global",   "cfc11global",   "atmos_scalar",        "all",  .true.,  "none", 2
 
+##. Global Mean Mole Fraction of CFC12, 1e-12 (time): Priority 3
+ "radiation",     "cfc12global",   "cfc12global",   "atmos_scalar",        "all",  .true.,  "none", 2
+
+##. Global Mean Mole Fraction of HCFC22, 1e-12 (time): Priority 3
+ "radiation",     "hcfc22global",  "hcfc22global",  "atmos_scalar",        "all",  .true.,  "none", 2
+
+##. Global Mean Mole Fraction of CFC113, 1e-12 (time): Priority 3
+ "radiation",     "cfc113global",  "cfc113global",  "atmos_scalar",        "all",  .true.,  "none", 2
+
+##. Pressure on Model Levels, Pa (longitude,latitude,alevel,time2)
+ "phys",          "pfull",         "pfull",         "atmos_month_cmip",        "all",  .true.,  "none", 2
+
+##. Pressure on Model Half-Levels, Pa (longitude,latitude,alevhalf,time2)
+ "phys",          "phalf",         "phalf",         "atmos_month_cmip",        "all",  .true.,  "none", 2
