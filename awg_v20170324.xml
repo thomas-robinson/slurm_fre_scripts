@@ -1730,14 +1730,14 @@ $baseDate
         </timeAverage>
       </component>
 
-      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="180,288"> 
+      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere"> 
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" >
           <xi:include href="awg_include/analysis/analysis_amip_cmip.xml" xpointer="xpointer(*/landMonthTSNative/*)"/>
         </timeSeries>
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)"/>
       </component>
 
-      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" sourceGrid="land-cubedsphere" xyInterp="180,288"> 
+      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" sourceGrid="land-cubedsphere"> 
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" />
       </component>
 
@@ -2108,14 +2108,14 @@ $baseDate
         </timeAverage>
       </component>
 
-      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere" xyInterp="360,576"> 
+      <component type="land_cubic" start="$(ANA_AMIP_START)" source="land_month" sourceGrid="land-cubedsphere"> 
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" >
           <xi:include href="awg_include/analysis/analysis_amip_cmip.xml" xpointer="xpointer(*/landMonthTSNative/*)"/>
         </timeSeries>
         <timeSeries freq="daily" source="land_daily" chunkLength="$(PP_AMIP_CHUNK)"/>
       </component>
 
-      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" sourceGrid="land-cubedsphere" xyInterp="360,576"> 
+      <component type="land_instant_cubic" start="$(ANA_AMIP_START)" source="land_month_inst" sourceGrid="land-cubedsphere"> 
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" />
       </component>
 
