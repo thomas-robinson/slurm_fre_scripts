@@ -63,6 +63,7 @@
       <!-- analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/bw/stub/bw_cru_precip.csh"/ -->
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjg/stub/cjg_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/yim_aer_cld.csh"/>
+      <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/sak_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$FRE_ANALYSIS_HOME/eem/code/pcmdi_metrics/frepp.pcmdi_metrics_v1p1p1.atmos.csh -c amip"/>
    </atmosMonthAV>
 
@@ -113,9 +114,6 @@
    <landMonthAV>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_av.csh"/>
    </landMonthAV>
-   <landMonthTSNativeWEB>
-      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_ts_bas_web.csh"/>
-   </landMonthTSNativeWEB>
    <riverMonthTSNative>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/kap/stub/kap_land_basin_map.csh"/>
    </riverMonthTSNative>
