@@ -454,7 +454,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="land_lad2" requires="fms" paths="land_lad2">
       <description domainName="LM3" communityName="land_lad2" communityVersion="dev/master" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="testing_20170510">land_lad2.git</codeBase>
+        <codeBase version="testing_20170512">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
