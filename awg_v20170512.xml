@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20170512 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
+# .. git clone -b awg_v20170512b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
 # .. cd xml_v20170512
 
 # Change f to your group, such as f, w, o...
