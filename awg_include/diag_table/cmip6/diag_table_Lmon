@@ -1,6 +1,6 @@
 ##################
 # Table: Lmon
-# Version: 1.00.04
+# Version: 1.00.07
 ##################
 
  "land_month_cmip",          1, "months",    1,  "days",  "time",
@@ -9,8 +9,6 @@
 
 "land",    "geolon_t",   "geolon_t",   "land_month_cmip", "all", .false., "none", 1
 "land",    "geolat_t",   "geolat_t",   "land_month_cmip", "all", .false., "none", 1
-"land",    "dummy_lon",  "dummy_lon",  "land_month_cmip", "all", .false., "none", 1
-"land",    "dummy_lat",  "dummy_lat",  "land_month_cmip", "all", .false., "none", 1
 
 ##. Moisture in Upper Portion of Soil Column, kg m-2 (longitude,latitude,time,sdepth1)
  "cmor_land",     "mrsos",         "mrsos",         "land_month_cmip",         "all",  .true.,  "none", 2
@@ -45,19 +43,19 @@
 ##. Temperature of Soil, K (longitude,latitude,sdepth,time): Priority 2
 #"UNKNOWN",       "tsl",           "tsl",           "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Percentage Tree Cover, % (longitude,latitude,time)
+##. Percentage Tree Cover, % (longitude,latitude,time,typetree)
  "cmor_land",     "treeFrac",      "treeFrac",      "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Natural Grass Percentage, % (longitude,latitude,time)
+##. Natural Grass Area Percentage, % (longitude,latitude,time,typenatgr)
  "cmor_land",     "grassFrac",     "grassFrac",     "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Percentage Cover by Shrub, % (longitude,latitude,time)
+##. Percentage Cover by Shrub, % (longitude,latitude,time,typeshrub)
 #"UNKNOWN",       "shrubFrac",     "shrubFrac",     "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Percentage Crop Cover, % (longitude,latitude,time)
+##. Percentage Crop Cover, % (longitude,latitude,time,typecrop)
  "cmor_land",     "cropFrac",      "cropFrac",      "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Percentage of Land which is Anthropogenic Pasture, % (longitude,latitude,time)
+##. Percentage of Land which is Anthropogenic Pasture, % (longitude,latitude,time,typepasture)
  "cmor_land",     "pastureFrac",   "pastureFrac",   "land_month_cmip",         "all",  .true.,  "none", 2
 
 ##. Bare Soil Percentage, % (longitude,latitude,time,typebare)
@@ -66,7 +64,7 @@
 ##. Percentage of Grid Cell that is Land but Neither Vegetation-Covered nor Bare Soil, % (longitude,latitude,time)
  "cmor_land",     "residualFrac",  "residualFrac",  "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. Burnt Area Percentage, % (longitude,latitude,time)
+##. Burnt Area Percentage, % (longitude,latitude,time,typeburnt)
 #"UNKNOWN",       "burntArea",     "burntArea",     "land_month_cmip",         "all",  .true.,  "none", 2
 
 ##. Carbon Mass in Vegetation, kg m-2 (longitude,latitude,time)
@@ -78,7 +76,7 @@
 ##. Carbon Mass in Products of Landuse Change, kg m-2 (longitude,latitude,time)
  "cmor_land",     "cProduct",      "cProduct",      "land_month_cmip",         "all",  .true.,  "none", 2
 
-##. leaf area index, 1.0 (longitude,latitude,time)
+##. Leaf Area Index, 1.0 (longitude,latitude,time)
  "cmor_land",     "lai",           "lai",           "land_month_cmip",         "all",  .true.,  "none", 2
 
 ##. Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land, kg m-2 s-1 (longitude,latitude,time)

@@ -63,15 +63,8 @@
       <!-- analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/bw/stub/bw_cru_precip.csh"/ -->
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjg/stub/cjg_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/yim_aer_cld.csh"/>
-      <!--analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/sak_atmos_av_mon.csh"/-->
       <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$FRE_ANALYSIS_HOME/eem/code/pcmdi_metrics/frepp.pcmdi_metrics_v1p1p1.atmos.csh -c amip"/>
    </atmosMonthAV>
-
-   <atmosMonthModisAV>
-      <analysis switch="$(ANALYSIS_SWITCH)" script="/home/h1g/awg/warsaw/utils/Cloud_reff/yim_aer_cld_cosp.csh"/>
-   </atmosMonthModisAV>
-
-
 
    <atmosLevelAnnualTS>
       <null/>

@@ -1,10 +1,9 @@
 #################
 # Table: day
-# Version: 1.00.04
+# Version: 1.00.07
 #################
 
  "atmos_daily_cmip",        24, "hours",    1,  "days",  "time",
-#"ocean_daily_cmip",        24, "hours",    1,  "days",  "time",
  "land_daily_cmip",         24, "hours",    1,  "days",  "time",
 #"landIce_daily_cmip",      24, "hours",    1,  "days",  "time",
 
@@ -12,8 +11,6 @@
 
 "land",    "geolon_t",   "geolon_t",   "land_daily_cmip", "all", .false., "none", 1
 "land",    "geolat_t",   "geolat_t",   "land_daily_cmip", "all", .false., "none", 1
-"land",    "dummy_lon",  "dummy_lon",  "land_daily_cmip", "all", .false., "none", 1
-"land",    "dummy_lat",  "dummy_lat",  "land_daily_cmip", "all", .false., "none", 1
 
 ##. Surface pressure needed for masking pressure level fields
  "atmos",         "ps",            "ps",            "atmos_daily_cmip",        "all",  .true.,  "none", 2
@@ -41,9 +38,6 @@
  "flux",          "sfcWind",       "sfcWind",       "atmos_daily_cmip",        "all",  .true.,  "none", 2
  "flux",          "height10m",     "height10m",     "atmos_daily_cmip",        "all",  .false., "none", 1
 
-##. Mean Daily Maximum Ocean Mixed Layer Thickness Defined by Mixing Scheme, m (longitude,latitude,time)
-#"UNKNOWN",       "omldamax",      "omldamax",      "ocean_daily_cmip",        "all",  .true.,  "none", 2
-
 ##. Total Soil Moisture Content, kg m-2 (longitude,latitude,time)
  "cmor_land",     "mrso",          "mrso",          "land_daily_cmip",         "all",  .true.,  "none", 2
 
@@ -62,17 +56,23 @@
 ##. Snow Area Fraction, % (longitude,latitude,time)
 #"UNKNOWN",       "snc",           "snc",           "landIce_daily_cmip",      "all",  .true.,  "none", 2
 
-##. Total Cloud Fraction, 1.0 (longitude,latitude,time)
+##. Total Cloud Cover Percentage, % (longitude,latitude,time)
  "moist",         "clt",           "clt",           "atmos_daily_cmip",        "all",  .true.,  "none", 2
 
 ##. Surface Temperature where Land or Sea Ice, K (longitude,latitude,time)
  "flux",          "tslsi",         "tslsi",         "atmos_daily_cmip",        "all",  .true.,  "none", 2
+
+##. Surface Snow Amount, kg m-2 (longitude,latitude,time)
+ "cmor_land",     "snw",           "snw",           "land_daily_cmip",         "all",  .true.,  "none", 2
 
 ##. Convective Precipitation, kg m-2 s-1 (longitude,latitude,time)
  "moist",         "prc",           "prc",           "atmos_daily_cmip",        "all",  .true.,  "none", 2
 
 ##. Snowfall Flux, kg m-2 s-1 (longitude,latitude,time)
  "moist",         "prsn",          "prsn",          "atmos_daily_cmip",        "all",  .true.,  "none", 2
+
+##. Total Run-off, kg m-2 s-1 (longitude,latitude,time)
+ "cmor_land",     "mrro",          "mrro",          "land_daily_cmip",         "all",  .true.,  "none", 2
 
 ##. Eastward Near-Surface Wind, m s-1 (longitude,latitude,time,height10m)
  "flux",          "uas",           "uas",           "atmos_daily_cmip",        "all",  .true.,  "none", 2

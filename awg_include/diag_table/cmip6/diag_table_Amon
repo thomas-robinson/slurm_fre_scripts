@@ -1,9 +1,10 @@
 ##################
 # Table: Amon
-# Version: 1.00.04
+# Version: 1.00.07
 ##################
 
  "atmos_month_cmip",         1, "months",    1,  "days",  "time",
+#"atmos_scalar",             1, "months",    1,  "days",  "time",
 
 ##################
 
@@ -118,7 +119,7 @@
 ##. Water Vapor Path, kg m-2 (longitude,latitude,time)
  "moist",         "prw",           "prw",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
-##. Total Cloud Fraction, 1.0 (longitude,latitude,time)
+##. Total Cloud Cover Percentage, % (longitude,latitude,time)
  "moist",         "clt",           "clt",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Condensed Water Path, kg m-2 (longitude,latitude,time)
@@ -140,7 +141,6 @@
  "moist",         "ci",            "ci",            "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Fraction of Time Shallow Convection Occurs, 1.0 (longitude,latitude,time)
-# NOT AVAILABLE
  "uw_conv",       "sci_uw",        "sci",           "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Carbon Mass Flux into Atmosphere Due to All Anthropogenic Emissions of CO2, kg m-2 s-1 (longitude,latitude,time)
@@ -205,7 +205,7 @@
 #"UNKNOWN",       "co2",           "co2Clim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Total Atmospheric Mass of CO2, kg (time)
- "radiation",     "co2mass",       "co2mass",       "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "co2mass",       "co2mass",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Total Atmospheric Mass of CO2, kg (time2)
 # CLIMATOLOGY DONE IN POST-PROCESSING
@@ -220,11 +220,11 @@
 #"UNKNOWN",       "ch4",           "ch4Clim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of CH4, 1e-09 (time)
- "radiation",     "ch4global",     "ch4global",     "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "ch4global",     "ch4global",     "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of CH4, 1e-09 (time2)
 # CLIMATOLOGY DONE IN POST-PROCESSING
-#"radiation",     "ch4global",     "ch4globalClim", "atmos_month_cmip",        "all",  .true.,  "none", 2
+#"radiation",     "ch4global",     "ch4globalClim", "atmos_scalar",           "all",  .true.,  "none", 2
 
 ##. N2O volume mixing ratio, mol mol-1 (longitude,latitude,plev19,time)
 # This field was not reported CMIP5. It was replaced by #68 below.
@@ -235,23 +235,23 @@
 #"UNKNOWN",       "n2o",           "n2oClim",       "atmos_month_cmip",        "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of N2O, 1e-09 (time)
- "radiation",     "n2oglobal",     "n2oglobal",     "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "n2oglobal",     "n2oglobal",     "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of N2O, 1e-09 (time2)
 # CLIMATOLOGY DONE IN POST-PROCESSING
-#"radiation",     "n2oglobal",     "n2oglobalClim", "atmos_month_cmip",        "all",  .true.,  "none", 2
+#"radiation",     "n2oglobal",     "n2oglobalClim", "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of CFC11, 1e-12 (time): Priority 3
- "radiation",     "cfc11global",   "cfc11global",   "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "cfc11global",   "cfc11global",   "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of CFC12, 1e-12 (time): Priority 3
- "radiation",     "cfc12global",   "cfc12global",   "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "cfc12global",   "cfc12global",   "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of HCFC22, 1e-12 (time): Priority 3
- "radiation",     "hcfc22global",  "hcfc22global",  "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "hcfc22global",  "hcfc22global",  "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Global Mean Mole Fraction of CFC113, 1e-12 (time): Priority 3
- "radiation",     "cfc113global",  "cfc113global",  "atmos_scalar",        "all",  .true.,  "none", 2
+ "radiation",     "cfc113global",  "cfc113global",  "atmos_scalar",            "all",  .true.,  "none", 2
 
 ##. Pressure on Model Levels, Pa (longitude,latitude,alevel,time2)
  "phys",          "pfull",         "pfull",         "atmos_month_cmip",        "all",  .true.,  "none", 2

@@ -68,7 +68,7 @@ set filter = 2   # 0 = no filter, 1 = filtered, 2 = both
 #   variables: u, v, w, t, z, q
 #   levels: 1000, 850, 700, 500, 250, 100, 50, 10
 
-set plots = "uu10,tt10,uu250,vv250,tt250,uv250,vt250,ww500,wt500,zz500,vv850,uv850,tt850,vt850,vq850"
+set plots = "uu10,tt10,uu250,vv250,tt250,vt250,uv250,ww500,wt500,zz500,vv850,uv850,tt850,vt850,vq850"
 
 $FRE_CODE_BASE/$PACKAGE_NAME/run_eddies.pl $options -f $filter -p $plots -D merra
 

@@ -1,11 +1,11 @@
 #################
 # Table: 3hr
-# Version: 1.00.04
+# Version: 1.00.07
 #################
 
  "atmos_8xdaily_cmip",       3, "hours",    1,  "days",  "time",
  "atmos_8xdaily_inst",       3, "hours",    1,  "days",  "time",
-#"land_8xdaily_cmip",        3, "hours",    1,  "days",  "time",
+ "land_8xdaily_cmip",        3, "hours",    1,  "days",  "time",
 #"ocean_8xdaily_cmip",       3, "hours",    1,  "days",  "time",
 
 #################
@@ -73,7 +73,7 @@
 ##. Surface Air Pressure, Pa (longitude,latitude,time1)
 #"atmos",         "ps",            "ps",            "atmos_8xdaily_inst",      "all", .false.,  "none", 2
 
-##. Total Cloud Fraction, 1.0 (longitude,latitude,time)
+##. Total Cloud Cover Percentage, % (longitude,latitude,time)
 #"moist",         "clt",           "clt",           "atmos_8xdaily_cmip",      "all",  .true.,  "none", 2
 
 ##. Surface Diffuse Downwelling Shortwave Radiation, W m-2 (longitude,latitude,time)

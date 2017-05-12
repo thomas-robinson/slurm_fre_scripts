@@ -3,7 +3,7 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20170324 revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), v20170512 revision -->
 
 <!-- QUICK START GUIDE:
 
@@ -12,24 +12,24 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20170324 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170324
-# .. cd xml_v20170324
+# .. git clone -b awg_v20170512 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
+# .. cd xml_v20170512
 
 # Change f to your group, such as f, w, o...
       <project>gfdl_YOURGROUPLETTER</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
-# .. fremake -x awg_v20170324.xml -p ncrc3.intel -t openmp cm4p12_v20170324 
+# .. fremake -x awg_v20170512.xml -p ncrc3.intel -t openmp cm4p12_v20170512 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_v20170324.xml -p ncrc3.intel -t openmp c96L33_am4p0
+# .. frerun -s -r basic -x awg_v20170512.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_v20170324.xml -p ncrc3.intel -t openmp c96L33_am4p0
+# .. frerun -x awg_v20170512.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_v20170324.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0
+# .. fredb-pp -x awg_v20170512.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -42,20 +42,11 @@
 ! can be computed with the 'taverage' AWG utility.
 
 On gaea c4
-ref> c96L32_am4p0/ncrc4.intel-prod-openmp/0m8d                       8a7ab776e99ef741a7f2cd8a0df60bb69df33bc9
 ref> c96L33_am4p0/ncrc4.intel-prod-openmp/0m8d                       aa5b334386f7037c49cd0c934fb6e7d2b95b3bd7
-
-ref> c96L32_am4p0_2010climo/ncrc4.intel-prod-openmp/0m8d             2df0e65dfcecd644f104d1e7551a553c6c1153f0             
 ref> c96L33_am4p0_2010climo/ncrc4.intel-prod-openmp/0m8d             0a0dc025f7cf8b276bc4b98b9e1b3c8ad4547837
-
-ref> c96L32_am4p0_1850climo/ncrc4.intel-prod-openmp/0m8d             818a4dda851bd351e8687bff69100fa95f227193         
 ref> c96L33_am4p0_1850climo/ncrc4.intel-prod-openmp/0m8d             bf6b378a1ee92cde053e369a03b3d6fc0ba2cfe3
 
-ref> c96L32_am4p0_2010aero/ncrc4.intel-prod-openmp/0m8d              a6ab9fcb2c10caadfe0a9103933a2cf10b7ab8db               
-ref> c96L33_am4p0_2010aero/ncrc4.intel-prod-openmp/0m8d              61f883c8e0625b2f9d8aa5697bbf837831f1a7a5
-
-ref> c96L32_am4p0_2010climo_p2K/ncrc4.intel-prod-openmp/0m8d         75b9bc8b2f01e7b9bbd44a510c1bada875236bd8
-ref> c96L33_am4p0_2010climo_p2K/ncrc4.intel-prod-openmp/0m8d         9a725cd7e2b5456e460fec209ea2825ef4fc407c
+ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f7037c49cd0c934fb6e7d2b95b3bd7
 -->
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
@@ -63,8 +54,8 @@ ref> c96L33_am4p0_2010climo_p2K/ncrc4.intel-prod-openmp/0m8d         9a725cd7e2b
   <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="awg_v20170324"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="v20170324"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="awg_v20170512"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="v20170512"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -121,7 +112,7 @@ properties below.
   <property name="EXP_AMIP_START" value="1979"/>
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="36"/>
-  <property name="ANA_AMIP_START" value="1980"/>
+  <property name="ANA_AMIP_START" value="1979"/>
   <property name="ANA_AMIP_END"   value="2014"/>
   <property name="ANA_AMIP_LEN"   value="35yr"/>
 
@@ -415,8 +406,8 @@ Experiment to build executable. See git log for source code provenance.
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
           <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
-            ( cd atmos_shared && git checkout  $(AWG_GIT_TAG))
-            ( cd atmos_param  && git checkout  miz_cleanup_for_warsaw_v20170328 )
+            ( cd atmos_shared && git checkout  $(AWG_GIT_TAG) )
+            ( cd atmos_param  && git checkout  $(AWG_GIT_TAG) )
                        ]]>
           </csh>
         </source>
@@ -461,9 +452,9 @@ Experiment to build executable. See git log for source code provenance.
     </component>
 
     <component name="land_lad2" requires="fms" paths="land_lad2">
-      <description domainName="LM3" communityName="land_lad2" communityVersion="lad2_20170209_slm" communityGrid=""/>
+      <description domainName="LM3" communityName="land_lad2" communityVersion="dev/master" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="prerelease_warsaw_20170316">land_lad2.git</codeBase>
+        <codeBase version="testing_20170510">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
@@ -868,6 +859,63 @@ $baseDate
     </input>
   </freInclude>
 
+
+<!--
+  diag_table for CMIP6 diagnostic output
+-->
+  <freInclude name="diag_table_lm3p2_fullaero_cmip6">
+    <input>
+      <diagTable>
+$name
+$baseDate
+
+      </diagTable>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_atmos_cmip6</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_land</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_atmos_simpleSO4</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_3hr</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_6hrPlev</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_day</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERday</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Amon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERmon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERhr</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Lmon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AUXmon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_check</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_global_avg</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
   <freInclude name="diag_table_lm3p2_fullchem">
     <input>
       <diagTable>
@@ -932,6 +980,15 @@ $baseDate
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20161202.tar</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+  <freInclude name="c192L33_initCond">
+    <input>
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20170325.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -1694,7 +1751,7 @@ $baseDate
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)"/>
       </component>
 
-      <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar">
+      <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar" cmip="yes">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
       </component>
 
@@ -2072,7 +2129,7 @@ $baseDate
         <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)"/>
       </component>
 
-      <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar">
+      <component type="atmos_scalar" start="$(ANA_AMIP_START)" source="atmos_scalar" cmip="yes">
         <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
       </component>
 
@@ -2151,134 +2208,6 @@ $baseDate
 <!--====================-->
 <!--= AMIP EXPERIMENTS =-->
 <!--====================-->
-  <experiment name="c96L32_am4p0" inherit="cm4p12_$(AWG_VERSION)">
-<!-- MDBI -->
-    <publicMetadata DBswitch="$(MDBIswitch)">
-      <project>$(ProjectID)</project>
-      <model>am4p0</model>
-      <modelID>am4p0</modelID>
-      <experimentName>$(name)</experimentName>
-      <experimentID>$(name)</experimentID>
-      <comment>
-Experiment name = $(name)
-      </comment>
-      <forcing>N/A</forcing>
-      <startTime>$(EXP_AMIP_START)</startTime>
-      <endTime>$(EXP_AMIP_END)</endTime>
-      <parentExperimentID>N/A</parentExperimentID>
-      <parentExperimentRIP>N/A</parentExperimentRIP>
-      <branchTime>0.0</branchTime>
-    </publicMetadata>
-      <realization r="1" i="1" p="1"/>
-<!-- /MDBI -->
-<description>
-</description>
-    <input>
-      <namelist name="atmos_model_nml">
-         nxblocks = 1
-         nyblocks = $atm_threads
-      </namelist>
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_c96L32.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_amip.nml"/>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1979,1,1,0,0,0,
-        calendar = 'julian'
-        dt_atmos = 1800,
-        dt_cpld  = 7200,
-        use_lag_fluxes = .true.
-        concurrent = .false.
-        do_ocean = .false.
-        ocean_npes = $ocn_ranks
-        atmos_npes = $atm_ranks
-        atmos_nthreads = $atm_threads
-        use_hyper_thread = $ht
-        ncores_per_node = $(NCORE_PER_NODE)
-      </namelist>
-
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='amip_sst_cmip6']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='data_table_AM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='data_table_co2']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_grid']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_initCond_Newtopo']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11']/input/node())"/>
-
-    </input>
-
-    <runtime>
-      <production simTime="$(EXP_AMIP_LEN)" units="years" >
-          <segment simTime="12" units="months" />
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
-      </production>
-      <regression name="debug">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_debug']/node())"/>
-      </regression>
-      <regression name="basic">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
-      </regression>
-      <regression name="rts">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_rts']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_rts']/node())"/>
-      </regression>
-      <regression name="debugrts">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_debugrts']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_debugrts']/node())"/>
-      </regression>
-      <regression name="restart">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_restart']/node())"/>
-      </regression>
-      <regression name="scaling">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_scaling']/node())"/>
-      </regression>
-      <regression name="timing">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_timing']/node())"/>
-      </regression>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_amip_postprocess']/postProcess/node())"/>
-    </postProcess>
-  </experiment>
-
-
-
-
   <experiment name="c96L33_am4p0" inherit="cm4p12_$(AWG_VERSION)">
 <!-- MDBI -->
     <publicMetadata DBswitch="$(MDBIswitch)">
@@ -2599,157 +2528,6 @@ Experiment name = $(name)
 <!--==========================-->
 <!--= AMIP-CLIMO EXPERIMENTS =-->
 <!--==========================-->
-  <experiment name="c96L32_am4p0_2010climo" inherit="cm4p12_$(AWG_VERSION)">
-    <input>
-      <namelist name="atmos_model_nml">
-         nxblocks = 1
-         nyblocks = $atm_threads
-      </namelist>
-      <!-- Namelist -->
-      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_common.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_physics.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_c96L32.nml"/>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_2010climo.nml"/>
-      <namelist name="coupler_nml">
-        months = $months,
-        days   = $days,
-        current_date = 1,1,1,0,0,0,
-        calendar = 'noleap'
-        dt_atmos = 1800,
-        dt_cpld  = 7200,
-        use_lag_fluxes = .true.
-        concurrent = .false.
-        do_ocean = .false.
-        ocean_npes = $ocn_ranks
-        atmos_npes = $atm_ranks
-        atmos_nthreads = $atm_threads
-        use_hyper_thread = $ht
-        ncores_per_node = $(NCORE_PER_NODE)
-      </namelist>
-
-      <!-- Input datasets -->
-      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_2010_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='data_table_AM4']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_grid']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='c96L32_initCond_Newtopo']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11']/input/node())"/>
-    </input>
-
-    <runtime>
-      <production simTime="$(EXP_CLIMO_LEN)" units="years" >
-          <segment simTime="12" units="months" />
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
-      </production>
-      <regression name="debug">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_debug']/node())"/>
-      </regression>
-      <regression name="basic">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
-      </regression>
-      <regression name="rts">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_rts']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_rts']/node())"/>
-      </regression>
-      <regression name="debugrts">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_debugrts']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_debugrts']/node())"/>
-      </regression>
-      <regression name="restart">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_restart']/node())"/>
-      </regression>
-      <regression name="scaling">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_scaling']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_scaling']/node())"/>
-      </regression>
-      <regression name="timing">
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_384_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1152_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_1728_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_2304_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_3456_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_4608_timing']/node())"/>
-          <xi:include xpointer="xpointer(//freInclude[@name='c96_6912_timing']/node())"/>
-      </regression>
-    </runtime>
-
-    <postProcess>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_climo_postprocess']/postProcess/node())"/>
-    </postProcess>
-  </experiment>
-
-
-  <experiment name="c96L32_am4p0_1850climo" inherit="c96L32_am4p0_2010climo">
-    <input>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_1850climo.nml"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_1850_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
-    </input>
-  </experiment>
-
-
-  <experiment name="c96L32_am4p0_2010aero" inherit="c96L32_am4p0_2010climo">
-    <input>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_2010aero.nml"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_1850_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
-
-    </input>
-  </experiment>
-
-  <experiment name="c96L32_am4p0_2010climo_p2K" inherit="c96L32_am4p0_2010climo">
-    <input>
-      <namelist name="ice_spec_nml">
-        mcm_ice = .false.
-        do_leads = .false.
-        minimum_ice_concentration = 0.5
-        minimum_ice_thickness = 0.1
-        sst_degk = .true.
-        sst_pert = 2.0
-      </namelist>
-    </input>
-  </experiment>
-
-
   <experiment name="c96L33_am4p0_2010climo" inherit="cm4p12_$(AWG_VERSION)">
     <input>
       <namelist name="atmos_model_nml">
@@ -2897,36 +2675,6 @@ Experiment name = $(name)
     </input>
   </experiment>
 
-
-  <experiment name="c96L33_am4p0_2010aero" inherit="c96L33_am4p0_2010climo">
-    <input>
-      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_2010aero.nml"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_1850_cmip6']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20161213']/input/node())"/>
-
-      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
-      <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
-
-    </input>
-  </experiment>
-
-  <experiment name="c96L33_am4p0_2010climo_p2K" inherit="c96L33_am4p0_2010climo">
-    <input>
-      <namelist name="ice_spec_nml">
-        mcm_ice = .false.
-        do_leads = .false.
-        minimum_ice_concentration = 0.5
-        minimum_ice_thickness = 0.1
-        sst_degk = .true.
-        sst_pert = 2.0
-      </namelist>
-    </input>
-  </experiment>
 
 </experimentSuite>
 

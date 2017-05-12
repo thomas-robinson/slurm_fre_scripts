@@ -15,4 +15,7 @@
  "radiation",    "loadbc",        "loadbc_old",       "aerosol_month_cmip",      "all",  .true.,  "none", 2
  "radiation",    "loaddust",      "loaddust_old",     "aerosol_month_cmip",      "all",  .true.,  "none", 2
  "radiation",    "loadss",        "loadss_old",       "aerosol_month_cmip",      "all",  .true.,  "none", 2
+ "radiation",    "loadso4",       "loadso4_old",      "aerosol_month_cmip",      "all",  .true.,  "none", 2
+ "tracers",      "loadno3",       "loadno3_old",      "aerosol_month_cmip",      "all",  .true.,  "none", 2
+ "tracers",      "loadnh4",       "loadnh4_old",      "aerosol_month_cmip",      "all",  .true.,  "none", 2
 
