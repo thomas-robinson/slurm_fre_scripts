@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/verona
 # .. cd $home/awg/verona
-# .. git clone -b awg_v20170512b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
+# .. git clone -b awg_v20170512c http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
 # .. cd xml_v20170512
 
 # Change f to your group, such as f, w, o...
@@ -214,7 +214,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -262,7 +262,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -299,7 +299,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -336,7 +336,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
