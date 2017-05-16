@@ -10,9 +10,9 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-12
 # .. module load git
-# .. mkdir -p $home/awg/verona
-# .. cd $home/awg/verona
-# .. git clone -b awg_v20170512c http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
+# .. mkdir -p $home/awg/warsaw
+# .. cd $home/awg/warsaw
+# .. git clone -b awg_v20170512d http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
 # .. cd xml_v20170512
 
 # Change f to your group, such as f, w, o...
@@ -112,7 +112,7 @@ properties below.
   <property name="EXP_AMIP_START" value="1979"/>
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="36"/>
-  <property name="ANA_AMIP_START" value="1979"/>
+  <property name="ANA_AMIP_START" value="1980"/>
   <property name="ANA_AMIP_END"   value="2014"/>
   <property name="ANA_AMIP_LEN"   value="35yr"/>
 
