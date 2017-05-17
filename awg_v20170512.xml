@@ -10,9 +10,9 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-12
 # .. module load git
-# .. mkdir -p $home/awg/verona
-# .. cd $home/awg/verona
-# .. git clone -b awg_v20170512 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
+# .. mkdir -p $home/awg/warsaw
+# .. cd $home/awg/warsaw
+# .. git clone -b awg_v20170512d http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_v20170512
 # .. cd xml_v20170512
 
 # Change f to your group, such as f, w, o...
@@ -112,7 +112,7 @@ properties below.
   <property name="EXP_AMIP_START" value="1979"/>
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="36"/>
-  <property name="ANA_AMIP_START" value="1979"/>
+  <property name="ANA_AMIP_START" value="1980"/>
   <property name="ANA_AMIP_END"   value="2014"/>
   <property name="ANA_AMIP_LEN"   value="35yr"/>
 
@@ -214,7 +214,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -262,7 +262,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -299,7 +299,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -336,7 +336,7 @@ configuration.
       </directory>
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CPERM/Chris.Golaz/archive/mdt"/>
+      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
@@ -454,7 +454,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="land_lad2" requires="fms" paths="land_lad2">
       <description domainName="LM3" communityName="land_lad2" communityVersion="dev/master" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="testing_20170510">land_lad2.git</codeBase>
+        <codeBase version="testing_20170512">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
