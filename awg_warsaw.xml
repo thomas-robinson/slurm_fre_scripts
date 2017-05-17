@@ -112,7 +112,7 @@ properties below.
   <property name="EXP_AMIP_START" value="1979"/>
   <property name="EXP_AMIP_END"   value="2014"/>
   <property name="EXP_AMIP_LEN"   value="36"/>
-  <property name="ANA_AMIP_START" value="1979"/>
+  <property name="ANA_AMIP_START" value="1980"/>
   <property name="ANA_AMIP_END"   value="2014"/>
   <property name="ANA_AMIP_LEN"   value="35yr"/>
 
