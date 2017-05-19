@@ -54,7 +54,7 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
   <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="testing_20170516"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="warsaw"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="warsaw"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
@@ -65,7 +65,7 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
   <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
   <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
-  <property name="MIZ_ARCHIVE_ROOT_GAEA" value="$CPERM/Ming.Zhao/archive/mdt"/>
+  <property name="MIZ_ARCHIVE_ROOT_GAEA" value="$CDATA/gfdl_W/Ming.Zhao/archive/mdt"/>
   <property name="MIZ_ARCHIVE_ROOT_GFDL" value="/archive/miz/mdt/"/>
 
 <!--
@@ -217,7 +217,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
+      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="32"/>
       <csh><![CDATA[
         module load git
@@ -265,7 +265,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
+      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="32"/>
       <csh><![CDATA[
         module load git
@@ -302,7 +302,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
+      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="36"/>
       <csh><![CDATA[
         module load git
@@ -339,7 +339,7 @@ configuration.
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
       <property name="LWH_ARCHIVE_ROOT"    value="$CDATA/gfdl_M"/>
       <property name="MIZ_ARCHIVE_ROOT"    value="$(MIZ_ARCHIVE_ROOT_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CPERM/Huan.Guo/archive/mdt"/>
+      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="36"/>
       <csh><![CDATA[
         module load git
@@ -518,28 +518,28 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="common_LM4">
     <input>
       <dataFile label="input" target="INPUT/soil_type.nc" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$CPERM/Krista.A.Dunne/mod_input_files/any_grid/soil_type_hwsd_5minute.nc</dataSource>
+         <dataSource platform="$(platform)">$CDATA/gfdl_G/Krista.A.Dunne/mod_input_files/any_grid/soil_type_hwsd_5minute.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/biodata.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/biodata.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/cover_type.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/cover_type.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/geohydrology.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/geohydrology.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/geohydrology_table_2a2n.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/geohydrology_table_2a2n.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/ground_type.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/ground_type.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/landuse.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/landuse.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/lm3/soil_brdf.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/lm3/soil_brdf.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -547,13 +547,13 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="c96_LM4">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Sergey.Malyshev/fre/tikal/LM3/LM3p2sosn_HWSD5min_C96_OM4_025_historical_HC1_static_veg_out/ncrc2.default-prod/static_veg/19810101.static_veg_LM3p2sosn_HWSD5min_C96_OM4_025.v20150930.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_B/Sergey.Malyshev/fre/tikal/LM3/LM3p2sosn_HWSD5min_C96_OM4_025_historical_HC1_static_veg_out/ncrc2.default-prod/static_veg/19810101.static_veg_LM3p2sosn_HWSD5min_C96_OM4_025.v20150930.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/lm3/c96_OM4_025_hydrography_v20170413.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/lm3/c96_OM4_025_hydrography_v20170413.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/drag/c96_topo_rough_land.nc.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/drag/c96_topo_rough_land.nc.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -561,22 +561,22 @@ Experiment to build executable. See git log for source code provenance.
  <freInclude name="common_AM4_v20170208">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">/lustre/f1/unswept/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_W/Ming.Zhao/archive/mdt/awg/input/aerosol_inputs/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(LWH_ARCHIVE_ROOT)/cm3/ipcc_ar5/input/common/tropchem_dec2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/depvel/depvel_gc_am3_tran.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Fabien.Paulot/archive/depvel/depvel_gc_am3_tran.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_ARCHIVE_ROOT)/liteChem/input/emissions/so2_0.25_volcanoes.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/AM4_201510" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Fabien.Paulot/archive/rad/am4_optical_table_20151029.dat</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Fabien.Paulot/archive/rad/am4_optical_table_20151029.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -585,14 +585,14 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="common_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/chemlbf/chemlbf_CMIP6_merge_RCP45</dataSource>
       </dataFile>
 
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/litechem/mmro3_CMIP6_184901-201512.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/litechem/mmro3_CMIP6_184901-201512.nc</dataSource>
       </dataFile>
 
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -607,19 +607,19 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="Volcano_Solar_TimeSeries_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/extsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/extsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/omgsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/omgsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/asmsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/asmsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/extlw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/extlw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Solar/lean_solar_spectral_data.dat</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Solar/lean_solar_spectral_data.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -627,19 +627,19 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="Volcano_Solar_2010_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/extsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/extsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/omgsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/omgsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/asmsw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/asmsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/extlw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_2010/extlw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Solar/AVG_2010/lean_solar_spectral_data.dat</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Solar/AVG_2010/lean_solar_spectral_data.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -647,19 +647,19 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="Volcano_Solar_1850_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/extsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/extsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/omgsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/omgsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/asmsw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/asmsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/extlw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Volcano/AVG_1850/extlw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/David.Paynter/CMIP6_INPUT/Solar/AVG_1850/lean_solar_spectral_data.dat</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/David.Paynter/CMIP6_INPUT/Solar/AVG_1850/lean_solar_spectral_data.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -668,13 +668,15 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="emissions_cmip6_v20161213">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/1849-2016/emissions.0.5x0.5.1849-2016.tar</dataSource>
+<!--        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/1849-2016/emissions.0.5x0.5.1849-2016.tar</dataSource>
+-->
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/litechem_emission.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/anthro_so2.1849_2016.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/emissions.simple.so2.0.5x0.5.1849-2016.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/emissions.simple.so2.0.5x0.5.1849-2016.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/co2_data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/awg/input/cmip6/co2_data_2016.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/cmip6/co2_data_2016.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -699,7 +701,7 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="amip_sst_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/CMIP6_PCMDI.186901-201612.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/PCMDI_sst/CMIP6_PCMDI.186901-201612.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -707,10 +709,10 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="climo_sst_cmip6">
     <input>
       <dataFile label="input" target="INPUT/hadisst_sst.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/sst.climo.1981-2014.data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/PCMDI_sst/sst.climo.1981-2014.data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/hadisst_ice.data.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/PCMDI_sst/ice.climo.1981-2014.data.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/PCMDI_sst/ice.climo.1981-2014.data.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -718,7 +720,7 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="c96_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -741,13 +743,13 @@ endif
   <freInclude name="c192_LM4">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/static_veg/19810101.static_veg_LM3p2sosn_HWSD5min_C192_OM4_025.v20160304.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/static_veg/19810101.static_veg_LM3p2sosn_HWSD5min_C192_OM4_025.v20160304.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/lm3/c192_OM4_025_hydrography_v20170413.tar </dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/lm3/c192_OM4_025_hydrography_v20170413.tar </dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/drag/c192_topo_rough_land.nc.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/drag/c192_topo_rough_land.nc.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -755,7 +757,7 @@ endif
   <freInclude name="c192_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/grid/c192_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
+         <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c192_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -954,7 +956,7 @@ $baseDate
   <freInclude name="c96L32_initCond_Newtopo">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L32/topo_v20161229/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20161229.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/InitCond/AWG_c96L32/topo_v20161229/awg_C96L32_LM3_OM4_025_grid_lm4p1_topo_v20161229.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -962,7 +964,7 @@ $baseDate
   <freInclude name="c96L33_initCond">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Ming.Zhao/archive/mdt/awg/input/ic/AM4/awg_C96L33_LM3_OM4_025_grid_lm4p1_topo_v20170309.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_W/Ming.Zhao/archive/mdt/awg/input/ic/AM4/awg_C96L33_LM3_OM4_025_grid_lm4p1_topo_v20170309.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -970,7 +972,7 @@ $baseDate
   <freInclude name="c96L48_initCond">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c96L48/awg_C96L48_LM3_OM4_025_grid_lm4p1_topo_v20160210.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/InitCond/AWG_c96L48/awg_C96L48_LM3_OM4_025_grid_lm4p1_topo_v20160210.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -979,7 +981,7 @@ $baseDate
   <freInclude name="c192L32_initCond">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20161202.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20161202.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -988,7 +990,7 @@ $baseDate
   <freInclude name="c192L33_initCond">
     <input>
       <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CPERM/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20170325.tar</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/INPUT/InitCond/AWG_c192L32_newLand20160112/awg_C192L32_OM4_025_grid_lm4p1_v20170325.tar</dataSource>
       </dataFile>
     </input>
   </freInclude>
