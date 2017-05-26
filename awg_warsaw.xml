@@ -16,7 +16,7 @@
 # .. cd xml_warsaw
 
 # Change f to your group, such as f, w, o...
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
@@ -54,8 +54,8 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
   <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="warsaw"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="warsaw"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="dev/master"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="warsaw1"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -206,7 +206,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="15.0.2.164" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -254,7 +254,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -291,7 +291,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -328,7 +328,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="17.0.0.098" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>gfdl_f</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -390,7 +390,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="fms" paths="shared">
      <description domainName="infrastructure" communityName="FMS" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> shared.git </codeBase>
+        <codeBase version="dev/master"> shared.git </codeBase>
         <csh><![CDATA[
           ( cd shared && git checkout $(AWG_GIT_TAG) )
           ]]>
@@ -404,7 +404,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="atmos_phys" requires="fms" paths="atmos_param atmos_shared">
       <description domainName="" communityName="" communityVersion="$(RELEASE)" communityGrid=""/>
         <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-          <codeBase version="dev/awg">atmos_shared.git atmos_param.git</codeBase>
+          <codeBase version="dev/master">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout  $(AWG_GIT_TAG) )
             ( cd atmos_param  && git checkout  $(AWG_GIT_TAG) )
@@ -424,7 +424,7 @@ Experiment to build executable. See git log for source code provenance.
                                        atmos_cubed_sphere/GFDL_tools"
                                 requires="fms atmos_phys">
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
+        <codeBase version="dev/master">atmos_drivers.git atmos_cubed_sphere.git</codeBase>
         <csh><![CDATA[
           ( cd atmos_drivers && git checkout       $(AWG_GIT_TAG) )
           ( cd atmos_cubed_sphere && git checkout  $(AWG_GIT_TAG) )
@@ -439,7 +439,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> ice_sis.git ice_param.git </codeBase>
+        <codeBase version="dev/master"> ice_sis.git ice_param.git </codeBase>
         <csh><![CDATA[
           ( cd ice_sis    && git checkout $(AWG_GIT_TAG) )
           ( cd ice_param  && git checkout $(AWG_GIT_TAG) )
@@ -499,7 +499,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="dev/awg"> coupler.git </codeBase>
+        <codeBase version="dev/master"> coupler.git </codeBase>
         <csh><![CDATA[
         ( cd coupler && git checkout $(AWG_GIT_TAG) )
         ]]>
@@ -724,7 +724,7 @@ Experiment to build executable. See git log for source code provenance.
         <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/land_domain.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CDATA/gfdl_F/$USER/land/c96/land_domain.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_F/Thomas.Robinson/land/c96/land_domain.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -764,7 +764,7 @@ endif
          <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c192_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/land_domain.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CDATA/gfdl_F/$USER/land/c192/land_domain.nc</dataSource>
+        <dataSource platform="$(platform)">$CDATA/gfdl_F/Thomas.Robinson/land/c192/land_domain.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
