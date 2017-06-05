@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/warsaw
 # .. cd $home/awg/warsaw
-# .. git clone -b awg_warsaw_a http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw
+# .. git clone -b awg_warsaw_b http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw
 # .. cd xml_warsaw
 
 # Change f to your group, such as f, w, o...
@@ -54,8 +54,8 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
   <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="dev/master"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="warsaw1"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="dev/awg"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="warsaw"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -721,7 +721,7 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="c96_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
+        <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/land_domain.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CDATA/gfdl_F/Thomas.Robinson/land/c96/land_domain.nc</dataSource>
@@ -761,7 +761,7 @@ endif
   <freInclude name="c192_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/archive/mdt/awg/input/grid/c192_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
+         <dataSource platform="$(platform)">$(H1G_ARCHIVE_ROOT)/awg/input/grid/c192_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/land_domain.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CDATA/gfdl_F/Thomas.Robinson/land/c192/land_domain.nc</dataSource>
