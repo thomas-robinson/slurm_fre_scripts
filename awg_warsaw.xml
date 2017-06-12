@@ -54,7 +54,7 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
   <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="dev/awg"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_GIT_TAG" value="warsaw"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="warsaw"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
