@@ -10,26 +10,26 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-12
 # .. module load git
-# .. mkdir -p $home/awg/warsaw
-# .. cd $home/awg/warsaw
-# .. git clone -b awg_warsaw_c http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw
-# .. cd xml_warsaw
+# .. mkdir -p $home/awg/warsaw_201707
+# .. cd $home/awg/warsaw_201707
+# .. git clone -b awg_warsaw_201707 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201707
+# .. cd xml_warsaw_201707
 
-# Change f to your group, such as f, w, o...
-      <project>gfdl_YOURGROUPLETTER</project>
+# Change YOURGROUPLETTER to your group, such as f, w, o...
+  <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/>
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
-# .. fremake -x awg_warsaw.xml -p ncrc3.intel -t openmp cm4p12_warsaw 
+# .. fremake -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp cm4p12_warsaw 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_warsaw.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -s -r basic -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_warsaw.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_warsaw.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
+# .. fredb-pp -x awg_warsaw_201707.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -51,11 +51,12 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="RELEASE" value="warsaw"/>                        <!-- base code release -->
-  <property name="MOM6_DATE" value="2015.09.21"/>                  <!-- git tag date for MOM6 source code -->
+  <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
+  <property name="RELEASE" value="warsaw_201707"/>                        <!-- base code release -->
+  <property name="MOM6_DATE" value="2017.06.12"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="warsaw"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="warsaw"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="warsaw_201707"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="warsaw_201707"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -206,7 +207,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="15.0.2.164" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>$(GFDL_YGL)</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -254,7 +255,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>$(GFDL_YGL)</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -291,7 +292,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="16.0.3.210" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>$(GFDL_YGL)</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -328,7 +329,7 @@ configuration.
       <freVersion>$(FRE_VERSION)</freVersion>
       <compiler type="intel" version="17.0.0.098" />
 <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>gfdl_YOURGROUPLETTER</project>
+      <project>$(GFDL_YGL)</project>
       <directory stem="$(FRE_STEM)">
          <src>$HOME/$(stem)/$(name)/src</src>
          <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
@@ -436,7 +437,7 @@ Experiment to build executable. See git log for source code provenance.
       </compile>
     </component>
 
-    <component name="ice_sis" requires="fms" paths="ice_sis ice_param">
+    <component name="ice_sis" requires="fms mom6" paths="ice_sis ice_param">
       <description domainName="Sea Ice SIS" communityName="GFDL-SIS" communityVersion="$(RELEASE)" communityGrid="Tripolar"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="dev/master"> ice_sis.git ice_param.git </codeBase>
@@ -464,23 +465,43 @@ Experiment to build executable. See git log for source code provenance.
     <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/">
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)"> ocean_null.git  </codeBase>
+        <codeBase version="dev/master"> ocean_null.git  </codeBase>
         <csh>
           rm -rf ocean_null
-          git clone -b $(MOM6_GIT_TAG) http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6-examples.git mom6
+          # This checks out MOM6 from github
+          git clone -b $(MOM6_GIT_TAG) https://github.com/NOAA-GFDL/MOM6-examples.git mom6
           pushd mom6
           git checkout $(MOM6_GIT_TAG)  #needed for older git on zeus
-          git submodule init src/MOM6  tools/python/MIDAS
-          git clone --recursive http://gitlab.gfdl.noaa.gov/github_mirror/noaa-gfdl-mom6.git src/MOM6
+          git submodule init src/MOM6 src/SIS2 src/icebergs tools/python/MIDAS
+          git clone --recursive https://github.com/NOAA-GFDL/MOM6.git src/MOM6
+          git clone             https://github.com/NOAA-GFDL/SIS2.git src/SIS2
+          git clone             https://github.com/NOAA-GFDL/icebergs.git src/icebergs
           git submodule update #This gets the right version of submodules
+          popd
+          #To use MOM6 diagnostics/remapping in generic tracers package ocean_shared should be compiled as part of the MOM6 library and NOT as a separate stand-alone library
+          git clone -b warsaw http://gitlab.gfdl.noaa.gov/fms/ocean_shared.git
+          pushd ocean_shared
+          #git checkout user/nnz/mom6_dev
+          git checkout $(MOM6_GIT_TAG)
+          git submodule init mocsy
+          git submodule update
+          #Have to rename *.f90 to *.F90 so that we can pass cpp def  -DUSE_PRECISION=2 to them.
+          #Alternatively, we could build mocsy as a library by itself without renaming the files,
+          #but then we have to add a mocsy lib to link with.
+          cd mocsy/src
+          foreach f (*.f90)
+            mv ${f} "`basename ${f} .f90`.F90"
+          end
           popd
 
           pushd mom6
           set platform_domain = `perl -T -e "use Net::Domain(hostdomain) ; print hostdomain"`
-          if ("${platform_domain}" == "zeus.fairmont.rdhpcs.noaa.gov") then
-            ln -s /scratch2/portfolios/GFDL/gfdlscr/John.Krasting/pdata/gfdl_O/datasets/ .datasets
-          else
-            ln -s $CDATA/gfdl_O/datasets/ .datasets
+          if ("${platform_domain}" =~ *"fairmont.rdhpcs.noaa.gov"* ) then
+            ln -s /scratch4/GFDL/gfdlscr/pdata/gfdl_O/datasets/ .datasets
+          else if ("${platform_domain}" =~ *"ccs.ornl.gov"* ) then
+            ln -s /lustre/atlas/proj-shared/cli061/pdata/gfdl_O/datasets/ .datasets
+         else
+            ln -s /lustre/f1/pdata/gfdl_O/datasets/ .datasets
           endif
           popd
 
@@ -495,6 +516,7 @@ Experiment to build executable. See git log for source code provenance.
         <makeOverrides>OPENMP=""</makeOverrides> <!-- openmp switch for MOM6 may cause crash -->
       </compile>
     </component>
+
 
     <component name="coupler" paths="coupler" requires="fms atmos_dyn atmos_phys land_lad2 ice_sis mom6 ">
       <description domainName="FMS Coupler" communityName="coupler" communityVersion="$(RELEASE)" communityGrid=""/>
