@@ -20,10 +20,10 @@
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
-# .. fremake -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp cm4p12_warsaw 
+# .. fremake -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp cm4p12_warsaw_201707 
 
 # To run regression test:
-# .. frerun -s -r basic -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -s -r rts -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
 # .. frerun -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
@@ -413,7 +413,7 @@ Experiment to build executable. See git log for source code provenance.
           </csh>
         </source>
       <compile>
-        <cppDefs>$(F2003_FLAGS) -DCLUBB -DAM3_CHEM</cppDefs>
+        <cppDefs>$(F2003_FLAGS) -DCLUBB </cppDefs>
       </compile>
     </component>
 
@@ -455,7 +455,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="land_lad2" requires="fms" paths="land_lad2">
       <description domainName="LM3" communityName="land_lad2" communityVersion="dev/master" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(AWG_GIT_TAG)">land_lad2.git</codeBase>
+        <codeBase version="dev/master">land_lad2.git</codeBase>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
