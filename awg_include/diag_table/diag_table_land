@@ -258,3 +258,5 @@
 "land",    "FWSr",       "FWSr",       "land_month_inst",  "all", .false., "none", 2
 "land",    "HSr",        "HSr",        "land_month_inst",  "all", .false., "none", 2
 
+"land_static_sg", -1, "months", 1, "days", "time"
+"land_sg", "cell_area", "cell_area", "land_static_sg", "all", .false., "none", 2

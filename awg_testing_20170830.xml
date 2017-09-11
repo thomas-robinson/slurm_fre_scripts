@@ -10,26 +10,26 @@
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-12
 # .. module load git
-# .. mkdir -p $home/awg/warsaw_201707
-# .. cd $home/awg/warsaw_201707
-# .. git clone -b awg_warsaw_201707 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201707
-# .. cd xml_warsaw_201707
+# .. mkdir -p $home/awg/warsaw_201709
+# .. cd $home/awg/warsaw_201709
+# .. git clone -b awg_warsaw_201709 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201707
+# .. cd xml_warsaw_201709
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
-  <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/>
+  <property name="GFDL_YGL" value="gfdl_f"/>
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
-# .. fremake -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp cm4p12_warsaw_201707 
+# .. fremake -x awg_warsaw_201709.xml -p ncrc3.intel -t openmp cm4p12_warsaw_201707 
 
 # To run regression test:
-# .. frerun -s -r rts -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -s -r rts -x awg_warsaw_201709.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_warsaw_201707.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -x awg_warsaw_201709.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_warsaw_201707.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
+# .. fredb-pp -x awg_warsaw_201709.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -51,12 +51,12 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-  <property name="RELEASE" value="warsaw_201707"/>                        <!-- base code release -->
+  <property name="GFDL_YGL" value="gfdl_f"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
+  <property name="RELEASE" value="warsaw_201709"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="2017.06.12"/>                  <!-- git tag date for MOM6 source code -->
   <property name="MOM6_GIT_TAG" value="dev/master/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="warsaw_201707"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="warsaw_201707"/>                 <!-- AWG source code version -->
+  <property name="AWG_GIT_TAG" value="testing_20170830"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="testing_20170830"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -456,6 +456,10 @@ Experiment to build executable. See git log for source code provenance.
       <description domainName="LM3" communityName="land_lad2" communityVersion="dev/master" communityGrid=""/>
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="dev/master">land_lad2.git</codeBase>
+        <csh><![CDATA[
+          ( cd land_lad2    && git checkout $(AWG_GIT_TAG) )
+         ]]>
+        </csh>
       </source>
       <compile doF90Cpp="yes">
        <cppDefs>$(F2003_FLAGS) -nostdinc</cppDefs>
