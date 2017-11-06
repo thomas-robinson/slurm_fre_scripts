@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/warsaw_201710
 # .. cd $home/awg/warsaw_201710
-# .. git clone -b awg_warsaw_201710 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201710
+# .. git clone -b awg_warsaw_201710_cmip6 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201710
 # .. cd xml_warsaw_201710
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
