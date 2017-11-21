@@ -741,7 +741,7 @@ Experiment to build executable. See git log for source code provenance.
         <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/litechem_emission.tar</dataSource> 
 -->
       </dataFile>
-      <dataFile label="input" target="INPUT/anthro_so2.1849_2016.nc" chksum="" size="" timestamp="">
+      <dataFile label="input" target="INPUT/anthro_so2.1849_2017.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/emissions_cmip6_v20170518/emissions.simple.so2.0.5x0.5.1849-2017.nc</dataSource> 
       </dataFile>
       <dataFile label="input" target="INPUT/co2_data.nc" chksum="" size="" timestamp="">
