@@ -12,7 +12,7 @@
 # .. module load git
 # .. mkdir -p $home/awg/warsaw_201710
 # .. cd $home/awg/warsaw_201710
-# .. git clone -b awg_warsaw_201710_cmip6 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201710
+# .. git clone -b awg_warsaw_20171128 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201710
 # .. cd xml_warsaw_201710
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
@@ -53,8 +53,8 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
   <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
   <property name="RELEASE" value="warsaw_201710"/>                        <!-- base code release -->
-  <property name="MOM6_DATE" value="2017.10.05"/>                  <!-- git tag date for MOM6 source code -->
-  <property name="MOM6_GIT_TAG" value="dev/gfdl/$(MOM6_DATE)"/>  <!-- git tag for MOM6 source code -->
+  <property name="MOM6_DATE" value="om4_v1.0.1"/>                  <!-- git tag date for MOM6 source code -->
+  <property name="MOM6_GIT_TAG" value="om4/v1.0.1"/>  <!-- git tag for MOM6 source code -->
   <property name="AWG_GIT_TAG" value="warsaw_201710"/>             <!-- git tag for AWG source code -->
   <property name="AWG_VERSION" value="warsaw_201710"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
@@ -66,8 +66,6 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
   <property name="AWG_INPUT_HOME_GAEA" value="$HOME/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
   <property name="AWG_INPUT_HOME_GFDL" value="/home/$USER/ncrc/$(FRE_STEM)/xml_$(AWG_VERSION)/awg_include"/>
-  <property name="LM4_COMMON_GAEA" value="/lustre/f1/pdata/cmip6/datasets/CM4/common/common_LM4"/>
-  <property name="LM4_COMMON_GFDL" value="/archive/oar.gfdl.cmip6/datasets/CM4/CM4/common/common_LM4"/>
   <property name="REFERENCE_ROOT" value="/lustre/f1/unswept/Thomas.Robinson/reference_files/$(RELEASE)/cmip6"/>
 
 <!--
@@ -204,33 +202,6 @@ configuration.
 <!-- MDBI -->
     <fmsRelease>fmsversion</fmsRelease>
 <!-- /MDBI -->
-    <platform name="ncrc3.intel15">
-      <freVersion>$(FRE_VERSION)</freVersion>
-      <compiler type="intel" version="15.0.3.187" />
-<!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>$(GFDL_YGL)</project>
-      <directory stem="$(FRE_STEM)">
-         <src>$HOME/$(stem)/$(name)/src</src>
-         <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
-         <stdout>$CTMP/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
-      </directory>
-      <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
-      <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
-      <property name="NCORE_PER_NODE"      value="32"/>
-      <csh><![CDATA[
-        module load git
-#
-       setenv KMP_STACKSIZE 512m
-       setenv NC_BLKSZ 1M
-       setenv OMP_SCHEDULE "static,1"
-
-      ]]></csh>
-    </platform>
-
     <platform name="gfdl.ncrc3-intel">
       <freVersion>$(FRE_VERSION)</freVersion>
       <directory stem="$(FRE_STEM)">
@@ -242,8 +213,7 @@ configuration.
       <property name="F2003_FLAGS"         value="-DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GFDL)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/archive/cjg/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="/archive/oar.gfdl.cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GFDL)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="/archive/oar.gfdl.cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="/archive/h1g/mdt"/>
       <property name="NCORE_PER_NODE"      value="1"/>
       <csh><![CDATA[
@@ -265,8 +235,7 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="$CDATA/cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="32"/>
       <csh><![CDATA[
@@ -292,8 +261,7 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="$CDATA/cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="32"/>
       <csh><![CDATA[
@@ -311,37 +279,7 @@ configuration.
     <platform name="gfdl.ncrc3-intel16">
       <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc3-intel']/node())" />
     </platform>
-    <platform name="gfdl.ncrc3-intel15">
-      <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc3-intel']/node())" />
-    </platform>
 
-
-    <platform name="ncrc4.intel15">
-      <freVersion>$(FRE_VERSION)</freVersion>
-      <compiler type="intel" version="15.0.3.187" />
-<!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-      <project>$(GFDL_YGL)</project>
-      <directory stem="$(FRE_STEM)">
-         <src>$HOME/$(stem)/$(name)/src</src>
-         <scripts>$HOME/$(stem)/xml_$(AWG_VERSION)/scripts/$(platform)-$(target)</scripts>
-         <stdout>$CTMP/$USER/$(stem)/$(name)/$(platform)-$(target)/stdout</stdout>
-      </directory>
-      <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
-      <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
-      <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
-      <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
-      <property name="NCORE_PER_NODE"      value="36"/>
-      <csh><![CDATA[
-        module load git
-#
-       setenv KMP_STACKSIZE 512m
-       setenv NC_BLKSZ 1M
-       setenv OMP_SCHEDULE "static,1"
-
-      ]]></csh>
-    </platform>
 
     <platform name="ncrc4.intel16">
       <freVersion>$(FRE_VERSION)</freVersion>
@@ -356,8 +294,7 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML -g  "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="$CDATA/cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="36"/>
       <csh><![CDATA[
@@ -374,9 +311,6 @@ configuration.
       <xi:include xpointer="xpointer(//setup/platform[@name='ncrc4.intel16']/node())" />
     </platform>
     <platform name="gfdl.ncrc4-intel">
-      <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc3-intel']/node())" />
-    </platform>
-    <platform name="gfdl.ncrc4-intel15">
       <xi:include xpointer="xpointer(//setup/platform[@name='gfdl.ncrc3-intel']/node())" />
     </platform>
     <platform name="gfdl.ncrc4-intel16">
@@ -396,8 +330,7 @@ configuration.
       <property name="F2003_FLAGS"         value=" -DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GAEA)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/cjg/archive/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="$CDATA/cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GAEA)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="$CDATA/cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="$CDATA/gfdl_M/Huan.Guo/archive/mdt"/>
       <property name="NCORE_PER_NODE"      value="36"/>
       <csh><![CDATA[
@@ -420,8 +353,7 @@ configuration.
       <property name="F2003_FLAGS"         value="-DINTERNAL_FILE_NML "/>
       <property name="AWG_INPUT_HOME"      value="$(AWG_INPUT_HOME_GFDL)"/>
       <property name="AWG_ARCHIVE_ROOT"    value="/archive/cjg/mdt"/>
-      <property name="CMIP6_CM4_DATA"      value="/archive/oar.gfdl.cmip6/datasets/CM4"/>
-      <property name="LM4_COMMON"          value="$(LM4_COMMON_GFDL)"/>
+      <property name="CMIP6_ARCHIVE_ROOT"   value="/archive/oar.gfdl.cmip6/datasets"/>
       <property name="H1G_ARCHIVE_ROOT"    value="/archive/h1g/mdt"/>
       <property name="NCORE_PER_NODE"      value="1"/>
       <csh><![CDATA[
@@ -466,7 +398,7 @@ Experiment to build executable. See git log for source code provenance.
           <codeBase version="dev/master">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout  $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout  $(AWG_GIT_TAG) )
+            ( cd atmos_param  && git checkout  user/bw/conserve_order1_20171101 )
                        ]]>
           </csh>
         </source>
@@ -527,7 +459,7 @@ Experiment to build executable. See git log for source code provenance.
     <component name="mom6" requires="fms" paths="mom6/src/MOM6/config_src/dynamic mom6/src/MOM6/config_src/coupled_driver mom6/src/MOM6/src/*/ mom6/src/MOM6/src/*/*/ ocean_shared/generic_tracers ocean_shared/mocsy/src">
       <description domainName="Ocean" communityName="GFDL-MOM6" communityVersion="$(MOM6_GIT_TAG)" communityGrid="Tripolar"/>
        <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
-        <codeBase version="$(MOM6_GIT_TAG)"> ocean_shared.git </codeBase>
+        <codeBase version="user/h1g/add_senddata_phyp_20171103"> ocean_shared.git </codeBase>
         <csh><![CDATA[
           git clone -b $(MOM6_GIT_TAG) https://github.com/NOAA-GFDL/MOM6-examples.git mom6
           pushd mom6
@@ -585,28 +517,28 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="common_LM4">
     <input>
       <dataFile label="input" target="INPUT/soil_type.nc" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(LM4_COMMON)/soil_type_hwsd_5minute.nc</dataSource>
+         <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/soil_type_hwsd_5minute.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/biodata.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/biodata.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/cover_type.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/cover_type.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/geohydrology.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/geohydrology.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/geohydrology_table_2a2n.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/geohydrology_table_2a2n.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/ground_type.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/ground_type.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/landuse.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/landuse.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(LM4_COMMON)/soil_brdf.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_LM4/soil_brdf.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -614,36 +546,36 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="c96_LM4">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/c96_LM4/19810101.static_veg_LM3p2sosn_HWSD5min_C96_OM4_025.v20150930.tar</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/c96_LM4/19810101.static_veg_LM3p2sosn_HWSD5min_C96_OM4_025.v20150930.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/c96_LM4/c96_OM4_025_hydrography_v20170413.tar</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/c96_LM4/c96_OM4_025_hydrography_v20170413.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/c96_LM4/c96_topo_rough_land.nc.tar</dataSource>
-      </dataFile>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/c96_LM4/c96_topo_rough_land.nc.tar</dataSource>
+     </dataFile>
     </input>
   </freInclude>
 
  <freInclude name="common_AM4_v20170208">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/sea_esf_CM4_V6_AUG2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/aerosol_inputs_newdroplet2_v20170208.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/tropchem_dec2015.cpio</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/tropchem_dec2015.cpio</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/depvel_gc_am3_tran.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/depvel_gc_am3_tran.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/so2_0.25_volcanoes.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/so2_0.25_volcanoes.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/AM4_201510" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/common_AM4/am4_optical_table_20151029.dat</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/common_AM4/am4_optical_table_20151029.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -652,23 +584,22 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="common_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/common_cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/common_cmip6/cmip6_GHG_ODS_conc_2016.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/chemlbf" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/common_cmip6/chemlbf_CMIP6_merge_RCP45</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/common_cmip6/chemlbf_CMIP6_merge_RCP45</dataSource>
       </dataFile>
 
       <dataFile label="input" target="INPUT/o3.climatology.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/common_cmip6/mmro3_CMIP6_184901-201512.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/common_cmip6/mmro3_CMIP6_184901-201512.nc</dataSource>
       </dataFile>
-
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/common_cmip6/emissions.isoprene.1x1.2000.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/common_cmip6/emissions.isoprene.1x1.2000.nc</dataSource>
       </dataFile>
        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/common_cmip6/emissions.terpenes.1x1.2000.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/common_cmip6/emissions.terpenes.1x1.2000.nc</dataSource>
       </dataFile>
-   </input>
+    </input>
   </freInclude>
 
   <freInclude name="Volcano_Solar_TimeSeries_cmip6">
@@ -691,6 +622,29 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
+
+  <freInclude name="Volcano_Solar_TimeSeries_cmip6_v2">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_TimeSeries_cmip6_v2/extsw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_TimeSeries_cmip6_v2/omgsw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_TimeSeries_cmip6_v2/asmsw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_TimeSeries_cmip6_v2/extlw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_TimeSeries_cmip6_v2/lean_solar_spectral_data.dat</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+
   <freInclude name="Volcano_Solar_2010_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
@@ -711,22 +665,65 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
+
+  <freInclude name="Volcano_Solar_2010_cmip6_v2">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_2010_cmip6_v2/extsw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_2010_cmip6_v2/omgsw_data.nc</dataSource>
+      </dataFile>
+        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_2010_cmip6_v2/asmsw_data.nc</dataSource>
+      </dataFile>
+        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_2010_cmip6_v2/extlw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_2010_cmip6_v2/lean_solar_spectral_data.dat</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
   <freInclude name="Volcano_Solar_1850_cmip6">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/Volcano_Solar_1850_cmip6/extsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6/extsw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/Volcano_Solar_1850_cmip6/omgsw_data.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6/omgsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/Volcano_Solar_1850_cmip6/asmsw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6/asmsw_data.nc</dataSource>
       </dataFile>
         <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-      <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/Volcano_Solar_1850_cmip6/extlw_data.nc</dataSource>
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6/extlw_data.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/Volcano_Solar_1850_cmip6/lean_solar_spectral_data.dat</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6/lean_solar_spectral_data.dat</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+  <freInclude name="Volcano_Solar_1850_cmip6_v2">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6_v2/extsw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6_v2/omgsw_data.nc</dataSource>
+      </dataFile>
+        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6_v2/asmsw_data.nc</dataSource>
+      </dataFile>
+        <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+      <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6_v2/extlw_data.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/Volcano_Solar_1850_cmip6_v2/lean_solar_spectral_data.dat</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -735,14 +732,25 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="emissions_cmip6_v20161213">
     <input>
       <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
-<!-- These emissions files change answers from warsaw.  Answer changes using these files is not due to code changes. -->
-       <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/emissions_cmip6_v20170518/emissions.0.5x0.5.1849-2017.tar</dataSource>
-<!-- Using this litechem file may give different answers because it is from the old emissions file 
-        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/litechem_emission.tar</dataSource> 
--->
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/litechem_emission.tar</dataSource>
       </dataFile>
-      <dataFile label="input" target="INPUT/anthro_so2.1849_2017.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/forcings/emissions_cmip6_v20170518/emissions.simple.so2.0.5x0.5.1849-2017.nc</dataSource> 
+      <dataFile label="input" target="INPUT/anthro_so2.1849_2016.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Vaishali.Naik/input/cmip6_forcing_dataset/emissions/v2016-12-13/fast_chemistry/emissions.simple.so2.0.5x0.5.1849-2016.nc</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/co2_data.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/cmip6/co2_data_2016.nc</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
+
+  <freInclude name="emissions_cmip6_v20170518">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/emissions_cmip6_v20170518/emissions.fastchem.0.5x0.5.1849-2017.tar</dataSource>
+      </dataFile>
+      <dataFile label="input" target="INPUT/anthro_so2.1849-2017.nc" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/emissions_cmip6_v20170518/emissions.simple.so2.0.5x0.5.1849-2017.nc</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/co2_data.nc" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$CDATA/gfdl_M/Huan.Guo/awg/input/cmip6/co2_data_2016.nc</dataSource>
@@ -754,7 +762,7 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="L32_gas_conc">
     <input>
       <dataFile label="input" target="INPUT/gas_conc_3D_am3p9.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/L32_gas_conc/gas_conc_3D32L_am3p9.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/L32_gas_conc/gas_conc_3D32L_am3p9.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -762,7 +770,7 @@ Experiment to build executable. See git log for source code provenance.
   <freInclude name="L48_gas_conc">
     <input>
       <dataFile label="input" target="INPUT/gas_conc_3D_am3p9.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/L48_gas_conc/gas_conc_3D48L_am3p9.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/L48_gas_conc/gas_conc_3D48L_am3p9.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -786,13 +794,21 @@ Experiment to build executable. See git log for source code provenance.
     </input>
   </freInclude>
 
+  <freInclude name="amip_sst_cmip6_v6p1">
+    <input>
+      <dataFile label="input" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/forcings/AMIP_SST_cmip6_v6p1/CMIP6_PCMDI.186901-201712.v6p1.tar</dataSource>
+      </dataFile>
+    </input>
+  </freInclude>
+
   <freInclude name="c96_grid">
     <input>
       <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/c96_grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/c96_grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar</dataSource>
       </dataFile>
       <dataFile label="input" target="INPUT/land_domain.nc" chksum="" size="" timestamp="">
-        <dataSource platform="$(platform)">$(CMIP6_CM4_DATA)/common/c96_grid/land_domain.nc</dataSource>
+        <dataSource platform="$(platform)">$(CMIP6_ARCHIVE_ROOT)/CM4/common/c96_grid/land_domain.nc</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -856,13 +872,15 @@ endif
   <freInclude name="csh_adjust_dry_mass">
     <input>
       <csh type="always"><![CDATA[
-cd INPUT
+pushd INPUT
+#cd INPUT
 
 # adjustment of dry mass first time only
 set adjust_dry_mass = `$(AWG_INPUT_HOME)/adjust_dry_mass.csh`
 
 # create dummy MOM6 parameter file
 touch MOM_input
+popd
       ]]></csh>
     </input>
   </freInclude>
@@ -931,7 +949,7 @@ $baseDate
         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_atmos_simpleSO4</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_land</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_land_old</dataSource>
       </dataFile>
     </input>
   </freInclude>
@@ -956,39 +974,82 @@ $baseDate
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_atmos_simpleSO4</dataSource>
       </dataFile>
+
+<!--
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_3hr</dataSource>
       </dataFile>
+-->
+
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_6hrPlev</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_6hrLev</dataSource>
+      </dataFile>
+
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_6hrPlevPt</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_day</dataSource>
-      </dataFile>
-      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERday</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERmon_simple</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Amon</dataSource>
       </dataFile>
+
+<!-- CF3hr, no need for piControl, historical, 1%CO2, 4XCO2 CFmip
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERmon</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_CF3hr</dataSource>
+      </dataFile>
+-->
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_CFday</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AERhr</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_CFmon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_E1hrClimMon</dataSource>
+      </dataFile>
+
+<!-- E3hrPt, no need for piControl, historical, 1%CO2, 4XCO2 CFmip
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_E3hrPt</dataSource>
+      </dataFile>
+-->
+
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Eday</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Emon</dataSource>
+      </dataFile>
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_LImon</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_Lmon</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_AUXmon</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_day</dataSource>
       </dataFile>
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
-         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_check</dataSource>
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_fx</dataSource>
       </dataFile>
+
+<!-- CFsite, no need to piControl  
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_CFsite</dataSource>
+      </dataFile>
+-->
+
       <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
          <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/cmip6/diag_table_global_avg</dataSource>
       </dataFile>
+
+<!-- remove mcu, GFDL AM4/CM4 only provides net upward mass fluxes "mc". There are no upward mass fluxes  
+      <dataFile label="diagTable" target="INPUT/" chksum="" size="" timestamp="">
+         <dataSource platform="$(platform)">$(AWG_INPUT_HOME)/diag_table/diag_table_CFmon_aug30</dataSource>
+      </dataFile>
+-->
     </input>
   </freInclude>
 
@@ -1078,7 +1139,7 @@ $baseDate
 
 <freInclude name="c96_864_production">
         <resources jobWallclock="16:00:00"
-                   segRuntime="1:25:00" >
+                   segRuntime="1:50:00" >
                <atm ranks="432" threads="2"    layout = "3,24"    io_layout = "1,4" />
                <lnd                            layout = "3,24"    io_layout = "1,4" />
                <ocn ranks="0"   threads="0"    layout = "144,3"   io_layout = "1,3" /> 
@@ -1767,10 +1828,13 @@ $baseDate
       <refineDiag script="$(AWG_INPUT_HOME_GFDL)/refineDiag/refineDiag_atmos_cmip6.csh"/>
 
       <component type="atmos_cmip" start="$(ANA_AMIP_START)" source="atmos_month_cmip" sourceGrid="atmos-cubedsphere" xyInterp="180,288" cmip="yes">
+       <!--
         <timeSeries freq="3hr" source="atmos_8xdaily_cmip" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip_cmip.xml" xpointer="xpointer(*/atmos8xDailyTScmip/*)"/>
         </timeSeries>
         <timeSeries freq="3hr" source="atmos_8xdaily_inst" chunkLength="$(PP_AMIP_CHUNK)"/>
+         -->
+
         <timeSeries freq="6hr" source="atmos_4xdaily_cmip" chunkLength="$(PP_AMIP_CHUNK)"/>
         <timeSeries freq="daily" source="atmos_daily_cmip" chunkLength="$(PP_AMIP_CHUNK)">
           <xi:include href="awg_include/analysis/analysis_amip_cmip.xml" xpointer="xpointer(*/atmosDailyTScmip/*)"/>
@@ -2335,34 +2399,6 @@ Experiment name = $(name)
         ncores_per_node = $(NCORE_PER_NODE)
       </namelist>
 
-      <namelist name="deep_conv_nml">
-        crh_th_ocean = 0.4
-        crh_th_land  = 0.4
-        auto_th0_d = 0.2e-3
-        tcrit_d    = -25.15,
-        peff_l_d   = 6.0e-5
-        peff_i_d   = 11.e-5
-        rkm_dp1 = 0.9
-        rkm_dp2 = 0.1
-        crh_max = 1.0
-        cwfn_th = 10.
-        tau_dp = 28800.
-        mixing_assumption_d = 6
-        do_ppen_d  = .true.
-        rpen_d     = 4.0
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.85
-        hcevappbl_d = 0.95
-        pblfac_d   = 1.0
-        frac_limit_d = 0.25
-        dcwfndm_th = 100
-        lofactor_d = 1.0
-        do_cgust_dp  = .true.
-        cgust_choice = 1
-        include_emf_d = .false.
-      </namelist>
-
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
@@ -2478,34 +2514,6 @@ Experiment name = $(name)
       <namelist name="aerosolrad_driver_nml">
         do_swaerosol_forcing = .true.
         do_lwaerosol_forcing = .true.
-      </namelist>
-
-      <namelist name="deep_conv_nml">
-        crh_th_ocean = 0.4
-        crh_th_land  = 0.4
-        auto_th0_d = 0.2e-3
-        tcrit_d    = -25.15,
-        peff_l_d   = 6.0e-5
-        peff_i_d   = 11.e-5
-        rkm_dp1 = 0.9
-        rkm_dp2 = 0.1
-        crh_max = 1.0
-        cwfn_th = 10.
-        tau_dp = 28800.
-        mixing_assumption_d = 6
-        do_ppen_d  = .true.
-        rpen_d     = 4.0
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.85
-        hcevappbl_d = 0.95
-        pblfac_d   = 1.0
-        frac_limit_d = 0.25
-        dcwfndm_th = 100
-        lofactor_d = 1.0
-        do_cgust_dp  = .true.
-        cgust_choice = 1
-        include_emf_d = .false.
       </namelist>
 
       <!-- Input datasets -->
@@ -2636,34 +2644,6 @@ Experiment name = $(name)
         ncores_per_node = $(NCORE_PER_NODE)
       </namelist>
 
-      <namelist name="deep_conv_nml">
-        crh_th_ocean = 0.4
-        crh_th_land  = 0.4
-        auto_th0_d = 0.2e-3
-        tcrit_d    = -25.15,
-        peff_l_d   = 6.0e-5
-        peff_i_d   = 11.e-5
-        rkm_dp1 = 0.9
-        rkm_dp2 = 0.1
-        crh_max = 1.0
-        cwfn_th = 10.
-        tau_dp = 28800.
-        mixing_assumption_d = 6
-        do_ppen_d  = .true.
-        rpen_d     = 4.0
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.85
-        hcevappbl_d = 0.95
-        pblfac_d   = 1.0
-        frac_limit_d = 0.25
-        dcwfndm_th = 100
-        lofactor_d = 1.0
-        do_cgust_dp  = .true.
-        cgust_choice = 1
-        include_emf_d = .false.
-      </namelist>
-
       <!-- Input datasets -->
       <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
@@ -2753,10 +2733,214 @@ Experiment name = $(name)
       <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
       <xi:include xpointer="xpointer(//freInclude[@name='climo_sst_cmip6']/input/node())"/>
     </input>
-    <runtime>
-
-    </runtime> 
   </experiment>
+
+
+
+
+  <experiment name="c96L33_am4p0_DynVeg" inherit="cm4p12_$(AWG_VERSION)">
+    <input>
+      <namelist name="atmos_model_nml">
+         nxblocks = 1
+         nyblocks = $atm_threads
+      </namelist>
+      <!-- Namelist -->
+      <namelist file="$(AWG_INPUT_HOME)/nml/ocean_g12.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_common.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/cmip6_am4p0_physics.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_c96L33.nml"/>
+      <namelist file="$(AWG_INPUT_HOME)/nml/am4p0_amip_v20170518.nml"/>
+
+      <namelist name="coupler_nml">
+        months = $months,
+        days   = $days,
+        current_date = 1969,1,1,0,0,0,
+        calendar = 'julian'
+        dt_atmos = 1800,
+        dt_cpld  = 7200,
+        use_lag_fluxes = .true.
+        concurrent = .false.
+        do_ocean = .false.
+        ocean_npes = $ocn_ranks
+        atmos_npes = $atm_ranks
+        atmos_nthreads = $atm_threads
+        use_hyper_thread = $ht
+        ncores_per_node = $(NCORE_PER_NODE)
+      </namelist>
+
+      <namelist name="mpp_io_nml">
+        cf_compliance = .true.
+      </namelist>
+
+      <namelist name="aerosolrad_driver_nml">
+        do_swaerosol_forcing = .true.
+        do_lwaerosol_forcing = .true.
+      </namelist>
+
+      <namelist name="photosynthesis_nml">
+       photosynthesis_to_use = 'leuning'      
+       co2_to_use_for_photosynthesis ='interactive'  
+       co2_for_photosynthesis = 284.262e-6            
+       respiration_to_use = 'LM3'
+       Kok_effect = .False.
+       lai_eps    = 1.e-5
+      </namelist>
+
+      <namelist name="landuse_nml">
+       do_landuse_change = .true.
+       data_type   = 'luh2'
+       input_file  = '/lustre/f1/unswept/Sergey.Malyshev/DATA/landuse/LUH2/v2.0h/transitions.nc'
+       state_file  = '/lustre/f1/unswept/Sergey.Malyshev/DATA/landuse/LUH2/v2.0h/states.nc'
+       static_file = '/lustre/f1/unswept/Sergey.Malyshev/DATA/landuse/LUH2/v2.0h/landfrac.nc'
+       distribute_transitions = 'min-n-tiles'
+      </namelist>
+
+      <namelist name="harvesting_nml">
+       do_harvesting          =.true.
+       grazing_intensity      = 18.25 ! roughly 5% of biomass per day
+       grazing_residue        = 0.1
+       grazing_frequency      = 'daily'
+       min_lai_for_grazing    = 1.0
+       frac_wood_wasted_harv  = 0.25
+       frac_wood_wasted_clear = 0.25
+       !frac_wood_fast         = ONETHIRD
+       !frac_wood_med          = ONETHIRD
+       !frac_wood_slow         = ONETHIRD
+       crop_seed_density      = 0.1
+       waste_below_ground_wood = .TRUE.
+      </namelist>
+
+      <namelist name="cana_nml">
+       turbulence_to_use = "lm3v"
+       init_co2 = 286.0e-6
+       canopy_air_mass_for_tracers = 10.0
+       allow_small_z0 = .true.
+       sai_turb=.True.
+      </namelist>
+
+      <namelist name="static_veg_nml">
+        use_static_veg = .false.
+        write_static_veg = .false.
+        timeline   = 'loop'
+        start_loop = 1981, 1, 1, 0, 0, 0
+        end_loop   = 1982, 1, 1, 0, 0, 0
+        fill_land_mask = .TRUE.
+        input_file = 'INPUT/19810101.static_veg_out.nc'
+      </namelist>
+
+      <namelist name="vegn_data_nml">
+       vegn_to_use = 'uniform'
+       K1=10,
+       K2=0.1,
+       fsc_liv=0.9,
+       fsc_wood=0.45,
+       c1(4) = 0.3
+       c2(4) = 0.3
+       Vmax = 2.0E-5, 2.0E-5, 2.0E-5, 2.0E-5, 1.50E-5,
+       m_cond = 4., 9., 9., 7., 7.,
+       alpha_phot = 0.05, 0.06, 0.06, 0.06, 0.06,
+       gamma_resp = 0.03, 0.02, 0.02, 0.02, 0.02,
+       tc_crit(0:2) = 3*273.16
+       fact_crit_phen(0:4) = 0., 0., 0., 0., 0.
+       fact_crit_fire(0:4) = 0., 0., 0., 0., 0.
+       cnst_crit_phen(0:4) = 0.30, 0.15, 0.15, 0.30, 0.30
+       cnst_crit_fire(0:4) = 0.15,  0.40, 0.15, 0.15, 0.15
+       wet_leaf_dreg(0:4)  = .3, .3, .3, .3, .3
+       ksi =  0, 0, 0, 0, 0,
+       leaf_refl(0:4,1) = 0.11, 0.11, 0.10, 0.10, 0.10
+       leaf_refl(0:4,2) = 0.58, 0.58, 0.45, 0.45, 0.39,
+       dat_root_zeta(0:4) =   0.35212, 0.17039, 0.28909, 0.25813, 0.17039
+       critical_root_density = 0.0,
+       tau_drip_s     = 259200.0
+       cmc_lai(0:4) = 0.02, 0.02, 0.02, 0.02, 0.02
+       csc_lai(0:4) = 0.30, 0.30, 0.30, 0.30, 0.2
+       dat_snow_crit = 2*1.e7, .1, 1.e7, .1
+       t_transp_min = 268.
+       srl(0:1) = 112.0e3, 150.0e3
+       root_perm = 14*5e-7
+       alpha(1,3) = 4
+       leaf_age_tau(2) = 150
+       smoke_fraction = 0.9, 0.9, 0.6, 0.6, 0.6
+       tg_c3_thresh = 1
+       phen_ev1 = 0.2
+       phen_ev2 = 0.7
+       cmc_eps = 0.01
+       alpha(0:4,6) = 0.0, 0.0, 0.012, 0.012, 0.012
+       treefall_disturbance_rate = 0.175, 0.185, 0.025, 0.0275, 0.027
+       use_light_saber = .TRUE.
+       sai_cover = .TRUE.
+       sai_rad = .TRUE.
+      </namelist>
+
+      <namelist name="diag_manager_nml">
+        mix_snapshot_average_fields = .false.,
+        max_input_fields = 1200,
+        max_output_fields = 1800
+        max_axes = 150
+        max_num_axis_sets = 100
+        max_files = 75
+        issue_oor_warnings = .false.
+        max_axis_attributes=6
+        max_field_attributes=4
+      </namelist>
+
+      <namelist name="radiation_driver_nml">
+        rad_time_step= 10800,
+        rad_package = 'sea_esf',
+        do_clear_sky_pass=.true.,
+        !calc_hemi_integrals = .false.,
+        renormalize_sw_fluxes=.true.,
+        zenith_spec = 'diurnally_varying',
+        using_restart_file = .false.
+        do_conserve_energy = .true.
+        sw_rad_time_step = 3600,
+        use_single_lw_sw_ts = .false.,
+        use_co2_tracer_field = .false.                 ! jgj added
+        treat_sfc_refl_dir_as_dif = .true.           ! jgj added
+      </namelist>
+
+      <dataFile label="initCond" target="INPUT/" chksum="" size="" timestamp="">
+        <dataSource platform="$(platform)">/lustre/f1/unswept/Huan.Guo/INPUT/InitCond/AWG_c96L33/Dynamic_veg_AMIP/H1G_c96L33_am4p0_LU_bridge1750to1870_Res1969_combined.tar</dataSource>
+      </dataFile>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='common_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_LM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_AM4_v20170208']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='common_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='Volcano_Solar_TimeSeries_cmip6_v2']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='emissions_cmip6_v20170518']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='L32_gas_conc']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='amip_sst_cmip6_v6p1']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='data_table_AM4']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='data_table_co2']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_grid']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_stack_size']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='csh_adjust_dry_mass']/input/node())"/>
+
+      <xi:include xpointer="xpointer(//freInclude[@name='diag_table_lm3p2_fullaero_cmip6']/input/node())"/>
+      <xi:include xpointer="xpointer(//freInclude[@name='field_table_am4p11_cmip6']/input/node())"/>
+    </input>
+
+    <runtime>
+      <production simTime="46" units="years" >
+          <segment simTime="12" units="months" />
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_864_production']/node())"/>
+      </production>
+      <regression name="debug">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_432_debug']/node())"/>
+      </regression>
+      <regression name="basic">
+          <xi:include xpointer="xpointer(//freInclude[@name='c96_216_basic']/node())"/>
+      </regression>
+    </runtime>
+
+    <postProcess>
+      <xi:include xpointer="xpointer(//freInclude[@name='c96_amip_postprocess_cmip6']/postProcess/node())"/>
+    </postProcess>
+  </experiment>
+
 
   <experiment name="c192L33_am4p0_cmip6Diag" inherit="cm4p12_$(AWG_VERSION)">
 <!-- MDBI -->
@@ -2795,34 +2979,6 @@ Experiment name = $(name)
       <namelist name="aerosolrad_driver_nml">
         do_swaerosol_forcing = .true.
         do_lwaerosol_forcing = .true.
-      </namelist>
-
-      <namelist name="deep_conv_nml">
-        crh_th_ocean = 0.4
-        crh_th_land  = 0.4
-        auto_th0_d = 0.2e-3
-        tcrit_d    = -25.15,
-        peff_l_d   = 6.0e-5
-        peff_i_d   = 11.e-5
-        rkm_dp1 = 0.9
-        rkm_dp2 = 0.1
-        crh_max = 1.0
-        cwfn_th = 10.
-        tau_dp = 28800.
-        mixing_assumption_d = 6
-        do_ppen_d  = .true.
-        rpen_d     = 4.0
-        do_pevap_d = .true.
-        cfrac_d    = 0.15
-        hcevap_d   = 0.85
-        hcevappbl_d = 0.95
-        pblfac_d   = 1.0
-        frac_limit_d = 0.25
-        dcwfndm_th = 100
-        lofactor_d = 1.0
-        do_cgust_dp  = .true.
-        cgust_choice = 1
-        include_emf_d = .false.
       </namelist>
 
       <!-- Input datasets -->
@@ -2883,5 +3039,5 @@ Experiment name = $(name)
     </postProcess>
   </experiment>
 
-</experimentSuite>
 
+</experimentSuite>

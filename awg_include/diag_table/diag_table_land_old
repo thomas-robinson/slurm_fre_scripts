@@ -233,7 +233,7 @@
 "river",    "LWSr",       "LWSr",       "river_month_inst",  "all", .false., "none", 2
 "river",    "FWSr",       "FWSr",       "river_month_inst",  "all", .false., "none", 2
 "river",    "HSr",        "HSr",        "river_month_inst",  "all", .false., "none", 2
-#"river",    "cell_area",  "cell_area",  "river_static", "all", .false., "none", 2
+"river",    "cell_area",  "cell_area",  "river_static", "all", .false., "none", 2
 "river",    "no_riv",     "no_riv",     "river_static", "all", .false., "none", 2
 "river",    "dis_heat",   "dis_heat",   "river_month",  "all", .true., "none", 2
 "river",    "dis_ice",    "dis_ice",    "river_month",  "all", .true., "none", 2
