@@ -6,12 +6,10 @@
    </atmos8xDailyTScmip>
 
    <atmos4xDailyTS>
-      <!-- analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/keo/tropical_storms/frepp.keo_tropical_storms_wsfc.csh" / -->
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/jwd/tropical_storms/frepp.jwd_tropical_storms_wsfc.csh" />
    </atmos4xDailyTS>
 
    <atmosDailyTScmip>
-      <!-- analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/bw/stub/bw_cru_temp.csh"/ -->
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/cjs/stub/wheeler_kiladis.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$(AWG_INPUT_HOME)/analysis/stub/bw_atmos_eddies.csh"/>
    </atmosDailyTScmip>
@@ -22,6 +20,7 @@
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$(AWG_INPUT_HOME)/analysis/stub/bw_atmos_regress.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$(AWG_INPUT_HOME)/analysis/stub/bw_atmos_zmstream.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/cjs/stub/cjg_atmos_ts_mon.csh"/>
+      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/oar.gfdl.mdteam/code/pcmdi_metrics/frepp.pcmdi_metrics_v1p1p2.atmos.csh"/>
    </atmosMonthTScmip>
 
    <atmosMonthTS>
@@ -36,9 +35,7 @@
       <analysis switch="$(ANALYSIS_SWITCH)" script="$(AWG_INPUT_HOME)/analysis/stub/atw_atmos_ts_monthly_koppen.csh"/>
 
       <!--NCAR's CVDP analysis -->
-      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/eem/stub/cvdp/frepp.cvdp.csh -s $(CVDP_startyear_climo)"/>
-
-
+      <analysis switch="$(ANALYSIS_SWITCH)" startYear="$(ANA_CLIMO_START)" endYear="$(ANA_CLIMO_END)" cumulative="yes" script="$FRE_ANALYSIS_HOME/oar.gfdl.mdteam/stub/cvdp/frepp.cvdp.csh -s $(CVDP_startyear_climo)"/>
    </atmosMonthTS>
 
    <atmosMonthAVcmip>
@@ -58,14 +55,11 @@
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/surface_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/wind_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/temp_atmos_av_mon.csh"/>
-      <analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$FRE_ANALYSIS_HOME/eem/code/pcmdi_metrics/frepp.pcmdi_metrics_v1p1p1.atmos.csh -c amip"/>
    </atmosMonthAVcmip>
 
    <atmosMonthAV>
-      <!-- analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/bw/stub/bw_cru_precip.csh"/ -->
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjg/stub/cjg_atmos_av_mon.csh"/>
       <analysis switch="$(ANALYSIS_SWITCH)" script="$FRE_ANALYSIS_HOME/cjs/stub/yim_aer_cld.csh"/>
-      <!--analysis switch="$(ANALYSIS_SWITCH)" cumulative="no" script="$FRE_ANALYSIS_HOME/eem/code/pcmdi_metrics/frepp.pcmdi_metrics_v1p1p1.atmos.csh -c amip"/-->
    </atmosMonthAV>
 
    <atmosLevelAnnualTS>
