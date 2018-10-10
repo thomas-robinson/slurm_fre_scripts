@@ -399,7 +399,7 @@ Experiment to build executable. See git log for source code provenance.
           <codeBase version="master">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout  $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout  user/bw/conserve_order1_20171206 )
+            ( cd atmos_param  && git checkout  $(AWG_GIT_TAG) )
                        ]]>
           </csh>
         </source>
@@ -448,7 +448,7 @@ Experiment to build executable. See git log for source code provenance.
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="master">land_lad2.git</codeBase>
         <csh><![CDATA[
-          ( cd land_lad2 && git checkout snow_on_glacier_20171224_slm )
+          ( cd land_lad2 && git checkout $(AWG_GIT_TAG) )
          ]]>
         </csh>
       </source>
