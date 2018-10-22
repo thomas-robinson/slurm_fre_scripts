@@ -3,33 +3,33 @@
 <!-- GFDL Model Development Team (MDT) documentation: http://cobweb.gfdl.noaa.gov/~niz/mdt/ -->
 <!-- GFDL MDT Atmosphere Working Group (AWG) documentation: http://cobweb.gfdl.noaa.gov/~cjg/awg/ -->
 
-<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), warsaw revision -->
+<!-- Model configurations in support of MDT Atmosphere Working Group (AWG), xanadu revision -->
 
 <!-- QUICK START GUIDE:
 
 # To checkout this xml (you should have done this already)
 # .. module load fre/bronx-12
 # .. module load git
-# .. mkdir -p $home/awg/warsaw_201803
-# .. cd $home/awg/warsaw_201803
-# .. git clone -b awg_warsaw_201803 http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_warsaw_201803
-# .. cd xml_warsaw_201803
+# .. mkdir -p $home/awg/xanadu
+# .. cd $home/awg/xanadu
+# .. git clone -b awg_xanadu http://gitlab.gfdl.noaa.gov/mdt/xml.git xml_xanadu
+# .. cd xml_xanadu
 
 # Change YOURGROUPLETTER to your group, such as f, w, o...
   <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/>
 
 # To check out source code and compile:
 # .. module load fre/bronx-12
-# .. fremake -x awg_warsaw_201803.xml -p ncrc3.intel -t openmp cm4p12_warsaw_201803 
+# .. fremake -x awg_xanadu.xml -p ncrc3.intel -t openmp cm4p12_xanadu
 
 # To run regression test:
-# .. frerun -s -r rts -x awg_warsaw_201803.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -s -r rts -x awg_xanadu.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run a complete experiment (with automated database entry if MDBIswitch in "on"):
-# .. frerun -x awg_warsaw_201803.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
+# .. frerun -x awg_xanadu.xml -p ncrc3.intel -t openmp c96L33_am4p0_cmip6Diag
 
 # To run fredb after an experiment is finished to manually add it to the database:
-# .. fredb-pp -x awg_warsaw_201803.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
+# .. fredb-pp -x awg_xanadu.xml -p gfdl.ncrc3-intel -t openmp c96L33_am4p0_cmip6Diag
 
 
      LIST OF AUTOMATED TESTS TO BE PERFORMED WITH JENNY
@@ -51,12 +51,12 @@ ref> c96L33_am4p0_cmip6Diag/ncrc4.intel-prod-openmp/0m8d             aa5b334386f
 
 <experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
 
-  <property name="GFDL_YGL" value="gfdl_f"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
-  <property name="RELEASE" value="warsaw_201803"/>                        <!-- base code release -->
+  <property name="GFDL_YGL" value="gfdl_YOURGROUPLETTER"/> <!-- Please make sure to change "YOURGROUPLETTER" to your group, such as b, f, g, m, o... -->
+  <property name="RELEASE" value="xanadu"/>                        <!-- base code release -->
   <property name="MOM6_DATE" value="om4_v1.0.1"/>                  <!-- git tag date for MOM6 source code -->
-  <property name="MOM6_GIT_TAG" value="om4/v1.0.1"/>  <!-- git tag for MOM6 source code -->
-  <property name="AWG_GIT_TAG" value="warsaw_201803"/>             <!-- git tag for AWG source code -->
-  <property name="AWG_VERSION" value="warsaw_201803"/>                 <!-- AWG source code version -->
+  <property name="MOM6_GIT_TAG" value="dev/gfdl/2018.04.06"/>  <!-- git tag for MOM6 source code -->
+  <property name="AWG_GIT_TAG" value="xanadu"/>             <!-- git tag for AWG source code -->
+  <property name="AWG_VERSION" value="xanadu"/>                 <!-- AWG source code version -->
   <property name="FRE_STEM" value="awg/$(RELEASE)"/>
   <property name="FRE_VERSION" value="bronx-12"/>
   <property name="ANALYSIS_SWITCH" value="on"/>
@@ -399,7 +399,7 @@ Experiment to build executable. See git log for source code provenance.
           <codeBase version="master">atmos_shared.git atmos_param.git</codeBase>
           <csh><![CDATA[
             ( cd atmos_shared && git checkout  $(AWG_GIT_TAG) )
-            ( cd atmos_param  && git checkout  user/bw/conserve_order1_20171206 )
+            ( cd atmos_param  && git checkout  $(AWG_GIT_TAG) )
                        ]]>
           </csh>
         </source>
@@ -448,7 +448,7 @@ Experiment to build executable. See git log for source code provenance.
       <source versionControl="git" root="http://gitlab.gfdl.noaa.gov/fms">
         <codeBase version="master">land_lad2.git</codeBase>
         <csh><![CDATA[
-          ( cd land_lad2 && git checkout snow_on_glacier_20171224_slm )
+          ( cd land_lad2 && git checkout $(AWG_GIT_TAG) )
          ]]>
         </csh>
       </source>
