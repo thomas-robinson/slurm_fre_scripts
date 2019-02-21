@@ -6,4 +6,4 @@ You should include -p platforms , -t targets, and -e experiments.  There should 
 ```bash
 kill PID
 ```
-Where PID is the process ID.
+Where PID is the process ID
